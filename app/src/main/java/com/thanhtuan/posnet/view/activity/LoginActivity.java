@@ -1,17 +1,15 @@
-package com.thanhtuan.posnet;
+package com.thanhtuan.posnet.view.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Button;
 
-import butterknife.BindView;
+import com.thanhtuan.posnet.R;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity {
-    @BindView(R.id.btnLogin)
-    Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.thanhtuan.posnet.LoginActivity">
+    tools:context="com.thanhtuan.posnet.view.activity.LoginActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -14,7 +14,7 @@
         android:text="DMCL POSNet"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="55sp"
+        android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintHorizontal_bias="0.503"
