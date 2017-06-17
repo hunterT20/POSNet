@@ -6,4 +6,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="thongke">Thống kê</string>
+    <string name="thongbao">Thông báo</string>
+    <string name="duongdan">Hướng dẫn sử dụng</string>
+    <string name="trogiup">Trợ giúp</string>
+    <string name="infoapp">Thông tin ứng dụng</string>
+    <string name="logout">Logout</string>
 </resources>
