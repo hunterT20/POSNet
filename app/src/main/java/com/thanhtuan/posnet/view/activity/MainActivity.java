@@ -14,30 +14,32 @@ import android.view.MenuItem;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.view.fragment.HomeFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    Toolbar toolbar;
+    @BindView(R.id.toolbar)        Toolbar toolbar;
+    @BindView(R.id.drawer_layout)  DrawerLayout drawer;
+    @BindView(R.id.nav_view)       NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
         addViews();
     }
 
     private void addViews() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() == null) return;
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         setHomeView();
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home, menu);
+        menu.getItem(0).setVisible(false);
         return true;
     }
 

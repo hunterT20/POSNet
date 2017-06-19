@@ -1,6 +1,7 @@
 package com.thanhtuan.posnet.view.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.NewFeeds;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
+import com.thanhtuan.posnet.view.activity.CheckPRActivity;
 import com.thanhtuan.posnet.view.adapter.NewfeedAdapter;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,5 +66,13 @@ public class HomeFragment extends Fragment {
         mNewfeed.add(newFeeds3);
 
         addControls();
+    }
+
+    @OnClick(R.id.btnCheckPR)
+    public void ClickCheckPR(){
+        if (getActivity() == null) return;
+        Intent intent = new Intent(getActivity(), CheckPRActivity.class);
+        getActivity().startActivity(intent);
+        getActivity().finish();
     }
 }
