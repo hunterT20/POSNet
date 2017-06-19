@@ -1,6 +1,7 @@
 package com.thanhtuan.posnet.view.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,16 +12,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.thanhtuan.posnet.R;
+import com.thanhtuan.posnet.view.fragment.HomeFragment;
 
-public class HomeActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_main);
+
+        addViews();
+    }
+
+    private void addViews() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() == null) return;
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -30,6 +39,17 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setHomeView();
+    }
+
+    private void setHomeView() {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frmContent, new HomeFragment())
+                .commit();
+        if (getSupportActionBar() == null) return;
+        getSupportActionBar().setTitle("Thông báo");
     }
 
     @Override
@@ -61,16 +81,16 @@ public class HomeActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        if (getSupportActionBar() == null) return false;
 
         if (id == R.id.nav_ThongBao) {
-            // Handle the camera action
+            getSupportActionBar().setTitle("Thông báo");
         } else if (id == R.id.nav_ThongKe) {
-
+            getSupportActionBar().setTitle("Thống kê");
         } else if (id == R.id.nav_Help) {
-
+            getSupportActionBar().setTitle("Hướng dẫn");
         } else if (id == R.id.nav_Logout) {
 
         }
