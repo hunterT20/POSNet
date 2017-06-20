@@ -18,4 +18,14 @@ public class SweetDialogUtil {
                 .setContentText("Vui lòng kiểm tra lại")
                 .show();
     }
+
+    public static void onWarning(Context context,String alert, SweetAlertDialog.OnSweetClickListener OK, SweetAlertDialog.OnSweetClickListener NO){
+        new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(alert)
+                .setConfirmText("Có")
+                .setConfirmClickListener(OK)
+                .setCancelText("Không")
+                .setCancelClickListener(NO)
+                .show();
+    }
 }
