@@ -8,7 +8,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -27,7 +25,6 @@ import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.ScanUtil;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
 import com.thanhtuan.posnet.view.activity.MainActivity;
-import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.InfoPRAdapter;
 
 import java.util.ArrayList;
@@ -131,8 +128,6 @@ public class InfoPRFragment extends Fragment {
         }, new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                Intent intent = new Intent(getActivity(), ReOrderActivity.class);
-                getActivity().startActivity(intent);
                 sweetAlertDialog.dismiss();
             }
         });

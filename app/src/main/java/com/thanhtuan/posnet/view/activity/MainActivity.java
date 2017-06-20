@@ -1,5 +1,6 @@
 package com.thanhtuan.posnet.view.activity;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -42,16 +43,16 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        setHomeView();
+        callFragment(new HomeFragment(),"Thông báo");
     }
 
-    private void setHomeView() {
+    public void callFragment(Fragment fragment, String title) {
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frmContent, new HomeFragment())
+                .replace(R.id.frmContent, fragment)
                 .commit();
         if (getSupportActionBar() == null) return;
-        getSupportActionBar().setTitle("Thông báo");
+        getSupportActionBar().setTitle(title);
     }
 
     @Override

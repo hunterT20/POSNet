@@ -12,7 +12,8 @@ import android.view.ViewGroup;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.NewFeeds;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
-import com.thanhtuan.posnet.view.activity.CheckPRActivity;
+import com.thanhtuan.posnet.view.activity.CreateReorderActivity;
+import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.adapter.NewfeedAdapter;
 
 import java.util.ArrayList;
@@ -70,9 +71,6 @@ public class HomeFragment extends Fragment {
 
     @OnClick(R.id.btnCheckPR)
     public void ClickCheckPR(){
-        if (getActivity() == null) return;
-        Intent intent = new Intent(getActivity(), CheckPRActivity.class);
-        getActivity().startActivity(intent);
-        getActivity().finish();
+        ((MainActivity)getActivity()).callFragment(new InfoPRFragment(),"Thông tin sản phẩm");
     }
 }
