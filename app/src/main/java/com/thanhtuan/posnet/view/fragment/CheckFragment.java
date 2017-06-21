@@ -81,7 +81,7 @@ public class CheckFragment extends Fragment {
     }
 
     private void addViews() {
-        //ThongTin.setVisibility(View.GONE);
+        ThongTin.setVisibility(View.GONE);
     }
 
     private void addControls(){
