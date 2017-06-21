@@ -13,8 +13,6 @@ import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.NewFeeds;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.view.activity.CheckActivity;
-import com.thanhtuan.posnet.view.activity.CreateReorderActivity;
-import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.adapter.NewfeedAdapter;
 
 import java.util.ArrayList;

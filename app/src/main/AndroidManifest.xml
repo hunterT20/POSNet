@@ -24,8 +24,10 @@
             android:name=".view.activity.MainActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
-        <activity android:name=".view.activity.CreateReorderActivity" />
-        <activity android:name=".view.activity.CheckActivity"></activity>
+        <activity android:name=".view.activity.CheckActivity" />
+        <activity
+            android:name=".view.activity.ReOrderActivity"
+            android:label="@string/title_activity_re_order"></activity>
     </application>
 
 </manifest>

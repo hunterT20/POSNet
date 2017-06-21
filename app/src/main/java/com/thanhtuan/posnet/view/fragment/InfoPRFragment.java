@@ -24,8 +24,8 @@ import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.ScanUtil;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
-import com.thanhtuan.posnet.view.activity.CreateReorderActivity;
 import com.thanhtuan.posnet.view.activity.MainActivity;
+import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.InfoPRAdapter;
 
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class InfoPRFragment extends Fragment {
     }
 
     private void addViews() {
-        /*ThongTin.setVisibility(View.GONE);*/
+        ThongTin.setVisibility(View.GONE);
     }
 
     private void addControls(){
@@ -129,7 +129,7 @@ public class InfoPRFragment extends Fragment {
         }, new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                Intent intent = new Intent(getActivity(), CreateReorderActivity.class);
+                Intent intent = new Intent(getActivity(), ReOrderActivity.class);
                 getActivity().startActivity(intent);
                 sweetAlertDialog.dismiss();
             }
