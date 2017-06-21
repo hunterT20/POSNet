@@ -40,28 +40,7 @@ public class ReOrderActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Thông tin Order");
 
         callFragment(new ReorderFragment(),"Thông tin giao hàng");
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_info:
-                    callFragment(new ReorderFragment(),"Thông tin giao hàng");
-                    return true;
-                case R.id.navigation_DSSP:
-                    callFragment(new ReorderFragment(),"Danh sách sản phẩm");
-                    return true;
-            }
-            return false;
-        }
-
-    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

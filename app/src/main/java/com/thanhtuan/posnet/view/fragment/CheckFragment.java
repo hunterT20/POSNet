@@ -8,6 +8,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +40,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class InfoPRFragment extends Fragment {
+public class CheckFragment extends Fragment {
     @BindView(R.id.rcvKhuyenMai)
     RecyclerView rcvKhuyenMai;
     @BindView(R.id.fabScan)
@@ -55,7 +56,7 @@ public class InfoPRFragment extends Fragment {
     private Boolean coSP = false;
     public String codeBar;
 
-    public InfoPRFragment() {
+    public CheckFragment() {
         // Required empty public constructor
     }
 
@@ -64,7 +65,7 @@ public class InfoPRFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_info_pr, container, false);
+        View view = inflater.inflate(R.layout.fragment_check, container, false);
         ButterKnife.bind(this,view);
         setHasOptionsMenu(true);
 
@@ -79,7 +80,7 @@ public class InfoPRFragment extends Fragment {
     }
 
     private void addViews() {
-        ThongTin.setVisibility(View.GONE);
+        //ThongTin.setVisibility(View.GONE);
     }
 
     private void addControls(){

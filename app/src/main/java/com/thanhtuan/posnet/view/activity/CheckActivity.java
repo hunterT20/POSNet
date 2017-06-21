@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.view.fragment.InfoPRFragment;
+import com.thanhtuan.posnet.view.fragment.CheckFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +32,7 @@ public class CheckActivity extends AppCompatActivity {
 
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frmContent, new InfoPRFragment())
+                .replace(R.id.frmContent, new CheckFragment())
                 .commit();
     }
 }
