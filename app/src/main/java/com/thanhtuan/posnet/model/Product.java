@@ -1,11 +1,14 @@
 package com.thanhtuan.posnet.model;
 
 
+import java.util.List;
+
 public class Product {
     private String NamePR;
     private String DonGia;
     private String SL;
     private Boolean chon;
+    private List<Product> listKM;
 
     public Product() {
     }
@@ -15,6 +18,14 @@ public class Product {
         DonGia = donGia;
         this.SL = SL;
         this.chon = chon;
+    }
+
+    public Product(String namePR, String donGia, String SL, Boolean chon, List<Product> listKM) {
+        NamePR = namePR;
+        DonGia = donGia;
+        this.SL = SL;
+        this.chon = chon;
+        this.listKM = listKM;
     }
 
     public String getNamePR() {
@@ -47,5 +58,13 @@ public class Product {
 
     public void setChon(Boolean chon) {
         this.chon = chon;
+    }
+
+    public List<Product> getListKM() {
+        return listKM;
+    }
+
+    public void setListKM(List<Product> listKM) {
+        this.listKM = listKM;
     }
 }

@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.thanhtuan.posnet.R;
+import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.view.fragment.CheckFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

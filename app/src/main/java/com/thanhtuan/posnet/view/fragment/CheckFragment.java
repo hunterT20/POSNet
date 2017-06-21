@@ -8,7 +8,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +23,9 @@ import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.ScanUtil;
+import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
+import com.thanhtuan.posnet.view.activity.CheckActivity;
 import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.InfoPRAdapter;
@@ -41,20 +42,19 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * A simple {@link Fragment} subclass.
  */
 public class CheckFragment extends Fragment {
-    @BindView(R.id.rcvKhuyenMai)
-    RecyclerView rcvKhuyenMai;
-    @BindView(R.id.fabScan)
-    FloatingActionButton fabScan;
-    @BindView(R.id.Thongtin)
-    ConstraintLayout ThongTin;
-    @BindView(R.id.txtvNamePR)
-    TextView txtvNamePR;
+    @BindView(R.id.rcvKhuyenMai)    RecyclerView rcvKhuyenMai;
+    @BindView(R.id.fabScan)         FloatingActionButton fabScan;
+    @BindView(R.id.Thongtin)        ConstraintLayout ThongTin;
+    @BindView(R.id.txtvNamePR)      TextView txtvNamePR;
+    @BindView(R.id.txtvDonGiaPR)    TextView txtvDonGiaPR;
+    @BindView(R.id.txtvSLPR)        TextView txtvSLPR;
 
+    private List<Product> listKM;
     private List<Product> productList;
-    private InfoPRAdapter adapter;
 
     private Boolean coSP = false;
     public String codeBar;
+    Product product;
 
     public CheckFragment() {
         // Required empty public constructor
@@ -69,9 +69,10 @@ public class CheckFragment extends Fragment {
         ButterKnife.bind(this,view);
         setHasOptionsMenu(true);
 
+        listKM = new ArrayList<>();
         productList = new ArrayList<>();
         if (getActivity() == null) return view;
-        RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai, new InfoPRAdapter(productList,getActivity()),getActivity());
+        RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai, new InfoPRAdapter(listKM,getActivity()),getActivity());
 
         addViews();
         initData();
@@ -85,7 +86,7 @@ public class CheckFragment extends Fragment {
 
     private void addControls(){
         if (getActivity() == null) return;
-        adapter = new InfoPRAdapter(productList, getActivity());
+        InfoPRAdapter adapter = new InfoPRAdapter(product.getListKM(), getActivity());
         rcvKhuyenMai.setAdapter(adapter);
     }
 
@@ -95,10 +96,18 @@ public class CheckFragment extends Fragment {
         Product product3 = new Product("Bột giặt2","50.000", "3",false);
         Product product4 = new Product("Bột giặt3","50.000", "3",false);
 
-        productList.add(product1);
-        productList.add(product2);
-        productList.add(product3);
-        productList.add(product4);
+        listKM.add(product1);
+        listKM.add(product2);
+        listKM.add(product3);
+        listKM.add(product4);
+
+        product = new Product();
+        product.setNamePR("TV 40 inch");
+        product.setDonGia("6.000.000");
+        product.setChon(false);
+        product.setSL("10");
+        product.setListKM(listKM);
+
         addControls();
     }
 
@@ -121,6 +130,7 @@ public class CheckFragment extends Fragment {
 
     @OnClick(R.id.btnReOrder)
     public void ReOrderClick(){
+        productList.add(product);
         SweetDialogUtil.onWarning(getActivity(), "Bạn có muốn mua thêm?", new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -130,8 +140,10 @@ public class CheckFragment extends Fragment {
         }, new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
+                SharePreferenceUtil.setProduct(getActivity(),productList);
                 Intent intent = new Intent(getActivity(), ReOrderActivity.class);
                 getActivity().startActivity(intent);
+                getActivity().finish();
                 sweetAlertDialog.dismiss();
             }
         });

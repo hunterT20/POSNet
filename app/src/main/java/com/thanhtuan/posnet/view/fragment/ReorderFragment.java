@@ -6,7 +6,9 @@ import android.app.Fragment;
 import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,13 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.thanhtuan.posnet.R;
+import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.util.RecyclerViewUtil;
+import com.thanhtuan.posnet.util.SharePreferenceUtil;
+import com.thanhtuan.posnet.view.adapter.InfoPRAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,22 +36,21 @@ import butterknife.OnClick;
  * A simple {@link Fragment} subclass.
  */
 public class ReorderFragment extends Fragment {
-    @BindView(R.id.ThongTinKH)
-    ConstraintLayout ThongTinKH;
-    @BindView(R.id.ThongTinGiaoHang)
-    ConstraintLayout ThongTinGiaoHang;
-    @BindView(R.id.TaiNha) ConstraintLayout TaiNha;
-    @BindView(R.id.btnBack)
-    Button btnBack;
-    @BindView(R.id.btnNext) Button btnNext;
-    @BindView(R.id.radioGroup)
-    RadioGroup radioGroup;
+    @BindView(R.id.ThongTinKH)          ConstraintLayout ThongTinKH;
+    @BindView(R.id.ThongTinGiaoHang)    ConstraintLayout ThongTinGiaoHang;
+    @BindView(R.id.TaiNha)              ConstraintLayout TaiNha;
+    @BindView(R.id.btnBack)             Button btnBack;
+    @BindView(R.id.btnNext)             Button btnNext;
+    @BindView(R.id.radioGroup)          RadioGroup radioGroup;
+    @BindView(R.id.rcvProduct)          RecyclerView rcvProduct;
 
     /*Trạng thái của step:
     * step == 0: xác nhận thông tin khách hàng
     * step == 1: xác nhận thông tin giao hàng
     * step == 2: xác nhận danh sách sản phẩm*/
     private int step = 0;
+
+    private List<Product> productList;
 
     public ReorderFragment() {
         // Required empty public constructor
@@ -57,7 +65,12 @@ public class ReorderFragment extends Fragment {
         setHasOptionsMenu(true);
         ButterKnife.bind(this,view);
 
+        productList = new ArrayList<>();
+        if (getActivity() == null) return view;
+        RecyclerViewUtil.setupRecyclerView(rcvProduct, new InfoPRAdapter(productList,getActivity()),getActivity());
+
         addViews();
+
         return view;
     }
 
@@ -68,6 +81,12 @@ public class ReorderFragment extends Fragment {
                 onRadioButtonChange(radioGroup, i);
             }
         });
+    }
+
+    private void addControls(){
+        if (getActivity() == null) return;
+        InfoPRAdapter adapter = new InfoPRAdapter(productList, getActivity());
+        rcvProduct.setAdapter(adapter);
     }
 
     private void onRadioButtonChange(RadioGroup radioGroup, int i) {
@@ -87,12 +106,20 @@ public class ReorderFragment extends Fragment {
     public void NextClick(){
         if (step == 0){
             step ++;
-            btnNext.setText("Xác nhận SP");
-            ThongTinGiaoHang.setVisibility(View.VISIBLE);
+            btnNext.setText(R.string.xacnhanSP);
+
             ThongTinKH.setVisibility(View.GONE);
+            ThongTinGiaoHang.setVisibility(View.VISIBLE);
             btnBack.setVisibility(View.VISIBLE);
         }else if (step == 1){
-            Toast.makeText(getActivity(), "kiểm tra sản phẩm", Toast.LENGTH_SHORT).show();
+            step ++;
+            productList = SharePreferenceUtil.getProduct(getActivity());
+            addControls();
+
+            ThongTinGiaoHang.setVisibility(View.GONE);
+            ThongTinKH.setVisibility(View.GONE);
+            rcvProduct.setVisibility(View.VISIBLE);
+            btnNext.setText(R.string.thanhtoan);
         }
     }
 
@@ -100,9 +127,16 @@ public class ReorderFragment extends Fragment {
     public void BackClick(){
         if (step == 1){
             step --;
-            ThongTinGiaoHang.setVisibility(View.GONE);
-            ThongTinKH.setVisibility(View.VISIBLE);
             btnBack.setVisibility(View.GONE);
+            ThongTinKH.setVisibility(View.VISIBLE);
+            ThongTinGiaoHang.setVisibility(View.GONE);
+        }else if (step == 2){
+            step --;
+            btnNext.setText(R.string.xacnhanSP);
+
+            rcvProduct.setVisibility(View.GONE);
+            ThongTinGiaoHang.setVisibility(View.VISIBLE);
+            btnBack.setVisibility(View.VISIBLE);
         }
     }
 

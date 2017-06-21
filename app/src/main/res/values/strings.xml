@@ -19,4 +19,6 @@
     <string name="title_activity_re_order">ReOrderActivity</string>
     <string name="title_Info">Thông tin Order</string>
     <string name="title_DSSP">Danh sách SP</string>
+    <string name="xacnhanSP">Xác nhận SP</string>
+    <string name="thanhtoan">Thanh toán</string>
 </resources>
