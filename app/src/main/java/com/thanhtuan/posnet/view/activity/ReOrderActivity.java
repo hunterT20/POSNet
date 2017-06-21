@@ -8,6 +8,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
@@ -86,7 +88,7 @@ public class ReOrderActivity extends AppCompatActivity {
     public void callFragment(Fragment fragment, String title) {
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content, fragment)
+                .replace(R.id.frmContent, fragment)
                 .commit();
         if (getSupportActionBar() == null) return;
         getSupportActionBar().setTitle(title);
