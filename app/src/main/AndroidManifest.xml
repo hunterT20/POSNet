@@ -25,6 +25,7 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
         <activity android:name=".view.activity.CreateReorderActivity" />
+        <activity android:name=".view.activity.CheckActivity"></activity>
     </application>
 
 </manifest>

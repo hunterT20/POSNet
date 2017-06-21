@@ -39,23 +39,14 @@ public class CreateReorderActivity extends AppCompatActivity {
         if (getSupportActionBar() == null) return;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Check Product");
+        getSupportActionBar().setTitle("ReOrder");
 
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-
-        callFragmentInfoPR();
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
-    }
-
-    public void callFragmentInfoPR(){
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.viewpager, new InfoPRFragment())
-                .commit();
     }
 }
