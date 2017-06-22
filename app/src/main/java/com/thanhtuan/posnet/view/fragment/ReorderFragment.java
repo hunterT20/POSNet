@@ -1,6 +1,8 @@
 package com.thanhtuan.posnet.view.fragment;
 
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -9,7 +11,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,8 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Product;
@@ -31,6 +34,7 @@ import com.thanhtuan.posnet.view.adapter.KMAdapter;
 import com.thanhtuan.posnet.view.adapter.ProductAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,7 +45,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ReorderFragment extends Fragment {
+public class ReorderFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     @BindView(R.id.ThongTinKH)          ConstraintLayout ThongTinKH;
     @BindView(R.id.ThongTinGiaoHang)    ConstraintLayout ThongTinGiaoHang;
     @BindView(R.id.TaiNha)              ConstraintLayout TaiNha;
@@ -50,6 +54,8 @@ public class ReorderFragment extends Fragment {
     @BindView(R.id.radioGroup)          RadioGroup radioGroup;
     @BindView(R.id.rcvProduct)          RecyclerView rcvProduct;
     @BindView(R.id.txtvTongTien)        TextView txtvTongTien;
+    @BindView(R.id.txtvDate)            TextView txtvDate;
+    @BindView(R.id.txtvTime)            TextView txtvTime;
 
     /*Trạng thái của step:
     * step == 0: xác nhận thông tin khách hàng
@@ -170,6 +176,16 @@ public class ReorderFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.txtvDate)
+    public void DateClick(){
+        initDateDialog().show();
+    }
+
+    @OnClick(R.id.txtvTime)
+    public void TimeClick(){
+        initTimeDialog().show();
+    }
+
     private void onCreateListPR(){
         int TongTien = 0;
         productList = SharePreferenceUtil.getListProduct(getActivity());
@@ -222,5 +238,34 @@ public class ReorderFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private DatePickerDialog initDateDialog(){
+        // Use the current date as the default date in the picker
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        return new DatePickerDialog(
+                getActivity(), this, year, month, day);
+    }
+
+    private TimePickerDialog initTimeDialog(){
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        return new TimePickerDialog(
+                getActivity(), this, hour,minute,true);
+    }
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        month += 1;
+        txtvDate.setText(day + "/" + month + "/" + year);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+        txtvTime.setText(hour + ":" + minute);
     }
 }
