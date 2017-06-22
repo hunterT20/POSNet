@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.view.fragment.HomeFragment;
+import com.thanhtuan.posnet.view.fragment.UserInfoFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,9 +80,9 @@ public class MainActivity extends AppCompatActivity
         if (getSupportActionBar() == null) return false;
 
         if (id == R.id.nav_ThongBao) {
-            getSupportActionBar().setTitle("Thông báo");
+            callFragment(new HomeFragment(),"Home");
         } else if (id == R.id.nav_ThongKe) {
-            getSupportActionBar().setTitle("Thống kê");
+            callFragment(new UserInfoFragment(),"Thông tin user");
         } else if (id == R.id.nav_Help) {
             getSupportActionBar().setTitle("Hướng dẫn");
         } else if (id == R.id.nav_Logout) {

@@ -39,6 +39,7 @@
                 android:layout_weight="1"
                 android:text="Hủy hàng"
                 android:textAllCaps="false"
+                android:textColor="@color/red_btn_bg_pressed_color"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
