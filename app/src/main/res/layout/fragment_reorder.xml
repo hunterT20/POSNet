@@ -465,27 +465,51 @@
         android:id="@+id/rcvProduct"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/txtvTongTien"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ThongTinGiaoHang" />
+        app:layout_constraintTop_toBottomOf="@+id/ThongTinGiaoHang"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/TongTien" />
 
-    <TextView
-        android:id="@+id/txtvTongTien"
+    <LinearLayout
+        android:id="@+id/TongTien"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:gravity="right"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:text="Tổng tiền: 10.000.000 vnđ"
-        android:textColor="@color/cardview_light_background"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tổng tiền:"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtvTongTien"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="10.000.000 vnđ"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

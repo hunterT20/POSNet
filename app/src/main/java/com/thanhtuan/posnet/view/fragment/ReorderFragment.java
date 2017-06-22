@@ -1,6 +1,7 @@
 package com.thanhtuan.posnet.view.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -49,6 +51,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     @BindView(R.id.ThongTinKH)          ConstraintLayout ThongTinKH;
     @BindView(R.id.ThongTinGiaoHang)    ConstraintLayout ThongTinGiaoHang;
     @BindView(R.id.TaiNha)              ConstraintLayout TaiNha;
+    @BindView(R.id.TongTien)            LinearLayout TongTien;
     @BindView(R.id.btnBack)             Button btnBack;
     @BindView(R.id.btnNext)             Button btnNext;
     @BindView(R.id.radioGroup)          RadioGroup radioGroup;
@@ -102,6 +105,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             onCreateListPR();
 
             ThongTinGiaoHang.setVisibility(View.GONE);
+            TongTien.setVisibility(View.VISIBLE);
             ThongTinKH.setVisibility(View.GONE);
             btnBack.setVisibility(View.VISIBLE);
             rcvProduct.setVisibility(View.VISIBLE);
@@ -138,7 +142,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             ThongTinGiaoHang.setVisibility(View.GONE);
             ThongTinKH.setVisibility(View.GONE);
             rcvProduct.setVisibility(View.VISIBLE);
-            txtvTongTien.setVisibility(View.VISIBLE);
+            TongTien.setVisibility(View.VISIBLE);
             btnNext.setText(R.string.thanhtoan);
 
         }else if (step == 2){
@@ -170,7 +174,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             btnNext.setText(R.string.xacnhanSP);
 
             rcvProduct.setVisibility(View.GONE);
-            txtvTongTien.setVisibility(View.GONE);
+            TongTien.setVisibility(View.GONE);
             ThongTinGiaoHang.setVisibility(View.VISIBLE);
             btnBack.setVisibility(View.VISIBLE);
         }
@@ -186,13 +190,14 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
         initTimeDialog().show();
     }
 
+    @SuppressLint("SetTextI18n")
     private void onCreateListPR(){
         int TongTien = 0;
         productList = SharePreferenceUtil.getListProduct(getActivity());
         for (Product product : productList){
             TongTien += Integer.parseInt(product.getDonGia());
         }
-        txtvTongTien.setText("Tổng tiền: " + TongTien + " vnđ");
+        txtvTongTien.setText(TongTien + " vnđ");
         if (getActivity() == null) return;
         ProductAdapter adapter = new ProductAdapter(productList, getActivity());
         rcvProduct.setAdapter(adapter);

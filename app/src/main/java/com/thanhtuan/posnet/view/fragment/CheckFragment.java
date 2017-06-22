@@ -50,6 +50,7 @@ public class CheckFragment extends Fragment {
     @BindView(R.id.txtvDonGiaPR)    TextView txtvDonGiaPR;
     @BindView(R.id.txtvSLPR)        TextView txtvSLPR;
     @BindView(R.id.btnReOrder)      Button btnReOrder;
+    @BindView(R.id.btnHuyHang)      Button btnHuyHang;
 
     private List<Product> listKMAll;
     private List<Product> productList;
@@ -85,9 +86,13 @@ public class CheckFragment extends Fragment {
     }
 
     private void addViews() {
-        if (!SharePreferenceUtil.getProductChange(getActivity()))
+        if (!SharePreferenceUtil.getProductChange(getActivity())){
             ThongTin.setVisibility(View.GONE);
-        else fabScan.setVisibility(View.GONE);
+            btnHuyHang.setVisibility(View.GONE);
+        }
+        else {
+            fabScan.setVisibility(View.GONE);
+        }
 
     }
 
@@ -169,6 +174,24 @@ public class CheckFragment extends Fragment {
                 }
             });
         }
+    }
+
+    @OnClick(R.id.btnHuyHang)
+    public void HuyHangClick(){
+        SweetDialogUtil.onWarning(getActivity(), "Bạn muốn hủy SP?", new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                Intent intent = new Intent(getActivity(), ReOrderActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+                sweetAlertDialog.dismiss();
+            }
+        }, new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismiss();
+            }
+        });
     }
 
     @Override

@@ -44,6 +44,10 @@ public class ReOrderActivity extends AppCompatActivity {
         callFragment(new ReorderFragment(),"Thông tin Order");
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
     public void callFragment(Fragment fragment, String title) {
         getFragmentManager()
                 .beginTransaction()
