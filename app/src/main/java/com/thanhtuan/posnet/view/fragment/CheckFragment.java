@@ -115,7 +115,7 @@ public class CheckFragment extends Fragment {
         else {
             product = new Product();
             product.setNamePR("TV 40 inch");
-            product.setDonGia("6.000.000");
+            product.setDonGia("6000000");
             product.setChon(false);
             product.setSL("10");
         }

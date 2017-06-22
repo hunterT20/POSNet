@@ -1,6 +1,7 @@
 package com.thanhtuan.posnet.view.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
@@ -8,6 +9,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,11 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
+import com.thanhtuan.posnet.util.SweetDialogUtil;
+import com.thanhtuan.posnet.view.activity.MainActivity;
+import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.KMAdapter;
 import com.thanhtuan.posnet.view.adapter.ProductAdapter;
 
@@ -30,6 +36,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +49,7 @@ public class ReorderFragment extends Fragment {
     @BindView(R.id.btnNext)             Button btnNext;
     @BindView(R.id.radioGroup)          RadioGroup radioGroup;
     @BindView(R.id.rcvProduct)          RecyclerView rcvProduct;
+    @BindView(R.id.txtvTongTien)        TextView txtvTongTien;
 
     /*Trạng thái của step:
     * step == 0: xác nhận thông tin khách hàng
@@ -124,7 +132,22 @@ public class ReorderFragment extends Fragment {
             ThongTinGiaoHang.setVisibility(View.GONE);
             ThongTinKH.setVisibility(View.GONE);
             rcvProduct.setVisibility(View.VISIBLE);
+            txtvTongTien.setVisibility(View.VISIBLE);
             btnNext.setText(R.string.thanhtoan);
+
+        }else if (step == 2){
+            SweetDialogUtil.onWarning(getActivity(), "Xác nhận thanh toán?", new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                    ((ReOrderActivity)getActivity()).callFragment(new KQReOderFragment(),"Xác nhận thanh toán");
+                    sweetAlertDialog.dismiss();
+                }
+            }, new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                    sweetAlertDialog.dismiss();
+                }
+            });
         }
     }
 
@@ -141,13 +164,19 @@ public class ReorderFragment extends Fragment {
             btnNext.setText(R.string.xacnhanSP);
 
             rcvProduct.setVisibility(View.GONE);
+            txtvTongTien.setVisibility(View.GONE);
             ThongTinGiaoHang.setVisibility(View.VISIBLE);
             btnBack.setVisibility(View.VISIBLE);
         }
     }
 
     private void onCreateListPR(){
+        int TongTien = 0;
         productList = SharePreferenceUtil.getListProduct(getActivity());
+        for (Product product : productList){
+            TongTien += Integer.parseInt(product.getDonGia());
+        }
+        txtvTongTien.setText("Tổng tiền: " + TongTien + " vnđ");
         if (getActivity() == null) return;
         ProductAdapter adapter = new ProductAdapter(productList, getActivity());
         rcvProduct.setAdapter(adapter);
@@ -171,5 +200,27 @@ public class ReorderFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                SweetDialogUtil.onWarning(getActivity(), "Bạn muốn hủy order này?", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        getActivity().startActivity(intent);
+                    }
+                }, new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                    }
+                });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

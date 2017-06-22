@@ -41,7 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         final Product product = mProduct.get(position);
 
         holder.txtvNameKM.setText(product.getNamePR());
-        holder.txtvDonGiaKM.setText(product.getDonGia() + "vnđ");
+        holder.txtvDonGiaKM.setText(product.getDonGia() + " vnđ");
         holder.txtvSLKM.setText(product.getSL());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

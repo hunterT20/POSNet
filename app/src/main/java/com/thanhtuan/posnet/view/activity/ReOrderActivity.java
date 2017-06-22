@@ -40,31 +40,8 @@ public class ReOrderActivity extends AppCompatActivity {
         if (getSupportActionBar() == null) return;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Thông tin Order");
 
-        callFragment(new ReorderFragment(),"Thông tin giao hàng");
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                SweetDialogUtil.onWarning(this, "Bạn muốn hủy order này?", new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent intent = new Intent(ReOrderActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                }, new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.dismiss();
-                    }
-                });
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        callFragment(new ReorderFragment(),"Thông tin Order");
     }
 
     public void callFragment(Fragment fragment, String title) {
