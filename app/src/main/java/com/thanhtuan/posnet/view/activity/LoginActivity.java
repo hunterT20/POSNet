@@ -42,7 +42,12 @@ public class LoginActivity extends AppCompatActivity {
             SweetDialogUtil.onSuccess(this, "Đăng nhập thành công!", new SweetAlertDialog.OnSweetClickListener() {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    Intent intent;
+                    if (SharePreferenceUtil.getProductChange(getApplication())){
+                        intent = new Intent(LoginActivity.this,CheckActivity.class);
+                    }else {
+                        intent = new Intent(LoginActivity.this,MainActivity.class);
+                    }
                     startActivity(intent);
                     sweetAlertDialog.dismiss();
                 }

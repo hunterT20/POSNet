@@ -8,7 +8,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,13 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
-import com.thanhtuan.posnet.view.adapter.InfoPRAdapter;
+import com.thanhtuan.posnet.view.adapter.KMAdapter;
+import com.thanhtuan.posnet.view.adapter.ProductAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +66,7 @@ public class ReorderFragment extends Fragment {
 
         productList = new ArrayList<>();
         if (getActivity() == null) return view;
-        RecyclerViewUtil.setupRecyclerView(rcvProduct, new InfoPRAdapter(productList,getActivity()),getActivity());
+        RecyclerViewUtil.setupRecyclerView(rcvProduct, new KMAdapter(productList,getActivity()),getActivity());
 
         addViews();
 
@@ -81,12 +80,19 @@ public class ReorderFragment extends Fragment {
                 onRadioButtonChange(radioGroup, i);
             }
         });
-    }
 
-    private void addControls(){
-        if (getActivity() == null) return;
-        InfoPRAdapter adapter = new InfoPRAdapter(productList, getActivity());
-        rcvProduct.setAdapter(adapter);
+        if (SharePreferenceUtil.getProductChange(getActivity())){
+            SharePreferenceUtil.setProductChange(getActivity(),false);
+            SharePreferenceUtil.setPosition(getActivity(),-1);
+            step = 2;
+            onCreateListPR();
+
+            ThongTinGiaoHang.setVisibility(View.GONE);
+            ThongTinKH.setVisibility(View.GONE);
+            btnBack.setVisibility(View.VISIBLE);
+            rcvProduct.setVisibility(View.VISIBLE);
+            btnNext.setText(R.string.thanhtoan);
+        }
     }
 
     private void onRadioButtonChange(RadioGroup radioGroup, int i) {
@@ -113,8 +119,7 @@ public class ReorderFragment extends Fragment {
             btnBack.setVisibility(View.VISIBLE);
         }else if (step == 1){
             step ++;
-            productList = SharePreferenceUtil.getProduct(getActivity());
-            addControls();
+            onCreateListPR();
 
             ThongTinGiaoHang.setVisibility(View.GONE);
             ThongTinKH.setVisibility(View.GONE);
@@ -128,6 +133,7 @@ public class ReorderFragment extends Fragment {
         if (step == 1){
             step --;
             btnBack.setVisibility(View.GONE);
+            btnNext.setText(R.string.nextbutton);
             ThongTinKH.setVisibility(View.VISIBLE);
             ThongTinGiaoHang.setVisibility(View.GONE);
         }else if (step == 2){
@@ -138,6 +144,13 @@ public class ReorderFragment extends Fragment {
             ThongTinGiaoHang.setVisibility(View.VISIBLE);
             btnBack.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void onCreateListPR(){
+        productList = SharePreferenceUtil.getListProduct(getActivity());
+        if (getActivity() == null) return;
+        ProductAdapter adapter = new ProductAdapter(productList, getActivity());
+        rcvProduct.setAdapter(adapter);
     }
 
     @Override

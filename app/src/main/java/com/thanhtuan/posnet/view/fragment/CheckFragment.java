@@ -8,12 +8,14 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
@@ -25,10 +27,9 @@ import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.ScanUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
-import com.thanhtuan.posnet.view.activity.CheckActivity;
 import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
-import com.thanhtuan.posnet.view.adapter.InfoPRAdapter;
+import com.thanhtuan.posnet.view.adapter.KMAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,13 +49,16 @@ public class CheckFragment extends Fragment {
     @BindView(R.id.txtvNamePR)      TextView txtvNamePR;
     @BindView(R.id.txtvDonGiaPR)    TextView txtvDonGiaPR;
     @BindView(R.id.txtvSLPR)        TextView txtvSLPR;
+    @BindView(R.id.btnReOrder)      Button btnReOrder;
 
-    private List<Product> listKM;
+    private List<Product> listKMAll;
     private List<Product> productList;
 
     private Boolean coSP = false;
+
+    private KMAdapter adapter;
     public String codeBar;
-    Product product;
+    private Product product;
 
     public CheckFragment() {
         // Required empty public constructor
@@ -69,10 +73,10 @@ public class CheckFragment extends Fragment {
         ButterKnife.bind(this,view);
         setHasOptionsMenu(true);
 
-        listKM = new ArrayList<>();
+        listKMAll = new ArrayList<>();
         productList = new ArrayList<>();
         if (getActivity() == null) return view;
-        RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai, new InfoPRAdapter(listKM,getActivity()),getActivity());
+        RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai, new KMAdapter(listKMAll,getActivity()),getActivity());
 
         addViews();
         initData();
@@ -81,32 +85,40 @@ public class CheckFragment extends Fragment {
     }
 
     private void addViews() {
-        ThongTin.setVisibility(View.GONE);
+        if (!SharePreferenceUtil.getProductChange(getActivity()))
+            ThongTin.setVisibility(View.GONE);
+        else fabScan.setVisibility(View.GONE);
+
     }
 
     private void addControls(){
         if (getActivity() == null) return;
-        InfoPRAdapter adapter = new InfoPRAdapter(product.getListKM(), getActivity());
+        adapter = new KMAdapter(listKMAll, getActivity());
         rcvKhuyenMai.setAdapter(adapter);
     }
 
     private void initData() {
-        Product product1 = new Product("Tivi 29 inch","8.000.000","1",false);
-        Product product2 = new Product("Bột giặt","50.000", "3",false);
-        Product product3 = new Product("Bột giặt2","50.000", "3",false);
-        Product product4 = new Product("Bột giặt3","50.000", "3",false);
+        Product KM1 = new Product("1","Tivi 29 inch","8.000.000","1",false);
+        Product KM2 = new Product("2","Bột giặt","50.000", "3",false);
+        Product KM3 = new Product("3","Bột giặt2","50.000", "3",false);
+        Product KM4 = new Product("4","Bột giặt3","50.000", "3",false);
 
-        listKM.add(product1);
-        listKM.add(product2);
-        listKM.add(product3);
-        listKM.add(product4);
+        listKMAll.add(KM1);
+        listKMAll.add(KM2);
+        listKMAll.add(KM3);
+        listKMAll.add(KM4);
 
-        product = new Product();
-        product.setNamePR("TV 40 inch");
-        product.setDonGia("6.000.000");
-        product.setChon(false);
-        product.setSL("10");
-        product.setListKM(listKM);
+        if (SharePreferenceUtil.getProductChange(getActivity())){
+            product = SharePreferenceUtil.getProduct(getActivity());
+            btnReOrder.setText(R.string.xacnhanSP);
+        }
+        else {
+            product = new Product();
+            product.setNamePR("TV 40 inch");
+            product.setDonGia("6.000.000");
+            product.setChon(false);
+            product.setSL("10");
+        }
 
         addControls();
     }
@@ -130,29 +142,47 @@ public class CheckFragment extends Fragment {
 
     @OnClick(R.id.btnReOrder)
     public void ReOrderClick(){
-        productList.add(product);
-        SweetDialogUtil.onWarning(getActivity(), "Bạn có muốn mua thêm?", new SweetAlertDialog.OnSweetClickListener() {
-            @Override
-            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                ScanClick();
-                sweetAlertDialog.dismiss();
-            }
-        }, new SweetAlertDialog.OnSweetClickListener() {
-            @Override
-            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                SharePreferenceUtil.setProduct(getActivity(),productList);
-                Intent intent = new Intent(getActivity(), ReOrderActivity.class);
-                getActivity().startActivity(intent);
-                getActivity().finish();
-                sweetAlertDialog.dismiss();
-            }
-        });
+        if (SharePreferenceUtil.getProductChange(getActivity())){
+            setProductList();
+
+            Intent intent = new Intent(getActivity(), ReOrderActivity.class);
+            getActivity().startActivity(intent);
+            getActivity().finish();
+        }else {
+            product.setListKM(adapter.getProductChon());
+            productList.add(product);
+            SweetDialogUtil.onWarning(getActivity(), "Bạn có muốn mua thêm?", new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                    ScanClick();
+                    sweetAlertDialog.dismiss();
+                }
+            }, new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                    SharePreferenceUtil.setListProduct(getActivity(),productList);
+
+                    Intent intent = new Intent(getActivity(), ReOrderActivity.class);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
+                    sweetAlertDialog.dismiss();
+                }
+            });
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                if (SharePreferenceUtil.getProductChange(getActivity())){
+                    setProductList();
+
+                    Intent intent = new Intent(getActivity(), ReOrderActivity.class);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
+                    return true;
+                }
                 if (!coSP){
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     getActivity().startActivity(intent);
@@ -185,6 +215,14 @@ public class CheckFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    private void setProductList(){
+        int position = SharePreferenceUtil.getPosition(getActivity());
+        productList = SharePreferenceUtil.getListProduct(getActivity());
+        product.setListKM(adapter.getProductChon());
+        productList.add(position,product);
+        SharePreferenceUtil.setListProduct(getActivity(),productList);
     }
 
     private void setGONE(){

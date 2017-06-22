@@ -13,8 +13,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
+import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
 import com.thanhtuan.posnet.view.fragment.ReorderFragment;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

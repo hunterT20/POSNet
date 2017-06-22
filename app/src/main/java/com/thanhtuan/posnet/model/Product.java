@@ -4,6 +4,7 @@ package com.thanhtuan.posnet.model;
 import java.util.List;
 
 public class Product {
+    private String maPR;
     private String NamePR;
     private String DonGia;
     private String SL;
@@ -13,19 +14,20 @@ public class Product {
     public Product() {
     }
 
-    public Product(String namePR, String donGia, String SL, Boolean chon) {
+    public Product(String maPR, String namePR, String donGia, String SL, Boolean chon) {
+        this.maPR = maPR;
         NamePR = namePR;
         DonGia = donGia;
         this.SL = SL;
         this.chon = chon;
     }
 
-    public Product(String namePR, String donGia, String SL, Boolean chon, List<Product> listKM) {
-        NamePR = namePR;
-        DonGia = donGia;
-        this.SL = SL;
-        this.chon = chon;
-        this.listKM = listKM;
+    public String getMaPR() {
+        return maPR;
+    }
+
+    public void setMaPR(String maPR) {
+        this.maPR = maPR;
     }
 
     public String getNamePR() {
