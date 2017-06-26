@@ -20,13 +20,11 @@ import android.widget.TextView;
 
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
 import com.google.android.gms.vision.barcode.Barcode;
-import com.rey.material.widget.FloatingActionButton;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.ScanUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
-import com.thanhtuan.posnet.util.SweetDialogUtil;
 import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.KMAdapter;
@@ -37,29 +35,23 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CheckFragment extends Fragment {
     @BindView(R.id.rcvKhuyenMai)    RecyclerView rcvKhuyenMai;
-    @BindView(R.id.fabScan)         FloatingActionButton fabScan;
     @BindView(R.id.Thongtin)        ConstraintLayout ThongTin;
     @BindView(R.id.txtvNamePR)      TextView txtvNamePR;
     @BindView(R.id.txtvDonGiaPR)    TextView txtvDonGiaPR;
     @BindView(R.id.txtvSLPR)        TextView txtvSLPR;
     @BindView(R.id.btnReOrder)      Button btnReOrder;
-    @BindView(R.id.btnHuyHang)      Button btnHuyHang;
 
-    private List<Product> listKMAll;
-    private List<Product> productList;
-
-    private Boolean coSP = false;
-
-    private KMAdapter adapter;
-    public String codeBar;
-    private Product product;
+    private List<Product>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
+    private Boolean         coSP = false;   /*Set điều kiện có sản phẩm hay không để */
+    private KMAdapter       adapter;
+    public  String          codeBar;
+    private Product         product;
 
     public CheckFragment() {
         // Required empty public constructor
@@ -75,7 +67,6 @@ public class CheckFragment extends Fragment {
         setHasOptionsMenu(true);
 
         listKMAll = new ArrayList<>();
-        productList = new ArrayList<>();
         if (getActivity() == null) return view;
         RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai, new KMAdapter(listKMAll,getActivity()),getActivity());
 
@@ -86,14 +77,11 @@ public class CheckFragment extends Fragment {
     }
 
     private void addViews() {
-        if (!SharePreferenceUtil.getProductChange(getActivity())){
-            ThongTin.setVisibility(View.GONE);
-            btnHuyHang.setVisibility(View.GONE);
+        if (((ReOrderActivity)getActivity()).productCurrent == null){
+            product = ((ReOrderActivity)getActivity()).productCurrent;
+        }else {
+            //ThongTin.setVisibility(View.GONE);
         }
-        else {
-            fabScan.setVisibility(View.GONE);
-        }
-
     }
 
     private void addControls(){
@@ -113,11 +101,7 @@ public class CheckFragment extends Fragment {
         listKMAll.add(KM3);
         listKMAll.add(KM4);
 
-        if (SharePreferenceUtil.getProductChange(getActivity())){
-            product = SharePreferenceUtil.getProduct(getActivity());
-            btnReOrder.setText(R.string.xacnhanSP);
-        }
-        else {
+        if (product == null){
             product = new Product();
             product.setNamePR("TV 40 inch");
             product.setDonGia("6000000");
@@ -130,82 +114,20 @@ public class CheckFragment extends Fragment {
 
     @OnClick(R.id.txtvRecheck)
     public void ReCheckClick(){
-
     }
-    @OnClick(R.id.fabScan)
-    public void ScanClick(){
-        ScanUtil.startScan(getActivity(), new MaterialBarcodeScanner.OnResultListener() {
-            @Override
-            public void onResult(Barcode barcode) {
-                txtvNamePR.setText(barcode.rawValue);
-                codeBar = barcode.rawValue;
-                setGONE();
-            }
-        });
-    }
-
 
     @OnClick(R.id.btnReOrder)
     public void ReOrderClick(){
-        if (SharePreferenceUtil.getProductChange(getActivity())){
-            setProductList();
-
-            Intent intent = new Intent(getActivity(), ReOrderActivity.class);
-            getActivity().startActivity(intent);
-            getActivity().finish();
-        }else {
-            product.setListKM(adapter.getProductChon());
-            productList.add(product);
-            SweetDialogUtil.onWarning(getActivity(), "Bạn có muốn mua thêm?", new SweetAlertDialog.OnSweetClickListener() {
-                @Override
-                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    ScanClick();
-                    sweetAlertDialog.dismiss();
-                }
-            }, new SweetAlertDialog.OnSweetClickListener() {
-                @Override
-                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    SharePreferenceUtil.setListProduct(getActivity(),productList);
-
-                    Intent intent = new Intent(getActivity(), ReOrderActivity.class);
-                    getActivity().startActivity(intent);
-                    getActivity().finish();
-                    sweetAlertDialog.dismiss();
-                }
-            });
-        }
-    }
-
-    @OnClick(R.id.btnHuyHang)
-    public void HuyHangClick(){
-        SweetDialogUtil.onWarning(getActivity(), "Bạn muốn hủy SP?", new SweetAlertDialog.OnSweetClickListener() {
-            @Override
-            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                Intent intent = new Intent(getActivity(), ReOrderActivity.class);
-                getActivity().startActivity(intent);
-                getActivity().finish();
-                sweetAlertDialog.dismiss();
-            }
-        }, new SweetAlertDialog.OnSweetClickListener() {
-            @Override
-            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                sweetAlertDialog.dismiss();
-            }
-        });
+        product.setListKM(adapter.getProductChon());
+        ((ReOrderActivity)getActivity()).productCurrent = product;
+        ((ReOrderActivity)getActivity()).listPRBuy.add(product);
+        ((ReOrderActivity)getActivity()).callFragment(new ReorderFragment(),"Thông tin Order");
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (SharePreferenceUtil.getProductChange(getActivity())){
-                    setProductList();
-
-                    Intent intent = new Intent(getActivity(), ReOrderActivity.class);
-                    getActivity().startActivity(intent);
-                    getActivity().finish();
-                    return true;
-                }
                 if (!coSP){
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     getActivity().startActivity(intent);
@@ -213,6 +135,9 @@ public class CheckFragment extends Fragment {
                 }else {
                     setVisible();
                 }
+                return true;
+            case R.id.action_scan:
+                Scan();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -223,7 +148,9 @@ public class CheckFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.home, menu);
-        MenuItem searchViewItem = menu.findItem(R.id.action_search);
+        final MenuItem searchViewItem = menu.findItem(R.id.action_search);
+        ((ReOrderActivity)getActivity()).getToolbar().getMenu().findItem(R.id.action_scan).setVisible(true);
+
         final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
         searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -232,30 +159,32 @@ public class CheckFragment extends Fragment {
                 searchViewAndroidActionBar.clearFocus();
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                Log.e("text", newText);
+                return true;
             }
         });
     }
 
-    private void setProductList(){
-        int position = SharePreferenceUtil.getPosition(getActivity());
-        productList = SharePreferenceUtil.getListProduct(getActivity());
-        product.setListKM(adapter.getProductChon());
-        productList.add(position,product);
-        SharePreferenceUtil.setListProduct(getActivity(),productList);
+    private void Scan(){
+        ScanUtil.startScan(getActivity(), new MaterialBarcodeScanner.OnResultListener() {
+            @Override
+            public void onResult(Barcode barcode) {
+                txtvNamePR.setText(barcode.rawValue);
+                codeBar = barcode.rawValue;
+                setGONE();
+            }
+        });
     }
 
     private void setGONE(){
         coSP = true;
         ThongTin.setVisibility(View.VISIBLE);
-        fabScan.setVisibility(View.GONE);
     }
+
     private void setVisible(){
         coSP = false;
         ThongTin.setVisibility(View.GONE);
-        fabScan.setVisibility(View.VISIBLE);
     }
 }

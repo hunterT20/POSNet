@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.NewFeeds;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
-import com.thanhtuan.posnet.view.activity.CheckActivity;
+import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.NewfeedAdapter;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
 
     @OnClick(R.id.btnCheckPR)
     public void ClickCheckPR(){
-        Intent intent = new Intent(getActivity(), CheckActivity.class);
+        Intent intent = new Intent(getActivity(), ReOrderActivity.class);
         getActivity().startActivity(intent);
     }
 }

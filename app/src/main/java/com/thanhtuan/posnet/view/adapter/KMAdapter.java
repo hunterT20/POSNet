@@ -44,12 +44,10 @@ public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> 
         holder.txtvNameKM.setText(product.getNamePR());
         holder.txtvDonGiaKM.setText(product.getDonGia() + "vnđ");
         holder.txtvSLKM.setText(product.getSL());
-        if (SharePreferenceUtil.getProductChange(context))
-            for (Product KM: SharePreferenceUtil.getProduct(context).getListKM())
-                if (product.getMaPR().equals(KM.getMaPR()))
-                {
-                    setChon(product, holder);
-                }
+        if (product.getChon())
+        {
+            holder.itempr.setBackgroundResource(R.color.colorAccent);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

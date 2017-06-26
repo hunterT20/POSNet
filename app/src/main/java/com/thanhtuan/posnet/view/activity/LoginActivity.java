@@ -42,12 +42,7 @@ public class LoginActivity extends AppCompatActivity {
             SweetDialogUtil.onSuccess(this, "Đăng nhập thành công!", new SweetAlertDialog.OnSweetClickListener() {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    Intent intent;
-                    if (SharePreferenceUtil.getProductChange(getApplication())){
-                        intent = new Intent(LoginActivity.this,CheckActivity.class);
-                    }else {
-                        intent = new Intent(LoginActivity.this,MainActivity.class);
-                    }
+                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(intent);
                     sweetAlertDialog.dismiss();
                 }
@@ -57,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Boolean checkPass(String username, String pass){
         String getEmail = edtEmail.getText().toString();
-        String getPass = edtPass.getText().toString();
+        String getPass  = edtPass.getText().toString();
         if (edtEmail.getText().toString().equals(username)){
             if (edtPass.getText().toString().equals(pass)){
                 if (ckbSave.isChecked()){

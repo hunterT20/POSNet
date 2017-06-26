@@ -22,4 +22,5 @@
     <string name="xacnhanSP">Xác nhận SP</string>
     <string name="thanhtoan">Thanh toán</string>
     <string name="nextbutton">Next</string>
+    <string name="scan">Scan</string>
 </resources>

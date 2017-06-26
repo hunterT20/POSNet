@@ -52,23 +52,6 @@ public class SharePreferenceUtil {
         prefsEditor.apply();
     }
 
-    public static Product getProduct(Context context){
-        Gson gson = new Gson();
-        SharedPreferences mPrefs = context.getSharedPreferences(NAME,MODE_PRIVATE);
-        String json = mPrefs.getString(VALUE_PRODUCT, "");
-        return gson.fromJson(json, Product.class);
-    }
-
-    public static void setListProduct(Context context, List<Product> list){
-        Gson gson = new Gson();
-        SharedPreferences mPrefs = context.getSharedPreferences(NAME,MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-
-        String json = gson.toJson(list);
-        prefsEditor.putString(VALUE_LISTPRODUCT, json);
-        prefsEditor.apply();
-    }
-
     public static List<Product> getListProduct(Context context){
         Gson gson = new Gson();
         SharedPreferences mPrefs = context.getSharedPreferences(NAME,MODE_PRIVATE);
@@ -77,27 +60,8 @@ public class SharePreferenceUtil {
         return gson.fromJson(json, listType);
     }
 
-    public static void setProductChange(Context context, Boolean change){
-        SharedPreferences MyPre =  context.getSharedPreferences(NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = MyPre.edit();
-        editor.putBoolean(VALUE_CHANGE, change);
-        editor.apply();
-    }
-
     public static Boolean getProductChange(Context context){
         SharedPreferences mPrefs = context.getSharedPreferences(NAME,MODE_PRIVATE);
         return mPrefs.getBoolean(VALUE_CHANGE, false);
-    }
-
-    public static void setPosition(Context context, int position){
-        SharedPreferences MyPre =  context.getSharedPreferences(NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = MyPre.edit();
-        editor.putInt(VALUE_POSITION, position);
-        editor.apply();
-    }
-
-    public static int getPosition(Context context){
-        SharedPreferences mPrefs = context.getSharedPreferences(NAME,MODE_PRIVATE);
-        return mPrefs.getInt(VALUE_POSITION, -1);
     }
 }

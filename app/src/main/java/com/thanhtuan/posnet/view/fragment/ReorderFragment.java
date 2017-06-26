@@ -98,9 +98,8 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             }
         });
 
-        if (SharePreferenceUtil.getProductChange(getActivity())){
-            SharePreferenceUtil.setProductChange(getActivity(),false);
-            SharePreferenceUtil.setPosition(getActivity(),-1);
+        Product product = ((ReOrderActivity)getActivity()).productCurrent;
+        if (((ReOrderActivity)getActivity()).edit){
             step = 2;
             onCreateListPR();
 
@@ -132,6 +131,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             step ++;
             btnNext.setText(R.string.xacnhanSP);
 
+            setVisibleButtonScan(false);
             ThongTinKH.setVisibility(View.GONE);
             ThongTinGiaoHang.setVisibility(View.VISIBLE);
             btnBack.setVisibility(View.VISIBLE);
@@ -146,15 +146,17 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             btnNext.setText(R.string.thanhtoan);
 
         }else if (step == 2){
-            SweetDialogUtil.onWarning(getActivity(), "Xác nhận thanh toán?", new SweetAlertDialog.OnSweetClickListener() {
+            ((ReOrderActivity)getActivity()).productCurrent = null;
+            SweetDialogUtil.onWarning(getActivity(), "Bạn có muốn mua tiếp không?", new SweetAlertDialog.OnSweetClickListener() {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    ((ReOrderActivity)getActivity()).callFragment(new KQReOderFragment(),"Xác nhận thanh toán");
+                    ((ReOrderActivity)getActivity()).callFragment(new CheckFragment(),"Thông tin sản phẩm");
                     sweetAlertDialog.dismiss();
                 }
             }, new SweetAlertDialog.OnSweetClickListener() {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
+
                     sweetAlertDialog.dismiss();
                 }
             });
@@ -165,6 +167,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     public void BackClick(){
         if (step == 1){
             step --;
+            setVisibleButtonScan(true);
             btnBack.setVisibility(View.GONE);
             btnNext.setText(R.string.nextbutton);
             ThongTinKH.setVisibility(View.VISIBLE);
@@ -208,6 +211,8 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.home, menu);
         MenuItem searchViewItem = menu.findItem(R.id.action_search);
+        setVisibleButtonScan(true);
+
         final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
         searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -227,18 +232,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                SweetDialogUtil.onWarning(getActivity(), "Bạn muốn hủy order này?", new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        getActivity().startActivity(intent);
-                    }
-                }, new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.dismiss();
-                    }
-                });
+                ((ReOrderActivity)getActivity()).callFragment(new CheckFragment(),"Thông tin sản phẩm");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -272,5 +266,9 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
         txtvTime.setText(hour + ":" + minute);
+    }
+
+    private void setVisibleButtonScan(Boolean visible){
+        ((ReOrderActivity)getActivity()).getToolbar().getMenu().findItem(R.id.action_scan).setVisible(visible);
     }
 }

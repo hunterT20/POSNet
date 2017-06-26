@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
-import com.thanhtuan.posnet.view.activity.CheckActivity;
 
 import java.util.List;
 
@@ -47,15 +46,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharePreferenceUtil.setProduct(context,product);
-                SharePreferenceUtil.setProductChange(context,true);
-                mProduct.remove(holder.getAdapterPosition());
-                SharePreferenceUtil.setListProduct(context,mProduct);
-                SharePreferenceUtil.setPosition(context,holder.getAdapterPosition());
 
-                Intent intent = new Intent(context, CheckActivity.class);
-                context.startActivity(intent);
-                ((AppCompatActivity)context).finish();
             }
         });
     }
