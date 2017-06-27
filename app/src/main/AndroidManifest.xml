@@ -4,6 +4,7 @@
     package="com.thanhtuan.posnet">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -26,7 +27,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".view.activity.ReOrderActivity"
-            android:label="@string/title_activity_re_order"></activity>
+            android:label="@string/title_activity_re_order" />
     </application>
 
 </manifest>

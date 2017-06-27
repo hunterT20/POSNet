@@ -1,11 +1,13 @@
 package com.thanhtuan.posnet.view.fragment;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -15,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -79,7 +83,7 @@ public class CheckFragment extends Fragment {
         if (((ReOrderActivity)getActivity()).productCurrent != null){
             product = ((ReOrderActivity)getActivity()).productCurrent;
         }else {
-            //ThongTin.setVisibility(View.GONE);
+            ThongTin.setVisibility(View.GONE);
         }
     }
 
@@ -114,6 +118,32 @@ public class CheckFragment extends Fragment {
 
     @OnClick(R.id.txtvRecheck)
     public void ReCheckClick(){
+    }
+
+    @OnClick(R.id.txtvChiTiet)
+    public void ChiTietClick(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        alert.setTitle("Chi tiết sản phẩm");
+
+        WebView wv = new WebView(getActivity());
+        wv.loadUrl("https://www.dienmayxanh.com/tivi/tivi-led-asanzo-25t350");
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+
+                return true;
+            }
+        });
+
+        alert.setView(wv);
+        alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        alert.show();
     }
 
     @OnClick(R.id.btnReOrder)
