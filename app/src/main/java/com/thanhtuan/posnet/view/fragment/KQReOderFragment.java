@@ -5,15 +5,19 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
+import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
 import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
@@ -29,8 +33,11 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class KQReOderFragment extends Fragment {
     @BindView(R.id.ThanhToan)       ConstraintLayout ThanhToan;
     @BindView(R.id.KQ)              ConstraintLayout KQ;
+    @BindView(R.id.TraTruoc)        ConstraintLayout TraTruoc;
     @BindView(R.id.txtvTongTien)    TextView txtvTongTien;
     @BindView(R.id.btnXacNhan)      Button btnXacNhan;
+    @BindView(R.id.radioGroup)      RadioGroup radioGroup;
+    @BindView(R.id.edtTraTruoc)     EditText edtTraTruoc;
 
     /*Tham số biến step:
     * step == 0: màn hình xác nhận thanh toán
@@ -58,6 +65,13 @@ public class KQReOderFragment extends Fragment {
     private void addViews() {
         int TongTien = ((ReOrderActivity)getActivity()).TongTien();
         txtvTongTien.setText(TongTien + " vnđ");
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                onRadioButtonChange(radioGroup, i);
+            }
+        });
+        edtTraTruoc.addTextChangedListener(new NumberTextWatcherForThousand(edtTraTruoc));
     }
 
     @OnClick(R.id.btnXacNhan)
@@ -117,4 +131,16 @@ public class KQReOderFragment extends Fragment {
         }
     }
 
+    private void onRadioButtonChange(RadioGroup radioGroup, int i) {
+        int checkedRadioID = radioGroup.getCheckedRadioButtonId();
+
+        switch (checkedRadioID){
+            case R.id.rdbTraHet:
+                TraTruoc.setVisibility(View.GONE);
+                break;
+            case R.id.rdbTraGop:
+                TraTruoc.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
 }

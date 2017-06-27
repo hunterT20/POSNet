@@ -75,8 +75,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     public ReorderFragment() {
         // Required empty public constructor
     }
-
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
