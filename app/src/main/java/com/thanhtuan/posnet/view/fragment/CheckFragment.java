@@ -49,7 +49,6 @@ public class CheckFragment extends Fragment {
 
     private List<Product>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
     private Boolean         coSP = false;   /*Set điều kiện có sản phẩm hay không để */
-    private KMAdapter       adapter;
     public  String          codeBar;
     private Product         product;
 
@@ -77,7 +76,7 @@ public class CheckFragment extends Fragment {
     }
 
     private void addViews() {
-        if (((ReOrderActivity)getActivity()).productCurrent == null){
+        if (((ReOrderActivity)getActivity()).productCurrent != null){
             product = ((ReOrderActivity)getActivity()).productCurrent;
         }else {
             //ThongTin.setVisibility(View.GONE);
@@ -86,7 +85,7 @@ public class CheckFragment extends Fragment {
 
     private void addControls(){
         if (getActivity() == null) return;
-        adapter = new KMAdapter(listKMAll, getActivity());
+        KMAdapter adapter = new KMAdapter(product.getListKM(), getActivity());
         rcvKhuyenMai.setAdapter(adapter);
     }
 
@@ -107,6 +106,7 @@ public class CheckFragment extends Fragment {
             product.setDonGia("6000000");
             product.setChon(false);
             product.setSL("10");
+            product.setListKM(listKMAll);
         }
 
         addControls();
@@ -118,7 +118,6 @@ public class CheckFragment extends Fragment {
 
     @OnClick(R.id.btnReOrder)
     public void ReOrderClick(){
-        product.setListKM(adapter.getProductChon());
         ((ReOrderActivity)getActivity()).productCurrent = product;
         ((ReOrderActivity)getActivity()).listPRBuy.add(product);
         ((ReOrderActivity)getActivity()).callFragment(new ReorderFragment(),"Thông tin Order");
@@ -161,7 +160,6 @@ public class CheckFragment extends Fragment {
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.e("text", newText);
                 return true;
             }
         });

@@ -19,11 +19,6 @@ public class SharePreferenceUtil {
 
     private static String VALUE_USERNAME = "Username";
     private static String VALUE_PASSWORD = "Password";
-    private static String VALUE_LISTPRODUCT = "ListProduct";
-    private static String VALUE_PRODUCT = "Product";
-    private static String VALUE_CHANGE = "PRChange";
-    private static String VALUE_POSITION = "Position";
-
 
     public static void saveUser(Context context, String username, String pass) {
         SharedPreferences MyPre =  context.getSharedPreferences(NAME, MODE_PRIVATE);
@@ -40,28 +35,5 @@ public class SharePreferenceUtil {
 
         edtUserName.setText(UsernameValue);
         edtPassword.setText(PasswordValue);
-    }
-
-    public static void setProduct(Context context, Product product) {
-        Gson gson = new Gson();
-        SharedPreferences mPrefs = context.getSharedPreferences(NAME,MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-
-        String json = gson.toJson(product);
-        prefsEditor.putString(VALUE_PRODUCT, json);
-        prefsEditor.apply();
-    }
-
-    public static List<Product> getListProduct(Context context){
-        Gson gson = new Gson();
-        SharedPreferences mPrefs = context.getSharedPreferences(NAME,MODE_PRIVATE);
-        String json = mPrefs.getString(VALUE_LISTPRODUCT, "");
-        Type listType = new TypeToken<ArrayList<Product>>(){}.getType();
-        return gson.fromJson(json, listType);
-    }
-
-    public static Boolean getProductChange(Context context){
-        SharedPreferences mPrefs = context.getSharedPreferences(NAME,MODE_PRIVATE);
-        return mPrefs.getBoolean(VALUE_CHANGE, false);
     }
 }

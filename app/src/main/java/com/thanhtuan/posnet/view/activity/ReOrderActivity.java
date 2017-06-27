@@ -35,7 +35,6 @@ public class ReOrderActivity extends AppCompatActivity {
     * Step == 1: ReOrderFragment
     * Step == 2: KQReOrderFragment*/
     public int Step = 0;
-    public Boolean edit = false;
     public List<Product> listPRBuy;             /*List sp đã xác nhận mua*/
     public Product productCurrent;              /*SP đang mua*/
     public Customer customer;                   /*Thông tin khách hàng đang mua*/
@@ -51,9 +50,9 @@ public class ReOrderActivity extends AppCompatActivity {
     }
 
     private void addControls() {
-        productCurrent = new Product();
+        productCurrent = null;
         listPRBuy = new ArrayList<>();
-        customer = new Customer();
+        customer = null;
         thongTinGiaoHang = new ThongTinGiaoHang();
     }
 
@@ -81,5 +80,13 @@ public class ReOrderActivity extends AppCompatActivity {
 
     public Toolbar getToolbar(){
         return toolbar;
+    }
+
+    public int TongTien(){
+        int TongTien = 0;
+        for (Product product : listPRBuy){
+            TongTien += Integer.parseInt(product.getDonGia());
+        }
+        return TongTien;
     }
 }

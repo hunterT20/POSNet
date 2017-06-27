@@ -4,7 +4,6 @@ package com.thanhtuan.posnet.view.fragment;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
@@ -12,6 +11,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,20 +20,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.thanhtuan.posnet.R;
+import com.thanhtuan.posnet.model.Customer;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
-import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
-import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.KMAdapter;
-import com.thanhtuan.posnet.view.adapter.ProductAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,14 +50,19 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     @BindView(R.id.ThongTinKH)          ConstraintLayout ThongTinKH;
     @BindView(R.id.ThongTinGiaoHang)    ConstraintLayout ThongTinGiaoHang;
     @BindView(R.id.TaiNha)              ConstraintLayout TaiNha;
+    @BindView(R.id.ThongTinSP)          ConstraintLayout ThongTinSP;
     @BindView(R.id.TongTien)            LinearLayout TongTien;
     @BindView(R.id.btnBack)             Button btnBack;
     @BindView(R.id.btnNext)             Button btnNext;
     @BindView(R.id.radioGroup)          RadioGroup radioGroup;
-    @BindView(R.id.rcvProduct)          RecyclerView rcvProduct;
+    @BindView(R.id.rcvKhuyenMai)        RecyclerView rcvKhuyenMai;
     @BindView(R.id.txtvTongTien)        TextView txtvTongTien;
     @BindView(R.id.txtvDate)            TextView txtvDate;
     @BindView(R.id.txtvTime)            TextView txtvTime;
+    @BindView(R.id.txtvNamePR)          TextView txtvNamePR;
+    @BindView(R.id.edtTenKH)            EditText edtTenKH;
+    @BindView(R.id.edtPhoneKH)          EditText edtPhoneKH;
+    @BindView(R.id.edtDiaChi)           EditText edtDiaChi;
 
     /*Trạng thái của step:
     * step == 0: xác nhận thông tin khách hàng
@@ -83,7 +87,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
 
         productList = new ArrayList<>();
         if (getActivity() == null) return view;
-        RecyclerViewUtil.setupRecyclerView(rcvProduct, new KMAdapter(productList,getActivity()),getActivity());
+        RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai, new KMAdapter(productList,getActivity()),getActivity());
 
         addViews();
 
@@ -98,17 +102,9 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             }
         });
 
-        Product product = ((ReOrderActivity)getActivity()).productCurrent;
-        if (((ReOrderActivity)getActivity()).edit){
-            step = 2;
-            onCreateListPR();
-
-            ThongTinGiaoHang.setVisibility(View.GONE);
-            TongTien.setVisibility(View.VISIBLE);
-            ThongTinKH.setVisibility(View.GONE);
-            btnBack.setVisibility(View.VISIBLE);
-            rcvProduct.setVisibility(View.VISIBLE);
-            btnNext.setText(R.string.thanhtoan);
+        if (((ReOrderActivity)getActivity()).customer != null){
+            step = 1;
+            setKHSuccess();
         }
     }
 
@@ -129,37 +125,19 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     public void NextClick(){
         if (step == 0){
             step ++;
-            btnNext.setText(R.string.xacnhanSP);
-
-            setVisibleButtonScan(false);
-            ThongTinKH.setVisibility(View.GONE);
-            ThongTinGiaoHang.setVisibility(View.VISIBLE);
-            btnBack.setVisibility(View.VISIBLE);
+            setKHSuccess();
         }else if (step == 1){
             step ++;
             onCreateListPR();
 
             ThongTinGiaoHang.setVisibility(View.GONE);
             ThongTinKH.setVisibility(View.GONE);
-            rcvProduct.setVisibility(View.VISIBLE);
+            ThongTinSP.setVisibility(View.VISIBLE);
             TongTien.setVisibility(View.VISIBLE);
             btnNext.setText(R.string.thanhtoan);
 
         }else if (step == 2){
-            ((ReOrderActivity)getActivity()).productCurrent = null;
-            SweetDialogUtil.onWarning(getActivity(), "Bạn có muốn mua tiếp không?", new SweetAlertDialog.OnSweetClickListener() {
-                @Override
-                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    ((ReOrderActivity)getActivity()).callFragment(new CheckFragment(),"Thông tin sản phẩm");
-                    sweetAlertDialog.dismiss();
-                }
-            }, new SweetAlertDialog.OnSweetClickListener() {
-                @Override
-                public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-                    sweetAlertDialog.dismiss();
-                }
-            });
+            ((ReOrderActivity)getActivity()).callFragment(new KQReOderFragment(),"Thông tin thanh toán");
         }
     }
 
@@ -176,7 +154,6 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             step --;
             btnNext.setText(R.string.xacnhanSP);
 
-            rcvProduct.setVisibility(View.GONE);
             TongTien.setVisibility(View.GONE);
             ThongTinGiaoHang.setVisibility(View.VISIBLE);
             btnBack.setVisibility(View.VISIBLE);
@@ -195,15 +172,14 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
 
     @SuppressLint("SetTextI18n")
     private void onCreateListPR(){
-        int TongTien = 0;
-        productList = SharePreferenceUtil.getListProduct(getActivity());
-        for (Product product : productList){
-            TongTien += Integer.parseInt(product.getDonGia());
-        }
-        txtvTongTien.setText(TongTien + " vnđ");
+        Product product = ((ReOrderActivity)getActivity()).productCurrent;
+        txtvTongTien.setText(product.getDonGia() + " vnđ");
+        txtvNamePR.setText(product.getNamePR());
+        productList = (product.getListKM());
+
         if (getActivity() == null) return;
-        ProductAdapter adapter = new ProductAdapter(productList, getActivity());
-        rcvProduct.setAdapter(adapter);
+        KMAdapter adapter = new KMAdapter(productList, getActivity());
+        rcvKhuyenMai.setAdapter(adapter);
     }
 
     @Override
@@ -268,7 +244,24 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
         txtvTime.setText(hour + ":" + minute);
     }
 
+    /*set trạng thái cho button Scan trên toolbar*/
     private void setVisibleButtonScan(Boolean visible){
         ((ReOrderActivity)getActivity()).getToolbar().getMenu().findItem(R.id.action_scan).setVisible(visible);
+    }
+
+    /*Sau khi đã hoàn thành thông tin khách hàng*/
+    private void setKHSuccess(){
+        btnNext.setText(R.string.xacnhanSP);
+
+        Customer customer = new Customer();
+        customer.setName(edtTenKH.getText().toString());
+        customer.setDiaChi(edtDiaChi.getText().toString());
+        customer.setSDT(edtPhoneKH.getText().toString());
+        ((ReOrderActivity)getActivity()).customer = customer;
+
+        setVisibleButtonScan(false);
+        ThongTinKH.setVisibility(View.GONE);
+        ThongTinGiaoHang.setVisibility(View.VISIBLE);
+        btnBack.setVisibility(View.VISIBLE);
     }
 }
