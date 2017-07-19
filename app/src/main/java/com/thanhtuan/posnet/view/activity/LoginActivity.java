@@ -3,6 +3,8 @@ package com.thanhtuan.posnet.view.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -17,16 +19,14 @@ import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class LoginActivity extends AppCompatActivity {
-    @BindView(R.id.edtEmail)
-    EditText edtEmail;
+    @BindView(R.id.edtEmail)    EditText edtEmail;
     @BindView(R.id.edtPass) EditText edtPass;
-    @BindView(R.id.txtvForgetPass) TextView txtvForgetPass;
-    @BindView(R.id.ckbSave)
-    CheckBox ckbSave;
+    @BindView(R.id.ckbSave)    CheckBox ckbSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setFullScreen();
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
@@ -68,5 +68,11 @@ public class LoginActivity extends AppCompatActivity {
             SweetDialogUtil.onError(this,"Email không tồn tại!");
             return false;
         }
+    }
+
+    public void setFullScreen() {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 }
