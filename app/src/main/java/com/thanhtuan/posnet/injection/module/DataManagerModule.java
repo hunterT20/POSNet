@@ -16,7 +16,7 @@ public class DataManagerModule {
 
     @Provides
     @PerDataManager
-    POSCenterService provideHackerNewsService() {
+    POSCenterService providePOSCenterService() {
         return new RetrofitHelper().newPOSCenterService();
     }
 

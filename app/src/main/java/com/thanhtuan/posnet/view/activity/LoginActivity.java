@@ -6,10 +6,11 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.rey.material.widget.CheckBox;
+import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
+import com.thanhtuan.posnet.data.DataManager;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
 
@@ -17,11 +18,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
 
 public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.edtEmail)    EditText edtEmail;
     @BindView(R.id.edtPass) EditText edtPass;
     @BindView(R.id.ckbSave)    CheckBox ckbSave;
+
+    private DataManager dataManager;
+    private CompositeDisposable mSubscriptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +39,14 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         SharePreferenceUtil.loadUser(LoginActivity.this,edtEmail,edtPass);
+        dataManager = POSCenterApplication.get(getApplication()).getComponent().dataManager();
+        mSubscriptions = new CompositeDisposable();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSubscriptions.clear();
     }
 
     @OnClick(R.id.btnLogin)
@@ -68,6 +84,14 @@ public class LoginActivity extends AppCompatActivity {
             SweetDialogUtil.onError(this,"Email không tồn tại!");
             return false;
         }
+    }
+
+    private void login(String username, String pass){
+        mSubscriptions.add(dataManager
+                .login(username, pass)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(dataManager.getScheduler())
+                .subscribe());
     }
 
     public void setFullScreen() {
