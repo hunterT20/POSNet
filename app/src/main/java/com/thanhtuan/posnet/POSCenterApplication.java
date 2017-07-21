@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.thanhtuan.posnet.injection.component.ApplicationComponent;
+import com.thanhtuan.posnet.injection.component.DaggerApplicationComponent;
+import com.thanhtuan.posnet.injection.module.ApplicationModule;
 
 public class POSCenterApplication extends Application {
     ApplicationComponent mApplicationComponent;
@@ -11,6 +13,9 @@ public class POSCenterApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        mApplicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
     }
 
     public static POSCenterApplication get(Context context) {
@@ -19,10 +24,5 @@ public class POSCenterApplication extends Application {
 
     public ApplicationComponent getComponent() {
         return mApplicationComponent;
-    }
-
-    // Needed to replace the component with a test specific one
-    public void setComponent(ApplicationComponent applicationComponent) {
-        mApplicationComponent = applicationComponent;
     }
 }

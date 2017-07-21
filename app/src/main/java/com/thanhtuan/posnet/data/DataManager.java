@@ -6,6 +6,7 @@ import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.data.remote.POSCenterService;
 import com.thanhtuan.posnet.injection.component.DaggerDataManagerComponent;
 import com.thanhtuan.posnet.injection.module.DataManagerModule;
+import com.thanhtuan.posnet.model.User;
 
 import javax.inject.Inject;
 
@@ -38,18 +39,7 @@ public class DataManager {
         return mSubscribeScheduler;
     }
 
-    /*public Observable<String> login(String username,String pass){
-        return Observable.from(username,pass)
-                .concatMap(new Func1<Long, Observable<Post>>() {
-                    @Override
-                    public Observable<Post> call(Long aLong) {
-                        return mHackerNewsService.getStoryItem(String.valueOf(aLong));
-                    }
-                }).flatMap(new Func1<Post, Observable<Post>>() {
-                    @Override
-                    public Observable<Post> call(Post post) {
-                        return post.title != null ? Observable.just(post) : Observable.<Post>empty();
-                    }
-                });
-    }*/
+    public Observable<User> login(String username, String pass){
+        return posCenterService.login(username, pass);
+    }
 }

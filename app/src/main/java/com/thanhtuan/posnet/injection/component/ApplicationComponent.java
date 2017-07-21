@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.thanhtuan.posnet.data.DataManager;
 import com.thanhtuan.posnet.injection.module.ApplicationModule;
+import com.thanhtuan.posnet.view.activity.LoginActivity;
 import com.thanhtuan.posnet.view.activity.MainActivity;
 
 import javax.inject.Singleton;
@@ -14,7 +15,7 @@ import dagger.Component;
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
-    void inject(MainActivity mainActivity);
+    void inject(LoginActivity Login);
 
     Application application();
     DataManager dataManager();

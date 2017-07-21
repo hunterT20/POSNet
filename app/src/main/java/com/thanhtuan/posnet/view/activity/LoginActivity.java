@@ -3,14 +3,17 @@ package com.thanhtuan.posnet.view.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.rey.material.widget.CheckBox;
 import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.data.DataManager;
+import com.thanhtuan.posnet.model.User;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
 
@@ -25,8 +28,8 @@ import io.reactivex.observers.DisposableObserver;
 
 public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.edtEmail)    EditText edtEmail;
-    @BindView(R.id.edtPass) EditText edtPass;
-    @BindView(R.id.ckbSave)    CheckBox ckbSave;
+    @BindView(R.id.edtPass)     EditText edtPass;
+    @BindView(R.id.ckbSave)     CheckBox ckbSave;
 
     private DataManager dataManager;
     private CompositeDisposable mSubscriptions;
@@ -39,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         SharePreferenceUtil.loadUser(LoginActivity.this,edtEmail,edtPass);
-        dataManager = POSCenterApplication.get(getApplication()).getComponent().dataManager();
+        dataManager = POSCenterApplication.get(this).getComponent().dataManager();
         mSubscriptions = new CompositeDisposable();
     }
 
@@ -51,47 +54,40 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnLogin)
     public void LoginClick(){
-        String username = "thanhtuan";
-        String pass = "123456";
-
-        if (checkPass(username,pass)){
-            SweetDialogUtil.onSuccess(this, "Đăng nhập thành công!", new SweetAlertDialog.OnSweetClickListener() {
-                @Override
-                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                    startActivity(intent);
-                    sweetAlertDialog.dismiss();
-                }
-            });
-        }
-    }
-
-    private Boolean checkPass(String username, String pass){
         String getEmail = edtEmail.getText().toString();
         String getPass  = edtPass.getText().toString();
-        if (edtEmail.getText().toString().equals(username)){
-            if (edtPass.getText().toString().equals(pass)){
-                if (ckbSave.isChecked()){
-                    SharePreferenceUtil.saveUser(LoginActivity.this,getEmail,getPass);
-                }
-                return true;
-            }
-            else {
-                SweetDialogUtil.onError(this,"Sai Password");
-                return false;
-            }
-        }else {
-            SweetDialogUtil.onError(this,"Email không tồn tại!");
-            return false;
-        }
+
+        login(getEmail,getPass);
     }
 
-    private void login(String username, String pass){
+    private void login(final String username, final String pass){
         mSubscriptions.add(dataManager
                 .login(username, pass)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(dataManager.getScheduler())
-                .subscribe());
+                .subscribeWith(new DisposableObserver<User>(){
+                    @Override
+                    public void onNext(@NonNull User user) {
+                        if (user.getUserName().equals(username)){
+                            Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                            if (ckbSave.isChecked()){
+                                SharePreferenceUtil.saveUser(LoginActivity.this,username,pass);
+                            }
+                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }));
     }
 
     public void setFullScreen() {
