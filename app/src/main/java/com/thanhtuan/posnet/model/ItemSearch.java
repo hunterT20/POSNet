@@ -7,10 +7,10 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Product {
+public class ItemSearch {
 
     @SerializedName("DVT")
-    private Object mDVT;
+    private String mDVT;
     @SerializedName("FlagPromotion")
     private Long mFlagPromotion;
     @SerializedName("GiamThem")
@@ -24,23 +24,23 @@ public class Product {
     @SerializedName("ItemName")
     private String mItemName;
     @SerializedName("List_Itemkm")
-    private List<ItemKM> mListItemkm;
+    private List<Object> mListItemkm;
     @SerializedName("QuantityCan")
     private Long mQuantityCan;
     @SerializedName("SalesPrice")
     private Long mSalesPrice;
     @SerializedName("SiteID")
-    private String mSiteID;
+    private Object mSiteID;
     @SerializedName("SoLuongTon")
     private Long mSoLuongTon;
     @SerializedName("TypeItemID")
     private String mTypeItemID;
 
-    public Object getDVT() {
+    public String getDVT() {
         return mDVT;
     }
 
-    public void setDVT(Object DVT) {
+    public void setDVT(String DVT) {
         mDVT = DVT;
     }
 
@@ -92,11 +92,11 @@ public class Product {
         mItemName = ItemName;
     }
 
-    public List<ItemKM> getListItemkm() {
+    public List<Object> getListItemkm() {
         return mListItemkm;
     }
 
-    public void setListItemkm(List<ItemKM> ListItemkm) {
+    public void setListItemkm(List<Object> ListItemkm) {
         mListItemkm = ListItemkm;
     }
 
@@ -116,11 +116,11 @@ public class Product {
         mSalesPrice = SalesPrice;
     }
 
-    public String getSiteID() {
+    public Object getSiteID() {
         return mSiteID;
     }
 
-    public void setSiteID(String SiteID) {
+    public void setSiteID(Object SiteID) {
         mSiteID = SiteID;
     }
 

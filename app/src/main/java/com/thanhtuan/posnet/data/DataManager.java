@@ -6,6 +6,8 @@ import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.data.remote.POSCenterService;
 import com.thanhtuan.posnet.injection.component.DaggerDataManagerComponent;
 import com.thanhtuan.posnet.injection.module.DataManagerModule;
+import com.thanhtuan.posnet.model.StatusProduct;
+import com.thanhtuan.posnet.model.StatusSearch;
 import com.thanhtuan.posnet.model.User;
 
 import javax.inject.Inject;
@@ -41,5 +43,13 @@ public class DataManager {
 
     public Observable<User> login(String username, String pass){
         return posCenterService.login(username, pass);
+    }
+
+    public Observable<StatusSearch> search(String Model, String SiteID){
+        return posCenterService.search(Model, SiteID);
+    }
+
+    public Observable<StatusProduct> getProduct(String SiteID, String ItemID){
+        return posCenterService.getItem(SiteID, ItemID);
     }
 }

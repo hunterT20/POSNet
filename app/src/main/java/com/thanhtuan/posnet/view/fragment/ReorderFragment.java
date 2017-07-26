@@ -11,7 +11,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,9 +27,9 @@ import android.widget.TimePicker;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Customer;
+import com.thanhtuan.posnet.model.ItemKM;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
-import com.thanhtuan.posnet.util.SweetDialogUtil;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.KMAdapter;
 
@@ -41,7 +40,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,7 +68,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     * step == 2: xác nhận danh sách sản phẩm*/
     private int step = 0;
 
-    private List<Product> productList;
+    private List<ItemKM> productList;
 
     public ReorderFragment() {
         // Required empty public constructor
@@ -172,9 +170,9 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     @SuppressLint("SetTextI18n")
     private void onCreateListPR(){
         Product product = ((ReOrderActivity)getActivity()).productCurrent;
-        txtvTongTien.setText(product.getDonGia() + " vnđ");
-        txtvNamePR.setText(product.getNamePR());
-        productList = (product.getListKM());
+        txtvTongTien.setText(String.valueOf(product.getSalesPrice()) + " vnđ");
+        txtvNamePR.setText(product.getItemName());
+        productList = (product.getListItemkm());
 
         if (getActivity() == null) return;
         KMAdapter adapter = new KMAdapter(productList, getActivity());

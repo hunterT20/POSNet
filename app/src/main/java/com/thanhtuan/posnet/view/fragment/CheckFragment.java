@@ -10,6 +10,8 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,16 +21,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
+import com.thanhtuan.posnet.data.DataManager;
+import com.thanhtuan.posnet.model.ItemKM;
+import com.thanhtuan.posnet.model.ItemSearch;
 import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.model.StatusProduct;
+import com.thanhtuan.posnet.model.StatusSearch;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.ScanUtil;
-import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.KMAdapter;
@@ -39,6 +47,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,10 +63,13 @@ public class CheckFragment extends Fragment {
     @BindView(R.id.txtvSLPR)        TextView txtvSLPR;
     @BindView(R.id.btnReOrder)      Button btnReOrder;
 
-    private List<Product>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
+    private List<ItemKM>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
     private Boolean         coSP = false;   /*Set điều kiện có sản phẩm hay không để */
     public  String          codeBar;
-    private Product         product;
+    private Product product;
+
+    private DataManager dataManager;
+    private CompositeDisposable mSubscriptions;
 
     public CheckFragment() {
         // Required empty public constructor
@@ -73,10 +88,17 @@ public class CheckFragment extends Fragment {
         if (getActivity() == null) return view;
         RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai, new KMAdapter(listKMAll,getActivity()),getActivity());
 
-        addViews();
-        initData();
+        dataManager = POSCenterApplication.get(getActivity()).getComponent().dataManager();
+        mSubscriptions = new CompositeDisposable();
 
+        addViews();
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSubscriptions.clear();
     }
 
     private void addViews() {
@@ -89,35 +111,65 @@ public class CheckFragment extends Fragment {
 
     private void addControls(){
         if (getActivity() == null) return;
-        KMAdapter adapter = new KMAdapter(product.getListKM(), getActivity());
+        KMAdapter adapter = new KMAdapter(listKMAll, getActivity());
         rcvKhuyenMai.setAdapter(adapter);
     }
 
-    private void initData() {
-        Product KM1 = new Product("1","Tivi 29 inch","8.000.000","1",false);
-        Product KM2 = new Product("2","Bột giặt","50.000", "3",false);
-        Product KM3 = new Product("3","Bột giặt2","50.000", "3",false);
-        Product KM4 = new Product("4","Bột giặt3","50.000", "3",false);
+    private void getListKMAll(String SiteID, String ItemID){
+        mSubscriptions.add(dataManager
+                .getProduct(SiteID,ItemID)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(dataManager.getScheduler())
+                .subscribeWith(new DisposableObserver<StatusProduct>() {
+                    @Override
+                    public void onNext(@NonNull StatusProduct statusProduct) {
+                        product = statusProduct.getData().get(0);
+                        txtvNamePR.setText(product.getItemName());
+                        txtvDonGiaPR.setText(String.valueOf(product.getSalesPrice()));
+                        txtvSLPR.setText(String.valueOf(product.getQuantityCan()));
+                        setGONE();
+                        listKMAll = product.getListItemkm();
+                        addControls();
+                    }
 
-        listKMAll.add(KM1);
-        listKMAll.add(KM2);
-        listKMAll.add(KM3);
-        listKMAll.add(KM4);
+                    @Override
+                    public void onError(@NonNull Throwable e) {
 
-        if (product == null){
-            product = new Product();
-            product.setNamePR("TV 40 inch");
-            product.setDonGia("6000000");
-            product.setChon(false);
-            product.setSL("10");
-            product.setListKM(listKMAll);
-        }
+                    }
 
-        addControls();
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }));
+    }
+
+    private void onSearch(String Model, String SiteID){
+        mSubscriptions.add(dataManager
+                .search(Model, SiteID)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(dataManager.getScheduler())
+                .subscribeWith(new DisposableObserver<StatusSearch>() {
+                    @Override
+                    public void onNext(@NonNull StatusSearch statusSearch) {
+                        List<ItemSearch> list = statusSearch.getData();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }));
     }
 
     @OnClick(R.id.txtvRecheck)
     public void ReCheckClick(){
+        getListKMAll("H001","132372");
     }
 
     @OnClick(R.id.txtvChiTiet)
@@ -148,6 +200,7 @@ public class CheckFragment extends Fragment {
 
     @OnClick(R.id.btnReOrder)
     public void ReOrderClick(){
+        Log.e("main",product.getItemName());
         ((ReOrderActivity)getActivity()).productCurrent = product;
         ((ReOrderActivity)getActivity()).listPRBuy.add(product);
         ((ReOrderActivity)getActivity()).callFragment(new ReorderFragment(),"Thông tin Order");
@@ -184,7 +237,8 @@ public class CheckFragment extends Fragment {
         searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                setGONE();
+                onSearch("UA65HU9000KXXV","H001");
+                getListKMAll("H001","132372");
                 searchViewAndroidActionBar.clearFocus();
                 return true;
             }

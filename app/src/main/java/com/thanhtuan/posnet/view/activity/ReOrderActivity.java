@@ -1,31 +1,21 @@
 package com.thanhtuan.posnet.view.activity;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Customer;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.model.ThongTinGiaoHang;
-import com.thanhtuan.posnet.util.SweetDialogUtil;
 import com.thanhtuan.posnet.view.fragment.CheckFragment;
-import com.thanhtuan.posnet.view.fragment.ReorderFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ReOrderActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)    Toolbar toolbar;
@@ -85,7 +75,7 @@ public class ReOrderActivity extends AppCompatActivity {
     public int TongTien(){
         int TongTien = 0;
         for (Product product : listPRBuy){
-            TongTien += Integer.parseInt(product.getDonGia());
+            TongTien += product.getSalesPrice();
         }
         return TongTien;
     }
