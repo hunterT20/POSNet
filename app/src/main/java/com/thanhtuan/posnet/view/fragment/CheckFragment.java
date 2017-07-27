@@ -70,7 +70,6 @@ public class CheckFragment extends Fragment{
     @BindView(R.id.btnReOrder)      Button btnReOrder;
 
     private List<ItemKM>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
-    private Boolean         coSP = false;   /*Set điều kiện có sản phẩm hay không để */
     public  String          codeBar;
     private Product product;
 
@@ -134,6 +133,8 @@ public class CheckFragment extends Fragment{
                             if (getActivity() == null) return;
                             KMAdapter adapter = new KMAdapter(listKMAll, getActivity());
                             rcvKhuyenMai.setAdapter(adapter);
+                        }else {
+                            Toast.makeText(getActivity(), "Sản phẩm không có", Toast.LENGTH_SHORT).show();
                         }
                     }
 
