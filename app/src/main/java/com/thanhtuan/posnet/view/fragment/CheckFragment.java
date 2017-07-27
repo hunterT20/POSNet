@@ -24,6 +24,7 @@ import android.webkit.WebViewClient;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -35,10 +36,13 @@ import com.thanhtuan.posnet.model.ItemSearch;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.model.StatusProduct;
 import com.thanhtuan.posnet.model.StatusSearch;
+import com.thanhtuan.posnet.util.InterfaceUtil;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.ScanUtil;
+import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
+import com.thanhtuan.posnet.view.adapter.ItemSearchAdapter;
 import com.thanhtuan.posnet.view.adapter.KMAdapter;
 
 import java.util.ArrayList;
@@ -52,10 +56,12 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CheckFragment extends Fragment {
+public class CheckFragment extends Fragment{
     @BindView(R.id.rcvKhuyenMai)    RecyclerView rcvKhuyenMai;
     @BindView(R.id.Thongtin)        ConstraintLayout ThongTin;
     @BindView(R.id.txtvNamePR)      TextView txtvNamePR;
@@ -85,6 +91,7 @@ public class CheckFragment extends Fragment {
         setHasOptionsMenu(true);
 
         listKMAll = new ArrayList<>();
+
         if (getActivity() == null) return view;
         RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai, new KMAdapter(listKMAll,getActivity()),getActivity());
 
@@ -92,6 +99,9 @@ public class CheckFragment extends Fragment {
         mSubscriptions = new CompositeDisposable();
 
         addViews();
+        String SiteID = SharePreferenceUtil.getValueSiteid(getActivity());
+        String ItemID = SharePreferenceUtil.getValueItemid(getActivity());
+        getListKMAll(SiteID,ItemID);
         return view;
     }
 
@@ -104,15 +114,7 @@ public class CheckFragment extends Fragment {
     private void addViews() {
         if (((ReOrderActivity)getActivity()).productCurrent != null){
             product = ((ReOrderActivity)getActivity()).productCurrent;
-        }else {
-            ThongTin.setVisibility(View.GONE);
         }
-    }
-
-    private void addControls(){
-        if (getActivity() == null) return;
-        KMAdapter adapter = new KMAdapter(listKMAll, getActivity());
-        rcvKhuyenMai.setAdapter(adapter);
     }
 
     private void getListKMAll(String SiteID, String ItemID){
@@ -123,36 +125,16 @@ public class CheckFragment extends Fragment {
                 .subscribeWith(new DisposableObserver<StatusProduct>() {
                     @Override
                     public void onNext(@NonNull StatusProduct statusProduct) {
-                        product = statusProduct.getData().get(0);
-                        txtvNamePR.setText(product.getItemName());
-                        txtvDonGiaPR.setText(String.valueOf(product.getSalesPrice()));
-                        txtvSLPR.setText(String.valueOf(product.getQuantityCan()));
-                        setGONE();
-                        listKMAll = product.getListItemkm();
-                        addControls();
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                }));
-    }
-
-    private void onSearch(String Model, String SiteID){
-        mSubscriptions.add(dataManager
-                .search(Model, SiteID)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(dataManager.getScheduler())
-                .subscribeWith(new DisposableObserver<StatusSearch>() {
-                    @Override
-                    public void onNext(@NonNull StatusSearch statusSearch) {
-                        List<ItemSearch> list = statusSearch.getData();
+                        if (statusProduct.getData() != null){
+                            product = statusProduct.getData().get(0);
+                            txtvNamePR.setText(product.getItemName());
+                            txtvDonGiaPR.setText(String.valueOf(product.getSalesPrice()));
+                            txtvSLPR.setText(String.valueOf(product.getQuantityCan()));
+                            listKMAll = product.getListItemkm();
+                            if (getActivity() == null) return;
+                            KMAdapter adapter = new KMAdapter(listKMAll, getActivity());
+                            rcvKhuyenMai.setAdapter(adapter);
+                        }
                     }
 
                     @Override
@@ -210,13 +192,9 @@ public class CheckFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (!coSP){
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    getActivity().startActivity(intent);
-                    getActivity().finish();
-                }else {
-                    setVisible();
-                }
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().finish();
                 return true;
             case R.id.action_scan:
                 Scan();
@@ -234,17 +212,10 @@ public class CheckFragment extends Fragment {
         ((ReOrderActivity)getActivity()).getToolbar().getMenu().findItem(R.id.action_scan).setVisible(true);
 
         final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
-        searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchViewAndroidActionBar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                onSearch("UA65HU9000KXXV","H001");
-                getListKMAll("H001","132372");
-                searchViewAndroidActionBar.clearFocus();
-                return true;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
+            public void onClick(View view) {
+                ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Search");
             }
         });
     }
@@ -255,18 +226,7 @@ public class CheckFragment extends Fragment {
             public void onResult(Barcode barcode) {
                 txtvNamePR.setText(barcode.rawValue);
                 codeBar = barcode.rawValue;
-                setGONE();
             }
         });
-    }
-
-    private void setGONE(){
-        coSP = true;
-        ThongTin.setVisibility(View.VISIBLE);
-    }
-
-    private void setVisible(){
-        coSP = false;
-        ThongTin.setVisibility(View.GONE);
     }
 }

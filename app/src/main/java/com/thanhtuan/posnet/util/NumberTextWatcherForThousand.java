@@ -56,7 +56,7 @@ public class NumberTextWatcherForThousand implements TextWatcher {
         }
     }
 
-    private static String getDecimalFormattedString(String value)
+    public static String getDecimalFormattedString(String value)
     {
         StringTokenizer lst = new StringTokenizer(value, ".");
         String str1 = value;

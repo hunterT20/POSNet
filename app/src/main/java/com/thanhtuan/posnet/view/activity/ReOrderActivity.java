@@ -10,6 +10,7 @@ import com.thanhtuan.posnet.model.Customer;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.model.ThongTinGiaoHang;
 import com.thanhtuan.posnet.view.fragment.CheckFragment;
+import com.thanhtuan.posnet.view.fragment.SearchFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class ReOrderActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        callFragment(new CheckFragment(),"Thông tin sản phẩm");
+        callFragment(new SearchFragment(),"Search");
     }
 
     @Override

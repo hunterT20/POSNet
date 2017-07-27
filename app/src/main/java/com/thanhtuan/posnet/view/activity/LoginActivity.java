@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.edtEmail)    EditText edtEmail;
     @BindView(R.id.edtPass)     EditText edtPass;
     @BindView(R.id.ckbSave)     CheckBox ckbSave;
+    @BindView(R.id.btnLogin)    Button btnLogin;
 
     private DataManager dataManager;
     private CompositeDisposable mSubscriptions;
@@ -54,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnLogin)
     public void LoginClick(){
+        btnLogin.setText("Loading...");
         String getEmail = edtEmail.getText().toString();
         String getPass  = edtPass.getText().toString();
 
@@ -73,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (ckbSave.isChecked()){
                                 SharePreferenceUtil.saveUser(LoginActivity.this,username,pass);
                             }
+                            SharePreferenceUtil.setValueSiteid(LoginActivity.this,user.getSiteID());
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
                         }
@@ -85,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-
+                        btnLogin.setText("Login");
                     }
                 }));
     }
