@@ -3,34 +3,48 @@ package com.thanhtuan.posnet.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
+import com.thanhtuan.posnet.data.DataManager;
 import com.thanhtuan.posnet.model.Customer;
 import com.thanhtuan.posnet.model.ItemKM;
+import com.thanhtuan.posnet.model.Kho;
 import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.model.StatusKho;
+import com.thanhtuan.posnet.model.ThongTinGiaoHang;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
+import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
+import com.thanhtuan.posnet.view.adapter.ItemKhoAdapter;
 import com.thanhtuan.posnet.view.adapter.KMAdapter;
 
 import java.util.ArrayList;
@@ -40,6 +54,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+
+import static android.content.ContentValues.TAG;
+import static com.thanhtuan.posnet.R.id.edtTenKH;
+import static com.thanhtuan.posnet.R.id.txtvGiaoHang;
+import static com.thanhtuan.posnet.R.id.txtvLayHang;
+import static com.thanhtuan.posnet.R.id.txtvTenKH;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,6 +82,10 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     @BindView(R.id.txtvDate)            TextView txtvDate;
     @BindView(R.id.txtvTime)            TextView txtvTime;
     @BindView(R.id.txtvNamePR)          TextView txtvNamePR;
+    @BindView(R.id.txtvLayHang)         TextView txtvLayHang;
+    @BindView(R.id.txtvGiaoHang)        TextView txtvGiaHang;
+    @BindView(R.id.txtvDCGiaoHang)      TextView txtvDCGiaoHang;
+    @BindView(R.id.txtvQuay)            TextView txtvQuay;
     @BindView(R.id.edtTenKH)            EditText edtTenKH;
     @BindView(R.id.edtPhoneKH)          EditText edtPhoneKH;
     @BindView(R.id.edtDiaChi)           EditText edtDiaChi;
@@ -69,6 +97,9 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     private int step = 0;
 
     private List<ItemKM> productList;
+    private DataManager dataManager;
+    private CompositeDisposable mSubscriptions;
+
 
     public ReorderFragment() {
         // Required empty public constructor
@@ -82,6 +113,8 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
         setHasOptionsMenu(true);
         ButterKnife.bind(this,view);
 
+        dataManager = POSCenterApplication.get(getActivity()).getComponent().dataManager();
+        mSubscriptions = new CompositeDisposable();
         productList = new ArrayList<>();
         if (getActivity() == null) return view;
         RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai, new KMAdapter(productList,getActivity()),getActivity());
@@ -126,13 +159,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
         }else if (step == 1){
             step ++;
             onCreateListPR();
-
-            ThongTinGiaoHang.setVisibility(View.GONE);
-            ThongTinKH.setVisibility(View.GONE);
-            ThongTinSP.setVisibility(View.VISIBLE);
-            TongTien.setVisibility(View.VISIBLE);
-            btnNext.setText(R.string.thanhtoan);
-
+            setThongTinGiaoHang();
         }else if (step == 2){
             ((ReOrderActivity)getActivity()).callFragment(new KQReOderFragment(),"Thông tin thanh toán");
         }
@@ -165,6 +192,32 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     @OnClick(R.id.txtvTime)
     public void TimeClick(){
         initTimeDialog().show();
+    }
+
+    @OnClick(R.id.txtvCheckLayHang)
+    public void CheckKho(){
+        String ItemID = SharePreferenceUtil.getValueItemid(getActivity());
+        mSubscriptions.add(dataManager
+                .checkKho(ItemID)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(dataManager.getScheduler())
+                .subscribeWith(new DisposableObserver<StatusKho>() {
+                    @Override
+                    public void onNext(@NonNull StatusKho statusKho) {
+                        if (statusKho.getData() == null) return;
+                        DialogCheckKho(statusKho.getData());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }));
     }
 
     @SuppressLint("SetTextI18n")
@@ -212,6 +265,28 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
         }
     }
 
+    private void DialogCheckKho(List<Kho> list){
+        final Dialog dialog = new Dialog(getActivity());
+
+        View view = getActivity().getLayoutInflater().inflate(R.layout.layout_listkho, null);
+        final ListView lv = view.findViewById(R.id.lvKho);
+        ItemKhoAdapter adapter = new ItemKhoAdapter(getActivity(), list);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Kho kho = (Kho) lv.getItemAtPosition(i);
+                txtvLayHang.setText(kho.getSiteId());
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setContentView(view);
+        dialog.setTitle("Chọn kho");
+
+        dialog.show();
+    }
+
     private DatePickerDialog initDateDialog(){
         // Use the current date as the default date in the picker
         final Calendar c = Calendar.getInstance();
@@ -249,16 +324,42 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     /*Sau khi đã hoàn thành thông tin khách hàng*/
     private void setKHSuccess(){
         btnNext.setText(R.string.xacnhanSP);
-
-        Customer customer = new Customer();
-        customer.setName(edtTenKH.getText().toString());
-        customer.setDiaChi(edtDiaChi.getText().toString());
-        customer.setSDT(edtPhoneKH.getText().toString());
-        ((ReOrderActivity)getActivity()).customer = customer;
+        Customer customer = ((ReOrderActivity)getActivity()).customer;
+        if (customer == null){
+            customer = new Customer();
+            customer.setName(edtTenKH.getText().toString());
+            customer.setDiaChi(edtDiaChi.getText().toString());
+            customer.setSDT(edtPhoneKH.getText().toString());
+            ((ReOrderActivity)getActivity()).customer = customer;
+        }else {
+            edtTenKH.setText(customer.getName());
+            edtDiaChi.setText(customer.getDiaChi());
+            edtPhoneKH.setText(customer.getSDT());
+        }
 
         setVisibleButtonScan(false);
         ThongTinKH.setVisibility(View.GONE);
         ThongTinGiaoHang.setVisibility(View.VISIBLE);
         btnBack.setVisibility(View.VISIBLE);
+    }
+
+    private void setThongTinGiaoHang(){
+        ThongTinGiaoHang.setVisibility(View.GONE);
+        ThongTinKH.setVisibility(View.GONE);
+        ThongTinSP.setVisibility(View.VISIBLE);
+        TongTien.setVisibility(View.VISIBLE);
+        btnNext.setText(R.string.thanhtoan);
+
+        com.thanhtuan.posnet.model.ThongTinGiaoHang thongTinGiaoHang = ((ReOrderActivity)getActivity()).thongTinGiaoHang;
+        if (thongTinGiaoHang == null){
+            thongTinGiaoHang = new ThongTinGiaoHang();
+            thongTinGiaoHang.setDiaChi(txtvDCGiaoHang.getText().toString());
+            thongTinGiaoHang.setGiaoHang(txtvGiaHang.getText().toString());
+            thongTinGiaoHang.setLayHang(txtvLayHang.getText().toString());
+            thongTinGiaoHang.setNgayGiao(txtvDate.getText().toString());
+            thongTinGiaoHang.setThoiGian(txtvTime.getText().toString());
+            thongTinGiaoHang.setQuay(txtvQuay.getText().toString());
+            ((ReOrderActivity)getActivity()).thongTinGiaoHang = thongTinGiaoHang;
+        }
     }
 }

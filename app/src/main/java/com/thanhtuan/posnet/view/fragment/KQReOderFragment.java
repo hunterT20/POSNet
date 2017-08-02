@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,16 +17,21 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
 import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,14 +88,13 @@ public class KQReOderFragment extends Fragment {
             SweetDialogUtil.onWarning(getActivity(), "Bạn có muốn mua tiếp không?", new SweetAlertDialog.OnSweetClickListener() {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    ((ReOrderActivity)getActivity()).productCurrent = null;
-                    ((ReOrderActivity)getActivity()).callFragment(new CheckFragment(),"Thông tin sản phẩm");
+                    ((ReOrderActivity)getActivity()).thongTinGiaoHang = null;
+                    ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Thông tin sản phẩm");
                     sweetAlertDialog.dismiss();
                 }
             }, new SweetAlertDialog.OnSweetClickListener() {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    ((ReOrderActivity)getActivity()).customer = null;
                     sweetAlertDialog.dismiss();
                     SweetDialogUtil.onSuccess(getActivity(), "Mua hàng thành công!", new SweetAlertDialog.OnSweetClickListener() {
                         @Override
@@ -103,7 +108,19 @@ public class KQReOderFragment extends Fragment {
             });
             btnXacNhan.setText(R.string.success);
         }else {
-            ((ReOrderActivity)getActivity()).callFragment(new CheckFragment(),"Thông tin sản phẩm");
+            Gson gson = new Gson();
+            String customer = gson.toJson(((ReOrderActivity)getActivity()).customer);
+            String TTGH = gson.toJson(((ReOrderActivity)getActivity()).thongTinGiaoHang);
+            String list = gson.toJson(((ReOrderActivity)getActivity()).listPRBuy);
+            HashMap<String,Object> param = new HashMap<String, Object>();
+            param.put("Customer",customer);
+            param.put("TTGH",TTGH);
+            param.put("list_sp",list);
+            Log.e(TAG, "XacNhanClick: " + param);
+
+            ((ReOrderActivity)getActivity()).customer = null;
+            ((ReOrderActivity)getActivity()).thongTinGiaoHang = null;
+            ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Thông tin sản phẩm");
         }
     }
 

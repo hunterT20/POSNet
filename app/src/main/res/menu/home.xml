@@ -14,4 +14,10 @@
         android:title="@string/scan"
         android:visible="false"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_store"
+        android:icon="@drawable/ic_local_grocery_store_white_24dp"
+        android:title="@string/scan"
+        android:visible="false"
+        app:showAsAction="always" />
 </menu>

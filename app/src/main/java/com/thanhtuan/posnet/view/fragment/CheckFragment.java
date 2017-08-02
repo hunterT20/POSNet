@@ -70,7 +70,6 @@ public class CheckFragment extends Fragment{
     @BindView(R.id.btnReOrder)      Button btnReOrder;
 
     private List<ItemKM>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
-    public  String          codeBar;
     private Product product;
 
     private DataManager dataManager;
@@ -197,8 +196,8 @@ public class CheckFragment extends Fragment{
                 getActivity().startActivity(intent);
                 getActivity().finish();
                 return true;
-            case R.id.action_scan:
-                Scan();
+            case R.id.action_search:
+                ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Search");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -209,25 +208,5 @@ public class CheckFragment extends Fragment{
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.home, menu);
-        final MenuItem searchViewItem = menu.findItem(R.id.action_search);
-        ((ReOrderActivity)getActivity()).getToolbar().getMenu().findItem(R.id.action_scan).setVisible(true);
-
-        final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
-        searchViewAndroidActionBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Search");
-            }
-        });
-    }
-
-    private void Scan(){
-        ScanUtil.startScan(getActivity(), new MaterialBarcodeScanner.OnResultListener() {
-            @Override
-            public void onResult(Barcode barcode) {
-                txtvNamePR.setText(barcode.rawValue);
-                codeBar = barcode.rawValue;
-            }
-        });
     }
 }

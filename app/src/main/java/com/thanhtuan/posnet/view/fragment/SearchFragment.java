@@ -1,6 +1,7 @@
 package com.thanhtuan.posnet.view.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -14,13 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.data.DataManager;
 import com.thanhtuan.posnet.model.ItemSearch;
 import com.thanhtuan.posnet.model.StatusSearch;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
+import com.thanhtuan.posnet.util.ScanUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
+import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.ItemSearchAdapter;
 
@@ -42,6 +47,8 @@ public class SearchFragment extends Fragment {
     private List<ItemSearch> searchList;
     private DataManager dataManager;
     private CompositeDisposable mSubscriptions;
+
+    public  String          codeBar;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -108,6 +115,7 @@ public class SearchFragment extends Fragment {
         inflater.inflate(R.menu.home, menu);
         final MenuItem searchViewItem = menu.findItem(R.id.action_search);
         ((ReOrderActivity)getActivity()).getToolbar().getMenu().findItem(R.id.action_scan).setVisible(true);
+        ((ReOrderActivity)getActivity()).getToolbar().getMenu().findItem(R.id.action_store).setVisible(true);
 
         final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
         searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -120,8 +128,35 @@ public class SearchFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 if (getActivity() == null) return false;
                 String SiteID = SharePreferenceUtil.getValueSiteid(getActivity());
-                onSearch(newText,SiteID);
+                if (newText.length() > 3){
+                    onSearch(newText,SiteID);
+                }
                 return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+                return true;
+            case R.id.action_scan:
+                Scan();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void Scan(){
+        ScanUtil.startScan(getActivity(), new MaterialBarcodeScanner.OnResultListener() {
+            @Override
+            public void onResult(Barcode barcode) {
+                codeBar = barcode.rawValue;
             }
         });
     }

@@ -141,7 +141,7 @@
                 android:text="Ngày giao:"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView26" />
+                app:layout_constraintTop_toBottomOf="@+id/txtvDCGiaoHang" />
 
             <TextView
                 android:id="@+id/textView25"
@@ -156,7 +156,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView26"
+                android:id="@+id/txtvDCGiaoHang"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -189,7 +189,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintLeft_toRightOf="@+id/textView27"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView26" />
+                app:layout_constraintTop_toBottomOf="@+id/txtvDCGiaoHang" />
 
             <TextView
                 android:id="@+id/txtvTime"
@@ -281,10 +281,10 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toRightOf="@+id/textView18"
             app:layout_constraintRight_toLeftOf="@+id/txtvCheckLayHang"
-            app:layout_constraintTop_toBottomOf="@+id/textView20" />
+            app:layout_constraintTop_toBottomOf="@+id/txtvQuay" />
 
         <TextView
-            android:id="@+id/textView20"
+            android:id="@+id/txtvQuay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="7dp"
@@ -419,8 +419,6 @@
         android:id="@+id/ThongTinSP"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="-1dp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/TongTien"
         app:layout_constraintHorizontal_bias="0.0"
@@ -433,7 +431,7 @@
             android:id="@+id/textView14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="> Khuyến mãi"
@@ -453,7 +451,7 @@
 
             <TextView
                 android:id="@+id/txtvNamePR"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
@@ -491,8 +489,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -502,17 +498,13 @@
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:id="@+id/linearLayout2">
+        app:layout_constraintRight_toRightOf="parent">
 
         <Button
             android:id="@+id/btnBack"
@@ -530,14 +522,14 @@
 
         <Button
             android:id="@+id/btnNext"
-            style="@style/Widget.AppCompat.Button.Colored"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
             android:layout_weight="1"
+            android:background="@color/colorAccent"
             android:text="Tiếp tục"
             android:textAllCaps="false"
+            android:textColor="@color/button_text_color"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
