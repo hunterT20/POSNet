@@ -44,7 +44,7 @@ public class ReOrderActivity extends AppCompatActivity {
         productCurrent = null;
         listPRBuy = new ArrayList<>();
         customer = null;
-        thongTinGiaoHang = new ThongTinGiaoHang();
+        thongTinGiaoHang = null;
     }
 
     private void addViews() {

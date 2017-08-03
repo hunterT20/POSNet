@@ -34,6 +34,7 @@ import com.thanhtuan.posnet.data.DataManager;
 import com.thanhtuan.posnet.model.ItemKM;
 import com.thanhtuan.posnet.model.ItemSearch;
 import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.StatusProduct;
 import com.thanhtuan.posnet.model.StatusSearch;
 import com.thanhtuan.posnet.util.InterfaceUtil;
@@ -66,7 +67,7 @@ public class CheckFragment extends Fragment{
     @BindView(R.id.Thongtin)        ConstraintLayout ThongTin;
     @BindView(R.id.txtvNamePR)      TextView txtvNamePR;
     @BindView(R.id.txtvDonGiaPR)    TextView txtvDonGiaPR;
-    @BindView(R.id.txtvSLPR)        TextView txtvSLPR;
+    @BindView(R.id.txtvSoSPChon)    TextView txtvSoSPChon;
     @BindView(R.id.btnReOrder)      Button btnReOrder;
 
     private List<ItemKM>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
@@ -97,9 +98,6 @@ public class CheckFragment extends Fragment{
         mSubscriptions = new CompositeDisposable();
 
         addViews();
-        String SiteID = SharePreferenceUtil.getValueSiteid(getActivity());
-        String ItemID = SharePreferenceUtil.getValueItemid(getActivity());
-        getListKMAll(SiteID,ItemID);
         return view;
     }
 
@@ -113,6 +111,10 @@ public class CheckFragment extends Fragment{
         if (((ReOrderActivity)getActivity()).productCurrent != null){
             product = ((ReOrderActivity)getActivity()).productCurrent;
         }
+        String SiteID = SharePreferenceUtil.getValueSiteid(getActivity());
+        String ItemID = SharePreferenceUtil.getValueItemid(getActivity());
+        getListKMAll(SiteID,ItemID);
+        checkHangTon(ItemID);
     }
 
     private void getListKMAll(String SiteID, String ItemID){
@@ -127,11 +129,14 @@ public class CheckFragment extends Fragment{
                             product = statusProduct.getData().get(0);
                             txtvNamePR.setText(product.getItemName());
                             txtvDonGiaPR.setText(String.valueOf(product.getSalesPrice()));
-                            txtvSLPR.setText(String.valueOf(product.getQuantityCan()));
                             listKMAll = product.getListItemkm();
-                            if (getActivity() == null) return;
-                            KMAdapter adapter = new KMAdapter(listKMAll, getActivity());
-                            rcvKhuyenMai.setAdapter(adapter);
+                            if (listKMAll.size() != 0){
+                                txtvSoSPChon.setText("Khách hàng được chọn " +
+                                        listKMAll.get(0).getPermissonBuyItemAttach() + " sản phẩm!");
+                                if (getActivity() == null) return;
+                                KMAdapter adapter = new KMAdapter(listKMAll, getActivity());
+                                rcvKhuyenMai.setAdapter(adapter);
+                            }
                         }else {
                             Toast.makeText(getActivity(), "Sản phẩm không có", Toast.LENGTH_SHORT).show();
                         }
@@ -149,12 +154,33 @@ public class CheckFragment extends Fragment{
                 }));
     }
 
-    @OnClick(R.id.txtvRecheck)
-    public void ReCheckClick(){
-        getListKMAll("H001","132372");
+    private void checkHangTon(String ItemID){
+        mSubscriptions.add(dataManager
+                .checkKho(ItemID)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(dataManager.getScheduler())
+                .subscribeWith(new DisposableObserver<StatusKho>() {
+                    @Override
+                    public void onNext(@NonNull StatusKho statusKho) {
+                        if (statusKho.getData() == null){
+                            btnReOrder.setText("Hết hàng");
+                            btnReOrder.setEnabled(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }));
     }
 
-    @OnClick(R.id.txtvChiTiet)
+    @OnClick(R.id.imgChitiet)
     public void ChiTietClick(){
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert.setTitle("Chi tiết sản phẩm");
@@ -165,7 +191,6 @@ public class CheckFragment extends Fragment{
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
-
                 return true;
             }
         });
@@ -182,7 +207,6 @@ public class CheckFragment extends Fragment{
 
     @OnClick(R.id.btnReOrder)
     public void ReOrderClick(){
-        Log.e("main",product.getItemName());
         ((ReOrderActivity)getActivity()).productCurrent = product;
         ((ReOrderActivity)getActivity()).listPRBuy.add(product);
         ((ReOrderActivity)getActivity()).callFragment(new ReorderFragment(),"Thông tin Order");

@@ -94,6 +94,9 @@ public class SearchFragment extends Fragment {
                             rcvSearch.setAdapter(adapter);
                         }else {
                             Toast.makeText(getActivity(), "Không tìm thấy sản phẩm!", Toast.LENGTH_SHORT).show();
+                            searchList = new ArrayList<ItemSearch>();
+                            ItemSearchAdapter adapter = new ItemSearchAdapter(searchList, getActivity());
+                            rcvSearch.setAdapter(adapter);
                         }
                     }
 

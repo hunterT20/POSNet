@@ -12,10 +12,10 @@ import com.thanhtuan.posnet.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListPurFragment extends Fragment {
+public class ListOrderFragment extends Fragment {
 
 
-    public ListPurFragment() {
+    public ListOrderFragment() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class ListPurFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_pur, container, false);
+        return inflater.inflate(R.layout.fragment_list_order, container, false);
     }
 
 }
