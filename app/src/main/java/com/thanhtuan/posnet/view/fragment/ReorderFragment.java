@@ -5,16 +5,13 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +27,6 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
@@ -58,12 +54,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
-
-import static android.content.ContentValues.TAG;
-import static com.thanhtuan.posnet.R.id.edtTenKH;
-import static com.thanhtuan.posnet.R.id.txtvGiaoHang;
-import static com.thanhtuan.posnet.R.id.txtvLayHang;
-import static com.thanhtuan.posnet.R.id.txtvTenKH;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -258,7 +248,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                ((ReOrderActivity)getActivity()).callFragment(new CheckFragment(),"Thông tin sản phẩm");
+                ((ReOrderActivity)getActivity()).callFragment(new InfoProductFragment(),"Thông tin sản phẩm");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

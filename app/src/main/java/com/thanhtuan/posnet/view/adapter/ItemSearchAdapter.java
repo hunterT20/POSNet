@@ -13,7 +13,7 @@ import com.thanhtuan.posnet.model.ItemSearch;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
-import com.thanhtuan.posnet.view.fragment.CheckFragment;
+import com.thanhtuan.posnet.view.fragment.InfoProductFragment;
 
 import java.util.List;
 
@@ -39,14 +39,14 @@ public class ItemSearchAdapter extends RecyclerView.Adapter<ItemSearchAdapter.It
     public void onBindViewHolder(ItemSearchAdapter.ItemSearchViewHolder holder, int position) {
         final ItemSearch itemSearch = listItems.get(position);
 
-        holder.txtvItemID.setText("ID: " + itemSearch.getItemID());
-        holder.txtvItemName.setText("Name: " + itemSearch.getItemName());
-        holder.txtvItemPrice.setText("Giá: " + NumberTextWatcherForThousand.getDecimalFormattedString(itemSearch.getSalesPrice().toString()));
+        holder.txtvItemID.setText(itemSearch.getItemID());
+        holder.txtvItemName.setText(itemSearch.getItemName());
+        holder.txtvItemPrice.setText(NumberTextWatcherForThousand.getDecimalFormattedString(itemSearch.getSalesPrice().toString()) + " vnđ");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharePreferenceUtil.setValueItemid(context,itemSearch.getItemID());
-                ((ReOrderActivity)context).callFragment(new CheckFragment(),"Thông tin");
+                ((ReOrderActivity)context).callFragment(new InfoProductFragment(),"Thông tin");
             }
         });
     }

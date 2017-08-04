@@ -45,8 +45,8 @@ public class ItemKhoAdapter extends BaseAdapter {
             khoList.remove(i);
             return view;
         }
-        holder.txtvNameKho.setText(kho.getSiteId());
-        holder.txtvSLTon.setText(String.valueOf(kho.getTonKho()));
+        holder.txtvNameKho.setText(kho.getmSiteName());
+        holder.txtvSLTon.setText(String.valueOf(kho.getSiteId()));
         return view;
     }
 
@@ -65,7 +65,7 @@ public class ItemKhoAdapter extends BaseAdapter {
         return 0;
     }
 
-    static class ViewHolder {
+    private static class ViewHolder {
         TextView txtvNameKho;
         TextView txtvSLTon;
     }

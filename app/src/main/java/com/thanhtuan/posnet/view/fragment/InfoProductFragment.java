@@ -1,17 +1,14 @@
 package com.thanhtuan.posnet.view.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,33 +18,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
-import com.google.android.gms.vision.barcode.Barcode;
 import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.data.DataManager;
 import com.thanhtuan.posnet.model.ItemKM;
-import com.thanhtuan.posnet.model.ItemSearch;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.StatusProduct;
-import com.thanhtuan.posnet.model.StatusSearch;
-import com.thanhtuan.posnet.util.InterfaceUtil;
+import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
-import com.thanhtuan.posnet.util.ScanUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
-import com.thanhtuan.posnet.view.adapter.ItemSearchAdapter;
 import com.thanhtuan.posnet.view.adapter.KMAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +53,7 @@ import static android.content.ContentValues.TAG;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CheckFragment extends Fragment{
+public class InfoProductFragment extends Fragment{
     @BindView(R.id.rcvKhuyenMai)    RecyclerView rcvKhuyenMai;
     @BindView(R.id.Thongtin)        ConstraintLayout ThongTin;
     @BindView(R.id.txtvNamePR)      TextView txtvNamePR;
@@ -76,7 +67,7 @@ public class CheckFragment extends Fragment{
     private DataManager dataManager;
     private CompositeDisposable mSubscriptions;
 
-    public CheckFragment() {
+    public InfoProductFragment() {
         // Required empty public constructor
     }
 
@@ -85,7 +76,7 @@ public class CheckFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_check, container, false);
+        View view = inflater.inflate(R.layout.fragment_info_product, container, false);
         ButterKnife.bind(this,view);
         setHasOptionsMenu(true);
 
@@ -123,12 +114,13 @@ public class CheckFragment extends Fragment{
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(dataManager.getScheduler())
                 .subscribeWith(new DisposableObserver<StatusProduct>() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onNext(@NonNull StatusProduct statusProduct) {
                         if (statusProduct.getData() != null){
                             product = statusProduct.getData().get(0);
                             txtvNamePR.setText(product.getItemName());
-                            txtvDonGiaPR.setText(String.valueOf(product.getSalesPrice()));
+                            txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getSalesPrice().toString()) + " vnđ");
                             listKMAll = product.getListItemkm();
                             if (listKMAll.size() != 0){
                                 txtvSoSPChon.setText("Khách hàng được chọn " +
@@ -182,11 +174,13 @@ public class CheckFragment extends Fragment{
 
     @OnClick(R.id.imgChitiet)
     public void ChiTietClick(){
+        String ItemID = SharePreferenceUtil.getValueItemid(getActivity());
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert.setTitle("Chi tiết sản phẩm");
 
         WebView wv = new WebView(getActivity());
-        wv.loadUrl("https://www.dienmayxanh.com/tivi/tivi-led-asanzo-25t350");
+        wv.loadUrl("https://dienmaycholon.vn/default/product/thongsokythuat/sap/"+ItemID);
+        Log.e(TAG, "ChiTietClick: " + "https://dienmaycholon.vn/default/product/thongsokythuat/sap/"+ItemID);
         wv.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {

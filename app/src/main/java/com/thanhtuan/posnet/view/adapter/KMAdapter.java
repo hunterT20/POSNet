@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.ItemKM;
+import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> 
 
         holder.txtvNameKM.setText(product.getItemNameKM());
         holder.txtvSLKM.setText(String.valueOf(product.getQuantity()));
+        holder.txtvDonGiaKM.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getPromotionPrice().toString()) + " vnđ");
         if (product.getChon())
         {
             holder.itempr.setBackgroundResource(R.color.colorAccent);

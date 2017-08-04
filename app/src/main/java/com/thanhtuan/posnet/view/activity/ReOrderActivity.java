@@ -9,7 +9,6 @@ import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Customer;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.model.ThongTinGiaoHang;
-import com.thanhtuan.posnet.view.fragment.CheckFragment;
 import com.thanhtuan.posnet.view.fragment.SearchFragment;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class ReOrderActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)    Toolbar toolbar;
 
     /*Các step trong quá trình mua hàng:
-    * Step == 0: CheckFragment
+    * Step == 0: InfoProductFragment
     * Step == 1: ReOrderFragment
     * Step == 2: KQReOrderFragment*/
     public int Step = 0;

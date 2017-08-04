@@ -150,6 +150,8 @@ public class SearchFragment extends Fragment {
             case R.id.action_scan:
                 Scan();
                 return true;
+            case R.id.action_store:
+                ((ReOrderActivity)getActivity()).callFragment(new ListOrderFragment(),"Sản phẩm đã mua");
             default:
                 return super.onOptionsItemSelected(item);
         }
