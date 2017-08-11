@@ -120,7 +120,7 @@ public class InfoProductFragment extends Fragment{
                         if (statusProduct.getData() != null){
                             product = statusProduct.getData().get(0);
                             txtvNamePR.setText(product.getItemName());
-                            txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getSalesPrice().toString()) + " vnđ");
+                            txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getSalesPrice().toString()) + "đ");
                             listKMAll = product.getListItemkm();
                             if (listKMAll.size() != 0){
                                 txtvSoSPChon.setText("Khách hàng được chọn " +

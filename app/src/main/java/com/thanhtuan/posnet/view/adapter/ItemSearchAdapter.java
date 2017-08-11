@@ -41,7 +41,7 @@ public class ItemSearchAdapter extends RecyclerView.Adapter<ItemSearchAdapter.It
 
         holder.txtvItemID.setText(itemSearch.getItemID());
         holder.txtvItemName.setText(itemSearch.getItemName());
-        holder.txtvItemPrice.setText(NumberTextWatcherForThousand.getDecimalFormattedString(itemSearch.getSalesPrice().toString()) + " vnđ");
+        holder.txtvItemPrice.setText(NumberTextWatcherForThousand.getDecimalFormattedString(itemSearch.getSalesPrice().toString()) + "đ");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

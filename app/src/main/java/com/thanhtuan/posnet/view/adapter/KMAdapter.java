@@ -42,7 +42,7 @@ public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> 
 
         holder.txtvNameKM.setText(product.getItemNameKM());
         holder.txtvSLKM.setText(String.valueOf(product.getQuantity()));
-        holder.txtvDonGiaKM.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getPromotionPrice().toString()) + " vnđ");
+        holder.txtvDonGiaKM.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getPromotionPrice().toString()) + "đ");
         if (product.getChon())
         {
             holder.itempr.setBackgroundResource(R.color.colorAccent);

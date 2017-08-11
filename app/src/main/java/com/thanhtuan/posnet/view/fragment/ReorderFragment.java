@@ -37,6 +37,7 @@ import com.thanhtuan.posnet.model.Kho;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.ThongTinGiaoHang;
+import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
@@ -213,7 +214,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     @SuppressLint("SetTextI18n")
     private void onCreateListPR(){
         Product product = ((ReOrderActivity)getActivity()).productCurrent;
-        txtvTongTien.setText(String.valueOf(product.getSalesPrice()) + " vnđ");
+        txtvTongTien.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getSalesPrice().toString()) + "đ");
         txtvNamePR.setText(product.getItemName());
         productList = (product.getListItemkm());
 

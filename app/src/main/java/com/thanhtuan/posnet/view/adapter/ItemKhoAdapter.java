@@ -40,7 +40,6 @@ public class ItemKhoAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         Kho kho = khoList.get(i);
-        Log.e(TAG, "getView: " + String.valueOf(kho.getSiteId()));
         if (kho.getSiteId().equals("")){
             khoList.remove(i);
             return view;

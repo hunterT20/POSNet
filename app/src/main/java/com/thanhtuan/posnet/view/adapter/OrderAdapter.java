@@ -1,5 +1,6 @@
 package com.thanhtuan.posnet.view.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.ItemKM;
 import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 
 import java.util.List;
 
@@ -57,6 +59,7 @@ public class OrderAdapter extends BaseExpandableListAdapter{
         return false;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
         Product product = productList.get(i);
@@ -71,11 +74,12 @@ public class OrderAdapter extends BaseExpandableListAdapter{
 
         txtvNameItem.setText(product.getItemName());
         txtvItemID.setText(product.getItemID());
-        txtvPriceItem.setText(String.valueOf(product.getSalesPrice()));
+        txtvPriceItem.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getSalesPrice().toString()) + "đ");
 
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         ItemKM itemKM = (ItemKM) getChild(i,i1);
@@ -90,7 +94,7 @@ public class OrderAdapter extends BaseExpandableListAdapter{
 
         txtvNameItem.setText(itemKM.getItemNameKM());
         txtvItemID.setText(itemKM.getItemIDKM());
-        txtvPriceItem.setText(String.valueOf(itemKM.getPromotionPrice()));
+        txtvPriceItem.setText(NumberTextWatcherForThousand.getDecimalFormattedString(itemKM.getPromotionPrice().toString()) + "đ");
 
         return view;
     }

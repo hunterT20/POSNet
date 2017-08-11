@@ -70,7 +70,7 @@ public class KQReOderFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void addViews() {
         int TongTien = ((ReOrderActivity)getActivity()).TongTien();
-        txtvTongTien.setText(TongTien + " vnđ");
+        txtvTongTien.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(TongTien)) + "đ");
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
@@ -116,7 +116,6 @@ public class KQReOderFragment extends Fragment {
             param.put("Customer",customer);
             param.put("TTGH",TTGH);
             param.put("list_sp",list);
-            Log.e(TAG, "XacNhanClick: " + param);
 
             ((ReOrderActivity)getActivity()).customer = null;
             ((ReOrderActivity)getActivity()).thongTinGiaoHang = null;
