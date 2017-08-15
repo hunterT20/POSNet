@@ -12,7 +12,6 @@
         android:id="@+id/listOrder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="0dp"
         android:groupIndicator="@null"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintHorizontal_bias="0.0"
@@ -27,11 +26,8 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="110dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"

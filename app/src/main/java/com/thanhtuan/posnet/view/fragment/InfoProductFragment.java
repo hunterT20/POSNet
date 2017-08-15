@@ -2,6 +2,7 @@ package com.thanhtuan.posnet.view.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,15 +32,13 @@ import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.StatusProduct;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
-import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
-import com.thanhtuan.posnet.view.adapter.KMAdapter;
+import com.thanhtuan.posnet.view.adapter.KhuyenMaiAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,13 +48,12 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * A simple {@link Fragment} subclass.
  */
+
 public class InfoProductFragment extends Fragment{
-    @BindView(R.id.rcvKhuyenMai)    RecyclerView rcvKhuyenMai;
+    @BindView(R.id.lvKhuyenMai)     ListView lvKhuyenMai;
     @BindView(R.id.Thongtin)        ConstraintLayout ThongTin;
     @BindView(R.id.txtvNamePR)      TextView txtvNamePR;
     @BindView(R.id.txtvDonGiaPR)    TextView txtvDonGiaPR;
@@ -80,10 +79,12 @@ public class InfoProductFragment extends Fragment{
         ButterKnife.bind(this,view);
         setHasOptionsMenu(true);
 
+        View footerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_newfeeds, null, false);
+        lvKhuyenMai.addHeaderView(footerView);
+
         listKMAll = new ArrayList<>();
 
         if (getActivity() == null) return view;
-        RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai, new KMAdapter(listKMAll,getActivity()),getActivity());
 
         dataManager = POSCenterApplication.get(getActivity()).getComponent().dataManager();
         mSubscriptions = new CompositeDisposable();
@@ -108,6 +109,11 @@ public class InfoProductFragment extends Fragment{
         checkHangTon(ItemID);
     }
 
+    /**
+     * getListKMAll: để lấy danh sách khuyến mãi của sản phẩm
+     * @param SiteID: mã số của kho hàng
+     * @param ItemID: mã số sản phẩm
+     */
     private void getListKMAll(String SiteID, String ItemID){
         mSubscriptions.add(dataManager
                 .getProduct(SiteID,ItemID)
@@ -122,12 +128,13 @@ public class InfoProductFragment extends Fragment{
                             txtvNamePR.setText(product.getItemName());
                             txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getSalesPrice().toString()) + "đ");
                             listKMAll = product.getListItemkm();
+
                             if (listKMAll.size() != 0){
                                 txtvSoSPChon.setText("Khách hàng được chọn " +
                                         listKMAll.get(0).getPermissonBuyItemAttach() + " sản phẩm!");
                                 if (getActivity() == null) return;
-                                KMAdapter adapter = new KMAdapter(listKMAll, getActivity());
-                                rcvKhuyenMai.setAdapter(adapter);
+                                KhuyenMaiAdapter adapter = new KhuyenMaiAdapter(getActivity(),listKMAll);
+                                lvKhuyenMai.setAdapter(adapter);
                             }
                         }else {
                             Toast.makeText(getActivity(), "Sản phẩm không có", Toast.LENGTH_SHORT).show();
@@ -146,6 +153,12 @@ public class InfoProductFragment extends Fragment{
                 }));
     }
 
+    /**
+     * checkHangTon: kiểm tra tồn kho trong các kho trong hệ thống
+     * =====> Nếu còn hàng: btnReOrder không thay đổi
+     * =====> Nếu hết hàng: btnReOrder sẽ thành Hết hàng và không cho touch
+     * @param ItemID: mã số sản phẩm
+     */
     private void checkHangTon(String ItemID){
         mSubscriptions.add(dataManager
                 .checkKho(ItemID)
@@ -180,7 +193,6 @@ public class InfoProductFragment extends Fragment{
 
         WebView wv = new WebView(getActivity());
         wv.loadUrl("https://dienmaycholon.vn/default/product/thongsokythuat/sap/"+ItemID);
-        Log.e(TAG, "ChiTietClick: " + "https://dienmaycholon.vn/default/product/thongsokythuat/sap/"+ItemID);
         wv.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
