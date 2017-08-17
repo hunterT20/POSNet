@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,6 +44,7 @@ import io.reactivex.observers.DisposableObserver;
  * A simple {@link Fragment} subclass.
  */
 public class SearchFragment extends Fragment {
+    private static final String TAG = "SearchFragment";
     @BindView(R.id.rcvSearch)       RecyclerView rcvSearch;
     private List<ItemSearch> searchList;
     private DataManager dataManager;
@@ -94,7 +96,7 @@ public class SearchFragment extends Fragment {
                             rcvSearch.setAdapter(adapter);
                         }else {
                             Toast.makeText(getActivity(), "Không tìm thấy sản phẩm!", Toast.LENGTH_SHORT).show();
-                            searchList = new ArrayList<ItemSearch>();
+                            searchList = new ArrayList<>();
                             ItemSearchAdapter adapter = new ItemSearchAdapter(searchList, getActivity());
                             rcvSearch.setAdapter(adapter);
                         }

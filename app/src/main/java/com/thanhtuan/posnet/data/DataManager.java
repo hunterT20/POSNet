@@ -19,8 +19,10 @@ import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 
 public class DataManager {
-    @Inject protected POSCenterService posCenterService;
-    @Inject protected Scheduler mSubscribeScheduler;
+    @Inject
+    POSCenterService posCenterService;
+    @Inject
+    Scheduler mSubscribeScheduler;
 
     public DataManager(Context context) {
         injectDependencies(context);
@@ -32,7 +34,7 @@ public class DataManager {
         mSubscribeScheduler = subscribeScheduler;
     }
 
-    protected void injectDependencies(Context context){
+    private void injectDependencies(Context context){
         DaggerDataManagerComponent.builder()
                 .applicationComponent(POSCenterApplication.get(context).getComponent())
                 .dataManagerModule(new DataManagerModule())

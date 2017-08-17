@@ -18,7 +18,7 @@ public class StatusProduct {
     @SerializedName("SiteID")
     private String mSiteID;
     @SerializedName("Status")
-    private Long mStatus;
+    private Boolean mStatus;
     @SerializedName("UserName")
     private String mUserName;
 
@@ -54,11 +54,11 @@ public class StatusProduct {
         mSiteID = SiteID;
     }
 
-    public Long getStatus() {
+    public Boolean getStatus() {
         return mStatus;
     }
 
-    public void setStatus(Long Status) {
+    public void setStatus(Boolean Status) {
         mStatus = Status;
     }
 

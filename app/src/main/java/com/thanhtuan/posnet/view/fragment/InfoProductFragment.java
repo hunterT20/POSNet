@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,15 +54,20 @@ import io.reactivex.observers.DisposableObserver;
  */
 
 public class InfoProductFragment extends Fragment{
-    @BindView(R.id.lvKhuyenMai)     ListView lvKhuyenMai;
-    @BindView(R.id.Thongtin)        ConstraintLayout ThongTin;
-    @BindView(R.id.txtvNamePR)      TextView txtvNamePR;
-    @BindView(R.id.txtvDonGiaPR)    TextView txtvDonGiaPR;
-    @BindView(R.id.txtvSoSPChon)    TextView txtvSoSPChon;
-    @BindView(R.id.btnReOrder)      Button btnReOrder;
+    private static final String TAG = "fragmentinfo";
+    private ListView lvKhuyenMai;
+    private TextView txtvNamePR;
+    private TextView txtvDonGiaPR;
+    private TextView txtvSoSPChon;
+    private TextView txtvTamTinh;
+    private TextView txtvGiam;
+    private TextView txtvTongGia;
+    private Button btnReOrder;
+    private ImageView imgChitiet;
 
     private List<ItemKM>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
     private Product product;
+    KhuyenMaiAdapter adapter;
 
     private DataManager dataManager;
     private CompositeDisposable mSubscriptions;
@@ -79,9 +85,6 @@ public class InfoProductFragment extends Fragment{
         ButterKnife.bind(this,view);
         setHasOptionsMenu(true);
 
-        View footerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_newfeeds, null, false);
-        lvKhuyenMai.addHeaderView(footerView);
-
         listKMAll = new ArrayList<>();
 
         if (getActivity() == null) return view;
@@ -89,8 +92,79 @@ public class InfoProductFragment extends Fragment{
         dataManager = POSCenterApplication.get(getActivity()).getComponent().dataManager();
         mSubscriptions = new CompositeDisposable();
 
-        addViews();
+        addViews(view);
+        addEvents();
         return view;
+    }
+
+    /**
+     * addEvents chứa cái sự kiện diễn ra trong view hiện tại
+     * ===> btnReOrder click sẽ add sản phẩm vào list sản phẩm đang mua và thực hiện chuyển view sang ReorderFragment
+     * ===> imgChitiet click sẽ hiển thị dialog chứa webView thông tin chi tiết sản phẩm
+     */
+    private void addEvents() {
+        btnReOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ReOrderActivity)getActivity()).productCurrent = product;
+                ((ReOrderActivity)getActivity()).listPRBuy.add(product);
+                ((ReOrderActivity)getActivity()).callFragment(new ReorderFragment(),"Thông tin Order");
+            }
+        });
+
+        imgChitiet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String ItemID = SharePreferenceUtil.getValueItemid(getActivity());
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Chi tiết sản phẩm");
+
+                WebView wv = new WebView(getActivity());
+                wv.loadUrl("https://dienmaycholon.vn/default/product/thongsokythuat/sap/"+ItemID);
+                wv.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        view.loadUrl(url);
+                        return true;
+                    }
+                });
+
+                alert.setView(wv);
+                alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.show();
+            }
+        });
+
+        lvKhuyenMai.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                try {
+                    ItemKM itemKM = listKMAll.get((int)l);
+                    if (!itemKM.getChon()){
+                        itemKM.setChon(true);
+                        view.setBackgroundResource(R.color.colorAccent);
+                        txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(product.getSalesPrice())) + "đ");
+                        txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(itemKM.getPromotionPrice())) + "đ");
+                    }else {
+                        itemKM.setChon(false);
+                        view.setBackgroundResource(R.color.cardview_light_background);
+                        if (itemKM.getTachGia() == 1){
+                            long tonggia = product.getSalesPrice();
+                            tonggia = tonggia + itemKM.getPromotionPrice() - itemKM.getGiamGiaKLHKM();
+                            txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
+                        }
+                    }
+                }catch (Exception ex){
+                    Log.e(TAG, "onItemClick: " + ex);
+                }
+            }
+        });
     }
 
     @Override
@@ -99,7 +173,29 @@ public class InfoProductFragment extends Fragment{
         mSubscriptions.clear();
     }
 
-    private void addViews() {
+    /**
+     * addViews dùng để khởi tạo những view cần sử dụng
+     * @param view: fragment hiện tại
+     */
+    private void addViews(View view) {
+        View headerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.header_listview_info_product, null, false);
+        View footerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_listview_info_product, null, false);
+
+        lvKhuyenMai = view.findViewById(R.id.lvKhuyenMai);
+        btnReOrder = view.findViewById(R.id.btnReOrder);
+
+        txtvDonGiaPR = headerView.findViewById(R.id.txtvDonGiaPR);
+        txtvNamePR = headerView.findViewById(R.id.txtvNamePR);
+        txtvSoSPChon = headerView.findViewById(R.id.txtvSoSPChon);
+        imgChitiet = headerView.findViewById(R.id.imgChitiet);
+
+        txtvTamTinh = footerView.findViewById(R.id.txtvTamTinh);
+        txtvGiam = footerView.findViewById(R.id.txtvGiam);
+        txtvTongGia = footerView.findViewById(R.id.txtvTongGia);
+
+        lvKhuyenMai.addHeaderView(headerView,null,false);
+        lvKhuyenMai.addFooterView(footerView,null,false);
+
         if (((ReOrderActivity)getActivity()).productCurrent != null){
             product = ((ReOrderActivity)getActivity()).productCurrent;
         }
@@ -127,14 +223,24 @@ public class InfoProductFragment extends Fragment{
                             product = statusProduct.getData().get(0);
                             txtvNamePR.setText(product.getItemName());
                             txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getSalesPrice().toString()) + "đ");
+                            txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(product.getSalesPrice())) + "đ");
                             listKMAll = product.getListItemkm();
 
                             if (listKMAll.size() != 0){
                                 txtvSoSPChon.setText("Khách hàng được chọn " +
                                         listKMAll.get(0).getPermissonBuyItemAttach() + " sản phẩm!");
                                 if (getActivity() == null) return;
-                                KhuyenMaiAdapter adapter = new KhuyenMaiAdapter(getActivity(),listKMAll);
+                                adapter = new KhuyenMaiAdapter(getActivity(),listKMAll);
                                 lvKhuyenMai.setAdapter(adapter);
+                                long TongGia = product.getSalesPrice();
+                                for (ItemKM itemKM : listKMAll){
+                                    if (itemKM.getTachGia() == 1){
+                                        if (!itemKM.getChon()){
+                                            TongGia = TongGia + itemKM.getPromotionPrice() - itemKM.getGiamGiaKLHKM();
+                                        }
+                                    }
+                                }
+                                txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(TongGia)) + "đ");
                             }
                         }else {
                             Toast.makeText(getActivity(), "Sản phẩm không có", Toast.LENGTH_SHORT).show();
@@ -183,39 +289,6 @@ public class InfoProductFragment extends Fragment{
 
                     }
                 }));
-    }
-
-    @OnClick(R.id.imgChitiet)
-    public void ChiTietClick(){
-        String ItemID = SharePreferenceUtil.getValueItemid(getActivity());
-        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-        alert.setTitle("Chi tiết sản phẩm");
-
-        WebView wv = new WebView(getActivity());
-        wv.loadUrl("https://dienmaycholon.vn/default/product/thongsokythuat/sap/"+ItemID);
-        wv.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-        });
-
-        alert.setView(wv);
-        alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        alert.show();
-    }
-
-    @OnClick(R.id.btnReOrder)
-    public void ReOrderClick(){
-        ((ReOrderActivity)getActivity()).productCurrent = product;
-        ((ReOrderActivity)getActivity()).listPRBuy.add(product);
-        ((ReOrderActivity)getActivity()).callFragment(new ReorderFragment(),"Thông tin Order");
     }
 
     @Override

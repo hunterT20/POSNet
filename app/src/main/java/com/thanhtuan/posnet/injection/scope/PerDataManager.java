@@ -6,9 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import javax.inject.Scope;
 
 /**
- * A scoping annotation to permit objects whose lifetime should
- * conform to the life of the DataManager to be memorised in the
- * correct component.
+ * Đây là 1 custom scope, chức năng chính là khởi tạo cho đối tượng được gắn
+ * trong thời gian chạy (RUNTIME)
  */
 @Scope
 @Retention(RetentionPolicy.RUNTIME)

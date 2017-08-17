@@ -5,6 +5,7 @@ import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -18,7 +19,7 @@ public class KhuyenMaiAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
     private List<ItemKM> itemKMList;
-    private List<ItemKM> listChon = new ArrayList<>();
+    ViewHolder viewHolder;
 
     public KhuyenMaiAdapter(Context context, List<ItemKM> itemKMList) {
         this.context = context;
@@ -60,29 +61,7 @@ public class KhuyenMaiAdapter extends BaseAdapter {
         holder.txtvNameKM.setText(itemKM.getItemNameKM());
         holder.txtvDonGiaKM.setText(String.valueOf(itemKM.getPromotionPrice()));
         holder.txtvSLKM.setText(String.valueOf(itemKM.getQuantity()));
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!itemKM.getChon()){
-                    setChon(itemKM,holder);
-                }else {
-                    setBoChon(itemKM,holder);
-                }
-            }
-        });
         return view;
-    }
-
-    private void setChon(ItemKM product, ViewHolder holder){
-        listChon.add(product);
-        product.setChon(true);
-        holder.itempr.setBackgroundResource(R.color.colorAccent);
-    }
-
-    private void setBoChon(ItemKM product, ViewHolder holder){
-        listChon.remove(product);
-        product.setChon(false);
-        holder.itempr.setBackgroundResource(R.color.cardview_light_background);
     }
 
     private static class ViewHolder{

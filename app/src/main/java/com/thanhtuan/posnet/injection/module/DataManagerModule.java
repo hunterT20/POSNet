@@ -9,6 +9,9 @@ import dagger.Provides;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * DataManagerModule là đăng kí khởi tạo PosCenterService khi khởi động ứng dụng
+ */
 @Module
 public class DataManagerModule {
     public DataManagerModule() {

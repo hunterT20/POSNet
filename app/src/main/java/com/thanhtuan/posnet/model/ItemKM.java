@@ -30,15 +30,16 @@ public class ItemKM {
     private String mQuiDinh;
     @SerializedName("TachGia")
     private Long mTachGia;
-    private Boolean Chon = false;
+    private Boolean chon = false;
 
     public Boolean getChon() {
-        return Chon;
+        return chon;
     }
 
     public void setChon(Boolean chon) {
-        Chon = chon;
+        this.chon = chon;
     }
+
 
     public Long getGiamGiaKLHKM() {
         return mGiamGiaKLHKM;

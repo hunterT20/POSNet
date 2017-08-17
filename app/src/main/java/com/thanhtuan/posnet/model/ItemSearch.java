@@ -9,6 +9,8 @@ import com.google.gson.annotations.SerializedName;
 @SuppressWarnings("unused")
 public class ItemSearch {
 
+    @SerializedName("Bonus")
+    private Long mBonus;
     @SerializedName("DVT")
     private String mDVT;
     @SerializedName("FlagPromotion")
@@ -25,6 +27,8 @@ public class ItemSearch {
     private String mItemName;
     @SerializedName("List_Itemkm")
     private List<Object> mListItemkm;
+    @SerializedName("Mota")
+    private Object mMota;
     @SerializedName("QuantityCan")
     private Long mQuantityCan;
     @SerializedName("SalesPrice")
@@ -35,6 +39,14 @@ public class ItemSearch {
     private Long mSoLuongTon;
     @SerializedName("TypeItemID")
     private String mTypeItemID;
+
+    public Long getBonus() {
+        return mBonus;
+    }
+
+    public void setBonus(Long Bonus) {
+        mBonus = Bonus;
+    }
 
     public String getDVT() {
         return mDVT;
@@ -98,6 +110,14 @@ public class ItemSearch {
 
     public void setListItemkm(List<Object> ListItemkm) {
         mListItemkm = ListItemkm;
+    }
+
+    public Object getMota() {
+        return mMota;
+    }
+
+    public void setMota(Object Mota) {
+        mMota = Mota;
     }
 
     public Long getQuantityCan() {
