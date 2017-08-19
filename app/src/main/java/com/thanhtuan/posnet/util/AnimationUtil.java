@@ -6,6 +6,9 @@ import android.view.animation.AnimationUtils;
 
 import com.thanhtuan.posnet.R;
 
+/**
+ * Class hiệu ứng trong app
+ */
 public class AnimationUtil {
     public static void SlideUP(View view, Context context)
     {

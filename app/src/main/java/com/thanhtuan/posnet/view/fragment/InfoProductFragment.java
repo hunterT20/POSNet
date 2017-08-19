@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,9 +40,7 @@ import com.thanhtuan.posnet.view.adapter.KhuyenMaiAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
@@ -101,6 +98,7 @@ public class InfoProductFragment extends Fragment{
      * addEvents chứa cái sự kiện diễn ra trong view hiện tại
      * ===> btnReOrder click sẽ add sản phẩm vào list sản phẩm đang mua và thực hiện chuyển view sang ReorderFragment
      * ===> imgChitiet click sẽ hiển thị dialog chứa webView thông tin chi tiết sản phẩm
+     * ===> lvKhuyenMai click sẽ thực hiện cộng trừ tiền nếu có tách giá và set chọn cho sản phẩm khuyến mãi
      */
     private void addEvents() {
         btnReOrder.setOnClickListener(new View.OnClickListener() {
@@ -149,15 +147,12 @@ public class InfoProductFragment extends Fragment{
                     if (!itemKM.getChon()){
                         itemKM.setChon(true);
                         view.setBackgroundResource(R.color.colorAccent);
-                        txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(product.getSalesPrice())) + "đ");
-                        txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(itemKM.getPromotionPrice())) + "đ");
+                        setTachGiaChon();
                     }else {
                         itemKM.setChon(false);
                         view.setBackgroundResource(R.color.cardview_light_background);
                         if (itemKM.getTachGia() == 1){
-                            long tonggia = product.getSalesPrice();
-                            tonggia = tonggia + itemKM.getPromotionPrice() - itemKM.getGiamGiaKLHKM();
-                            txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
+                            setTachGiaKhongChon(itemKM);
                         }
                     }
                 }catch (Exception ex){
@@ -222,8 +217,6 @@ public class InfoProductFragment extends Fragment{
                         if (statusProduct.getData() != null){
                             product = statusProduct.getData().get(0);
                             txtvNamePR.setText(product.getItemName());
-                            txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getSalesPrice().toString()) + "đ");
-                            txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(product.getSalesPrice())) + "đ");
                             listKMAll = product.getListItemkm();
 
                             if (listKMAll.size() != 0){
@@ -233,14 +226,25 @@ public class InfoProductFragment extends Fragment{
                                 adapter = new KhuyenMaiAdapter(getActivity(),listKMAll);
                                 lvKhuyenMai.setAdapter(adapter);
                                 long TongGia = product.getSalesPrice();
+                                long GiamGia = 0;
+                                long DonGia = product.getSalesPrice();
                                 for (ItemKM itemKM : listKMAll){
                                     if (itemKM.getTachGia() == 1){
                                         if (!itemKM.getChon()){
+                                            DonGia += itemKM.getPromotionPrice();
+                                            GiamGia += itemKM.getGiamGiaKLHKM();
                                             TongGia = TongGia + itemKM.getPromotionPrice() - itemKM.getGiamGiaKLHKM();
                                         }
                                     }
                                 }
-                                txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(TongGia)) + "đ");
+                                txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(DonGia)));
+                                txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(DonGia)));
+                                txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(TongGia)) + "đ");
+                                if (GiamGia != 0){
+                                    txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
+                                }else {
+                                    txtvGiam.setText("Không giảm giá");
+                                }
                             }
                         }else {
                             Toast.makeText(getActivity(), "Sản phẩm không có", Toast.LENGTH_SHORT).show();
@@ -311,5 +315,36 @@ public class InfoProductFragment extends Fragment{
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.home, menu);
+    }
+
+    /**
+     * setTachGiaKhongChon để set giá cho sản phẩm nếu sản phẩm khuyến mãi không chọn trong trường hợp
+     * tách giá hoặc không
+     * @param itemKM: sản phẩm khuyến mãi
+     */
+    private void setTachGiaKhongChon(ItemKM itemKM){
+        long tonggia = product.getSalesPrice();
+        if (itemKM.getTachGia() == 1){
+            txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia + itemKM.getPromotionPrice())) + "đ");
+            tonggia = tonggia + itemKM.getPromotionPrice() - itemKM.getGiamGiaKLHKM();
+            txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
+            txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(itemKM.getGiamGiaKLHKM())) + "đ");
+        }else {
+            txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
+            txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
+            txtvGiam.setText("Không giảm giá");
+            txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
+        }
+    }
+
+    /**
+     * setTachGiaChon để set giá cho sản phẩm không tách giá
+     */
+    private void setTachGiaChon(){
+        long tonggia = product.getSalesPrice();
+        txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
+        txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
+        txtvGiam.setText("Không giảm giá");
+        txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
     }
 }

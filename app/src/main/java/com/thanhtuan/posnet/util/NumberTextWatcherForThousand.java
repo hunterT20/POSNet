@@ -15,11 +15,10 @@ public class NumberTextWatcherForThousand implements TextWatcher {
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+    }
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
     }
 
     @Override
@@ -29,19 +28,14 @@ public class NumberTextWatcherForThousand implements TextWatcher {
             editText.removeTextChangedListener(this);
             String value = editText.getText().toString();
 
-
             if (!value.equals(""))
             {
-
                 if(value.startsWith(".")){
                     editText.setText("0.");
                 }
                 if(value.startsWith("0") && !value.startsWith("0.")){
                     editText.setText("");
-
                 }
-
-
                 String str = editText.getText().toString().replaceAll(",", "");
                 if (!value.equals(""))
                     editText.setText(getDecimalFormattedString(str));
@@ -56,8 +50,7 @@ public class NumberTextWatcherForThousand implements TextWatcher {
         }
     }
 
-    public static String getDecimalFormattedString(String value)
-    {
+    public static String getDecimalFormattedString(String value){
         StringTokenizer lst = new StringTokenizer(value, ".");
         String str1 = value;
         String str2 = "";
@@ -99,6 +92,5 @@ public class NumberTextWatcherForThousand implements TextWatcher {
         else {
             return string;
         }
-
     }
 }
