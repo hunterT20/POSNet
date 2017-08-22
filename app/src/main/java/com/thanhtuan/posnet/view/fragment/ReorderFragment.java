@@ -35,13 +35,16 @@ import com.thanhtuan.posnet.model.Customer;
 import com.thanhtuan.posnet.model.ItemKM;
 import com.thanhtuan.posnet.model.Kho;
 import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.model.Quay;
 import com.thanhtuan.posnet.model.StatusKho;
+import com.thanhtuan.posnet.model.StatusQuay;
 import com.thanhtuan.posnet.model.ThongTinGiaoHang;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 import com.thanhtuan.posnet.view.adapter.ItemKhoAdapter;
+import com.thanhtuan.posnet.view.adapter.ItemQuayAdapter;
 import com.thanhtuan.posnet.view.adapter.KMAdapter;
 
 import java.util.ArrayList;
@@ -172,6 +175,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             TongTien.setVisibility(View.GONE);
             ThongTinGiaoHang.setVisibility(View.VISIBLE);
             btnBack.setVisibility(View.VISIBLE);
+            ThongTinSP.setVisibility(View.GONE);
         }
     }
 
@@ -209,6 +213,31 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
 
                     }
                 }));
+    }
+
+    @OnClick(R.id.txtvGetQuay)
+    public void checkQuay(){
+        mSubscriptions.add(dataManager
+        .checkQuay()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(dataManager.getScheduler())
+        .subscribeWith(new DisposableObserver<StatusQuay>() {
+            @Override
+            public void onNext(@NonNull StatusQuay statusQuay) {
+                if (statusQuay.getData() == null) return;
+                DialogCheckQuay(statusQuay.getData());
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        }));
     }
 
     @SuppressLint("SetTextI18n")
@@ -274,6 +303,28 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
 
         dialog.setContentView(view);
         dialog.setTitle("Chọn kho");
+
+        dialog.show();
+    }
+
+    private void DialogCheckQuay(List<Quay> list){
+        final Dialog dialog = new Dialog(getActivity());
+
+        View view = getActivity().getLayoutInflater().inflate(R.layout.layout_listkho, null);
+        final ListView lv = view.findViewById(R.id.lvKho);
+        ItemQuayAdapter adapter = new ItemQuayAdapter(getActivity(), list);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Quay quay = (Quay) lv.getItemAtPosition(i);
+                txtvQuay.setText(quay.getNote());
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setContentView(view);
+        dialog.setTitle("Chọn quầy");
 
         dialog.show();
     }

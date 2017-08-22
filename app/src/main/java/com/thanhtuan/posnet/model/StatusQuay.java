@@ -7,10 +7,10 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class StatusKho {
+public class StatusQuay {
 
     @SerializedName("Data")
-    private List<Kho> mData;
+    private List<Quay> mData;
     @SerializedName("ErrorCode")
     private Long mErrorCode;
     @SerializedName("Message")
@@ -22,11 +22,11 @@ public class StatusKho {
     @SerializedName("UserName")
     private String mUserName;
 
-    public List<Kho> getData() {
+    public List<Quay> getData() {
         return mData;
     }
 
-    public void setData(List<Kho> Data) {
+    public void setData(List<Quay> Data) {
         mData = Data;
     }
 

@@ -8,17 +8,19 @@ import com.google.gson.annotations.SerializedName;
 @SuppressWarnings("unused")
 public class Kho {
 
-    @SerializedName("SiteName")
-    private String mSiteName;
+    @SerializedName("ItemId")
+    private String mItemId;
     @SerializedName("SiteId")
     private String mSiteId;
+    @SerializedName("TonKho")
+    private Long mTonKho;
 
-    public String getmSiteName() {
-        return mSiteName;
+    public String getItemId() {
+        return mItemId;
     }
 
-    public void setmSiteName(String SiteName) {
-        mSiteName = SiteName;
+    public void setItemId(String ItemId) {
+        mItemId = ItemId;
     }
 
     public String getSiteId() {
@@ -28,4 +30,13 @@ public class Kho {
     public void setSiteId(String SiteId) {
         mSiteId = SiteId;
     }
+
+    public Long getTonKho() {
+        return mTonKho;
+    }
+
+    public void setTonKho(Long TonKho) {
+        mTonKho = TonKho;
+    }
+
 }

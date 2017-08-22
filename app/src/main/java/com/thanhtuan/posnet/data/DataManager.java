@@ -6,8 +6,10 @@ import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.data.remote.POSCenterService;
 import com.thanhtuan.posnet.injection.component.DaggerDataManagerComponent;
 import com.thanhtuan.posnet.injection.module.DataManagerModule;
+import com.thanhtuan.posnet.model.StatusKhachHang;
 import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.StatusProduct;
+import com.thanhtuan.posnet.model.StatusQuay;
 import com.thanhtuan.posnet.model.StatusSearch;
 import com.thanhtuan.posnet.model.User;
 
@@ -61,4 +63,14 @@ public class DataManager {
     public Observable<StatusKho> checkKho(String ItemID){
         return posCenterService.checkKho(ItemID);
     }
+
+    public Observable<StatusQuay> checkQuay(){
+        return posCenterService.checkQuay();
+    }
+
+    public Observable<StatusKhachHang> getKhachHang(String CustomerID, String PhoneNumber){
+        return posCenterService.getKhachHang(CustomerID,PhoneNumber);
+    }
+
+
 }

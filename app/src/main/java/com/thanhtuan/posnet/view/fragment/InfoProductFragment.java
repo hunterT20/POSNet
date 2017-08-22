@@ -51,7 +51,7 @@ import io.reactivex.observers.DisposableObserver;
  */
 
 public class InfoProductFragment extends Fragment{
-    private static final String TAG = "fragmentinfo";
+    private static final String TAG = "FragmentInfo";
     private ListView lvKhuyenMai;
     private TextView txtvNamePR;
     private TextView txtvDonGiaPR;
@@ -64,10 +64,12 @@ public class InfoProductFragment extends Fragment{
 
     private List<ItemKM>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
     private Product product;
-    KhuyenMaiAdapter adapter;
+    private KhuyenMaiAdapter adapter;
 
     private DataManager dataManager;
     private CompositeDisposable mSubscriptions;
+
+    long GiamGia = 0;
 
     public InfoProductFragment() {
         // Required empty public constructor
@@ -147,7 +149,7 @@ public class InfoProductFragment extends Fragment{
                     if (!itemKM.getChon()){
                         itemKM.setChon(true);
                         view.setBackgroundResource(R.color.colorAccent);
-                        setTachGiaChon();
+                        setTachGiaChon(itemKM);
                     }else {
                         itemKM.setChon(false);
                         view.setBackgroundResource(R.color.cardview_light_background);
@@ -216,7 +218,7 @@ public class InfoProductFragment extends Fragment{
                     public void onNext(@NonNull StatusProduct statusProduct) {
                         if (statusProduct.getData() != null){
                             product = statusProduct.getData().get(0);
-                            txtvNamePR.setText(product.getItemName());
+                            txtvNamePR.setText(product.getItemName() + " (" + "Loại: " + product.getTypeItemID() + ")");
                             listKMAll = product.getListItemkm();
 
                             if (listKMAll.size() != 0){
@@ -226,7 +228,6 @@ public class InfoProductFragment extends Fragment{
                                 adapter = new KhuyenMaiAdapter(getActivity(),listKMAll);
                                 lvKhuyenMai.setAdapter(adapter);
                                 long TongGia = product.getSalesPrice();
-                                long GiamGia = 0;
                                 long DonGia = product.getSalesPrice();
                                 for (ItemKM itemKM : listKMAll){
                                     if (itemKM.getTachGia() == 1){
@@ -237,14 +238,10 @@ public class InfoProductFragment extends Fragment{
                                         }
                                     }
                                 }
-                                txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(DonGia)));
-                                txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(DonGia)));
+                                txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(DonGia)) + "đ");
+                                txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(DonGia)) + "đ");
                                 txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(TongGia)) + "đ");
-                                if (GiamGia != 0){
-                                    txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
-                                }else {
-                                    txtvGiam.setText("Không giảm giá");
-                                }
+                                txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
                             }
                         }else {
                             Toast.makeText(getActivity(), "Sản phẩm không có", Toast.LENGTH_SHORT).show();
@@ -327,12 +324,13 @@ public class InfoProductFragment extends Fragment{
         if (itemKM.getTachGia() == 1){
             txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia + itemKM.getPromotionPrice())) + "đ");
             tonggia = tonggia + itemKM.getPromotionPrice() - itemKM.getGiamGiaKLHKM();
+            GiamGia += GiamGia + itemKM.getGiamGiaKLHKM();
             txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
-            txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(itemKM.getGiamGiaKLHKM())) + "đ");
+            txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
         }else {
             txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
             txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
-            txtvGiam.setText("Không giảm giá");
+            txtvGiam.setText("0đ");
             txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
         }
     }
@@ -340,11 +338,12 @@ public class InfoProductFragment extends Fragment{
     /**
      * setTachGiaChon để set giá cho sản phẩm không tách giá
      */
-    private void setTachGiaChon(){
+    private void setTachGiaChon(ItemKM itemKM){
         long tonggia = product.getSalesPrice();
+        GiamGia -= itemKM.getGiamGiaKLHKM();
         txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
         txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
-        txtvGiam.setText("Không giảm giá");
+        txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
         txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
     }
 }

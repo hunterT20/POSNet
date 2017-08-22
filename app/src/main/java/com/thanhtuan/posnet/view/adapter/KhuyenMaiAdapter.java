@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.ItemKM;
+import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,8 @@ public class KhuyenMaiAdapter extends BaseAdapter {
             holder.txtvDonGiaKM = view.findViewById(R.id.txtvDonGiaKM);
             holder.txtvNameKM = view.findViewById(R.id.txtvNameKM);
             holder.txtvSLKM = view.findViewById(R.id.txtvSLKM);
+            holder.txtvKLKM = view.findViewById(R.id.txtvKLKM);
+            holder.txtvQuyDinh = view.findViewById(R.id.txtvQuyDinh);
             holder.itempr = view.findViewById(R.id.itempr);
             view.setTag(holder);
         } else {
@@ -59,13 +62,15 @@ public class KhuyenMaiAdapter extends BaseAdapter {
         final ItemKM itemKM = itemKMList.get(i);
 
         holder.txtvNameKM.setText(itemKM.getItemNameKM());
-        holder.txtvDonGiaKM.setText(String.valueOf(itemKM.getPromotionPrice()));
+        holder.txtvDonGiaKM.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(itemKM.getPromotionPrice())) + "đ");
         holder.txtvSLKM.setText(String.valueOf(itemKM.getQuantity()));
+        holder.txtvKLKM.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(itemKM.getGiamGiaKLHKM())) + "đ");
+        holder.txtvQuyDinh.setText(itemKM.getQuiDinh());
         return view;
     }
 
     private static class ViewHolder{
-        TextView txtvNameKM, txtvDonGiaKM, txtvSLKM;
+        TextView txtvNameKM, txtvDonGiaKM, txtvSLKM, txtvKLKM, txtvQuyDinh;
         ConstraintLayout itempr;
     }
 }

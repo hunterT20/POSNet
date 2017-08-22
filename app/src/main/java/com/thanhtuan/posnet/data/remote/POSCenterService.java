@@ -1,7 +1,9 @@
 package com.thanhtuan.posnet.data.remote;
 
+import com.thanhtuan.posnet.model.StatusKhachHang;
 import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.StatusProduct;
+import com.thanhtuan.posnet.model.StatusQuay;
 import com.thanhtuan.posnet.model.StatusSearch;
 import com.thanhtuan.posnet.model.User;
 
@@ -25,4 +27,10 @@ public interface POSCenterService {
 
     @GET("GetTonKhoAllSite")
     Observable<StatusKho> checkKho(@Query("ItemID") String ItemID);
+
+    @GET("GetQuay")
+    Observable<StatusQuay> checkQuay();
+
+    @GET("GetInfoCustomer")
+    Observable<StatusKhachHang> getKhachHang(@Query("CustomerId") String CustomerId, @Query("MobilePhone") String MobilePhone);
 }

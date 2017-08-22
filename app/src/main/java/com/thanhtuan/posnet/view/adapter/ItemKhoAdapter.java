@@ -1,7 +1,6 @@
 package com.thanhtuan.posnet.view.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Kho;
 
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 public class ItemKhoAdapter extends BaseAdapter {
     private Context context;
@@ -44,8 +41,8 @@ public class ItemKhoAdapter extends BaseAdapter {
             khoList.remove(i);
             return view;
         }
-        holder.txtvNameKho.setText(kho.getmSiteName());
-        holder.txtvSLTon.setText(String.valueOf(kho.getSiteId()));
+        holder.txtvNameKho.setText(kho.getSiteId());
+        holder.txtvSLTon.setText(String.valueOf(kho.getTonKho()));
         return view;
     }
 
