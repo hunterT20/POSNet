@@ -1,19 +1,27 @@
 package com.thanhtuan.posnet.view.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
@@ -117,26 +125,53 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.home, menu);
-        final MenuItem searchViewItem = menu.findItem(R.id.action_search);
-        ((ReOrderActivity)getActivity()).getToolbar().getMenu().findItem(R.id.action_scan).setVisible(true);
-        ((ReOrderActivity)getActivity()).getToolbar().getMenu().findItem(R.id.action_store).setVisible(true);
+        inflater.inflate(R.menu.search, menu);
 
-        final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
-        searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        ImageView btnQRcode = ((ReOrderActivity)getActivity()).getQR();
+        final EditText edtSearch = ((ReOrderActivity)getActivity()).getSearch();
+        TextView txtvLogo = ((ReOrderActivity)getActivity()).getLogo();
+
+        edtSearch.setVisibility(View.VISIBLE);
+        edtSearch.requestFocus();
+        txtvLogo.setVisibility(View.GONE);
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchViewAndroidActionBar.clearFocus();
-                return true;
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
+
             @Override
-            public boolean onQueryTextChange(String newText) {
-                if (getActivity() == null) return false;
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (getActivity() == null) return;
                 String SiteID = SharePreferenceUtil.getValueSiteid(getActivity());
-                if (newText.length() > 3){
-                    onSearch(newText,SiteID);
+                if (editable.length() > 3){
+                    onSearch(String.valueOf(editable),SiteID);
                 }
-                return true;
+            }
+        });
+
+        edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    InputMethodManager imm =  (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        btnQRcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Scan();
             }
         });
     }
@@ -148,9 +183,6 @@ public class SearchFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 getActivity().startActivity(intent);
                 getActivity().finish();
-                return true;
-            case R.id.action_scan:
-                Scan();
                 return true;
             case R.id.action_store:
                 ((ReOrderActivity)getActivity()).callFragment(new ListOrderFragment(),"Sản phẩm đã mua");

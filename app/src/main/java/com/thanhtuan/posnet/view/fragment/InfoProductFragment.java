@@ -19,6 +19,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -300,9 +301,6 @@ public class InfoProductFragment extends Fragment{
                 getActivity().startActivity(intent);
                 getActivity().finish();
                 return true;
-            case R.id.action_search:
-                ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Search");
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -311,7 +309,22 @@ public class InfoProductFragment extends Fragment{
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.home, menu);
+        inflater.inflate(R.menu.search, menu);
+
+        ImageView btnQRcode = ((ReOrderActivity)getActivity()).getQR();
+        EditText edtSearch = ((ReOrderActivity)getActivity()).getSearch();
+        TextView txtvLogo = ((ReOrderActivity)getActivity()).getLogo();
+
+        edtSearch.setVisibility(View.GONE);
+        edtSearch.setText("");
+        txtvLogo.setVisibility(View.VISIBLE);
+
+        txtvLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Search");
+            }
+        });
     }
 
     /**

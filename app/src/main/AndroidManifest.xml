@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".view.activity.LoginActivity">
+        <activity android:name=".view.activity.LoginActivity"
+            android:theme="@style/AppTheme.Trans">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +29,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".view.activity.ReOrderActivity"
-            android:label="@string/title_activity_re_order" />
+            android:label="@string/title_activity_re_order"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

@@ -5,23 +5,32 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -59,10 +68,13 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ReorderFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    private static final String TAG = "ReOderFragment";
     @BindView(R.id.ThongTinKH)          ConstraintLayout ThongTinKH;
     @BindView(R.id.ThongTinGiaoHang)    ConstraintLayout ThongTinGiaoHang;
     @BindView(R.id.TaiNha)              ConstraintLayout TaiNha;
@@ -163,7 +175,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     public void BackClick(){
         if (step == 1){
             step --;
-            setVisibleButtonScan(true);
+            setVisibleSearch();
             btnBack.setVisibility(View.GONE);
             btnNext.setText(R.string.nextbutton);
             ThongTinKH.setVisibility(View.VISIBLE);
@@ -255,21 +267,44 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.home, menu);
-        MenuItem searchViewItem = menu.findItem(R.id.action_search);
-        setVisibleButtonScan(true);
+        inflater.inflate(R.menu.search, menu);
+        setVisibleSearch();
 
-        final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
-        searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        ImageView btnQRcode = ((ReOrderActivity)getActivity()).getQR();
+        final EditText edtSearch = ((ReOrderActivity)getActivity()).getSearch();
+        final TextView txtvLogo = ((ReOrderActivity)getActivity()).getLogo();
+
+        txtvLogo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchViewAndroidActionBar.clearFocus();
-                return true;
+            public void onClick(View view) {
+                edtSearch.setVisibility(View.VISIBLE);
+                txtvLogo.setVisibility(View.GONE);
+
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
             }
+        });
 
+        edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    edtSearch.clearFocus();
+                    if (getActivity() == null) return false;
+                    String SiteID = SharePreferenceUtil.getValueSiteid(getActivity());
+                    if (edtSearch.getText().length() > 3){
+                        //search thông tin khách hàng
+                    }
+                    return true;
+                }
                 return false;
+            }
+        });
+
+        btnQRcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               //scan
             }
         });
     }
@@ -359,8 +394,12 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     }
 
     /*set trạng thái cho button Scan trên toolbar*/
-    private void setVisibleButtonScan(Boolean visible){
-        ((ReOrderActivity)getActivity()).getToolbar().getMenu().findItem(R.id.action_scan).setVisible(visible);
+    private void setVisibleSearch(){
+        ((ReOrderActivity)getActivity()).getCardViewSearch().setVisibility(View.VISIBLE);
+    }
+
+    private void setGoneSearch(){
+        ((ReOrderActivity)getActivity()).getCardViewSearch().setVisibility(View.GONE);
     }
 
     /*Sau khi đã hoàn thành thông tin khách hàng*/
@@ -379,7 +418,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             edtPhoneKH.setText(customer.getSDT());
         }
 
-        setVisibleButtonScan(false);
+        setGoneSearch();
         ThongTinKH.setVisibility(View.GONE);
         ThongTinGiaoHang.setVisibility(View.VISIBLE);
         btnBack.setVisibility(View.VISIBLE);

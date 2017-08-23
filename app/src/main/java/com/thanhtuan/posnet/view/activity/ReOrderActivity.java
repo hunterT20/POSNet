@@ -3,7 +3,11 @@ package com.thanhtuan.posnet.view.activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Customer;
@@ -19,6 +23,10 @@ import butterknife.ButterKnife;
 
 public class ReOrderActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)    Toolbar toolbar;
+    @BindView(R.id.btnQRcode)  ImageView btnQRCode;
+    @BindView(R.id.edtSearch)  EditText edtSearch;
+    @BindView(R.id.txtvLogo)   TextView txtvLogo;
+    @BindView(R.id.cardview_search)    CardView cardViewSearch;
 
     /*Các step trong quá trình mua hàng:
     * Step == 0: InfoProductFragment
@@ -70,6 +78,18 @@ public class ReOrderActivity extends AppCompatActivity {
 
     public Toolbar getToolbar(){
         return toolbar;
+    }
+    public ImageView getQR(){
+        return btnQRCode;
+    }
+    public EditText getSearch(){
+        return edtSearch;
+    }
+    public TextView getLogo(){
+        return txtvLogo;
+    }
+    public CardView getCardViewSearch(){
+        return cardViewSearch;
     }
 
     public int TongTien(){
