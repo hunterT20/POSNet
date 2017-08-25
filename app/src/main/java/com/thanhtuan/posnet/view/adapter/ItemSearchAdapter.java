@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.ItemSearch;
+import com.thanhtuan.posnet.util.AnimationUtil;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
@@ -49,6 +50,7 @@ public class ItemSearchAdapter extends RecyclerView.Adapter<ItemSearchAdapter.It
                 ((ReOrderActivity)context).callFragment(new InfoProductFragment(),"Thông tin");
             }
         });
+        AnimationUtil.ScaleList(holder.itemView, context);
     }
 
     @Override

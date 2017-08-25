@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,6 +42,8 @@ import com.thanhtuan.posnet.view.adapter.ItemSearchAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +63,8 @@ public class SearchFragment extends Fragment {
     private CompositeDisposable mSubscriptions;
 
     public  String          codeBar;
+    ItemSearchAdapter adapter;
+    private Timer timer;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -100,7 +106,7 @@ public class SearchFragment extends Fragment {
                             searchList = statusSearch.getData();
 
                             if (getActivity() == null) return;
-                            ItemSearchAdapter adapter = new ItemSearchAdapter(searchList, getActivity());
+                            adapter = new ItemSearchAdapter(searchList, getActivity());
                             rcvSearch.setAdapter(adapter);
                         }else {
                             Toast.makeText(getActivity(), "Không tìm thấy sản phẩm!", Toast.LENGTH_SHORT).show();
@@ -143,16 +149,29 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                if (timer != null) {
+                    timer.cancel();
+                }
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-                if (getActivity() == null) return;
-                String SiteID = SharePreferenceUtil.getValueSiteid(getActivity());
-                if (editable.length() > 3){
-                    onSearch(String.valueOf(editable),SiteID);
-                }
+            public void afterTextChanged(final Editable editable) {
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (getActivity() == null) return;
+                        final String SiteID = SharePreferenceUtil.getValueSiteid(getActivity());
+                        if (editable.length() > 3){
+                            onSearch(String.valueOf(editable),SiteID);
+                        }else if (editable.length() == 0){
+                            int size = searchList.size();
+                            searchList.clear();
+                            adapter.notifyItemRangeRemoved(0, size);
+                        }
+                    }
+                }, 600);
+
             }
         });
 

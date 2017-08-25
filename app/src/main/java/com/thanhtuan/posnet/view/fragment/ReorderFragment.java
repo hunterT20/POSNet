@@ -314,6 +314,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
         switch (item.getItemId()) {
             case android.R.id.home:
                 ((ReOrderActivity)getActivity()).callFragment(new InfoProductFragment(),"Thông tin sản phẩm");
+                setVisibleSearch();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

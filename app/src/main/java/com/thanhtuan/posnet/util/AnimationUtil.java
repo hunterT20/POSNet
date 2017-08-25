@@ -10,15 +10,17 @@ import com.thanhtuan.posnet.R;
  * Class hiệu ứng trong app
  */
 public class AnimationUtil {
-    public static void SlideUP(View view, Context context)
-    {
+    public static void SlideUP(View view, Context context){
         view.startAnimation(AnimationUtils.loadAnimation(context,
                 R.anim.slide_up));
     }
 
-    public static void SlideDown(View view,Context context)
-    {
+    public static void SlideDown(View view,Context context){
         view.startAnimation(AnimationUtils.loadAnimation(context,
                 R.anim.slide_down));
+    }
+
+    public static void ScaleList(View view,Context context){
+        view.startAnimation(AnimationUtils.loadAnimation(context,R.anim.scale_listview));
     }
 }
