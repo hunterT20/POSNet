@@ -43,7 +43,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             tools:layout_constraintLeft_creator="1"
-            tools:layout_constraintRight_creator="1">
+            tools:layout_constraintRight_creator="1"
+            tools:targetApi="lollipop">
 
             <TextView
                 android:id="@+id/txtvTongTienOrder"
@@ -53,7 +54,6 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:text="2.000.000đ"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -69,7 +69,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Tổng tiền"
+                android:text="@string/tong_tien"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="Đã bao gồm VAT"
+                android:text="@string/vat"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtvTongTienOrder" />
 
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/colorPrimary"
-                android:text="Xác nhận thanh toán"
+                android:text="@string/xac_nhan_thanh_toan"
                 android:textAllCaps="false"
                 android:textColor="@color/button_text_color"
                 android:textSize="18sp"

@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:elevation="2dp"
-            android:text="ReOrder"
+            android:text="@string/reorder"
             android:textAllCaps="false"
             android:textColor="@color/button_text_color"
             android:textSize="18sp"
