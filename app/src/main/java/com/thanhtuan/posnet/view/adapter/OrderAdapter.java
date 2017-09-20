@@ -26,7 +26,7 @@ public class OrderAdapter extends BaseExpandableListAdapter{
 
     @Override
     public int getGroupCount() {
-        return productList.size();
+        return productList.isEmpty() ? 0 : productList.size();
     }
 
     @Override
@@ -79,22 +79,23 @@ public class OrderAdapter extends BaseExpandableListAdapter{
         return view;
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "InflateParams"})
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         ItemKM itemKM = (ItemKM) getChild(i,i1);
         if (view == null) {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = infalInflater.inflate(R.layout.item_search, null);
+            view = infalInflater != null ? infalInflater.inflate(R.layout.item_search, null) : null;
+        }else {
+            TextView txtvNameItem = view.findViewById(R.id.txtvNameItem);
+            TextView txtvItemID = view.findViewById(R.id.txtvItemID);
+            TextView txtvPriceItem = view.findViewById(R.id.txtvPriceItem);
+
+            txtvNameItem.setText(itemKM.getItemNameKM());
+            txtvItemID.setText(itemKM.getItemIDKM());
+            txtvPriceItem.setText(NumberTextWatcherForThousand.getDecimalFormattedString(itemKM.getPromotionPrice().toString()) + "đ");
+
         }
-
-        TextView txtvNameItem = view.findViewById(R.id.txtvNameItem);
-        TextView txtvItemID = view.findViewById(R.id.txtvItemID);
-        TextView txtvPriceItem = view.findViewById(R.id.txtvPriceItem);
-
-        txtvNameItem.setText(itemKM.getItemNameKM());
-        txtvItemID.setText(itemKM.getItemIDKM());
-        txtvPriceItem.setText(NumberTextWatcherForThousand.getDecimalFormattedString(itemKM.getPromotionPrice().toString()) + "đ");
 
         return view;
     }

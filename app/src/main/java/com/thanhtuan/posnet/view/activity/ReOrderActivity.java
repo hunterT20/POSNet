@@ -60,7 +60,7 @@ public class ReOrderActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        callFragment(new SearchFragment(),"Search");
+        callFragment(new SearchFragment(),"Tìm kiếm");
     }
 
     @Override

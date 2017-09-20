@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">POSNet</string>
     <string name="title_activity_home">Home</string>
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -25,9 +27,9 @@
     <string name="scan">Scan</string>
     <string name="success">Hoàn thành</string>
     <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="login">Login</string>
-    <string name="forget_password">Forget password?</string>
+    <string name="password">Mật khẩu</string>
+    <string name="login">Đăng nhập</string>
+    <string name="forget_password">Quên mật khẩu?</string>
     <string name="remember_acc">Ghi nhớ tài khoản</string>
     <string name="copyright">Copyright © 2017</string>
     <string name="version">DMCL v.001</string>
@@ -76,4 +78,5 @@
     <string name="khong_co_luu_y">Không có lưu ý</string>
     <string name="san_pham_tang_kem">Sản phẩm tặng kèm</string>
     <string name="image_sp">image sản phẩm</string>
+    <string name="username">Tên đăng nhập</string>
 </resources>

@@ -2,7 +2,8 @@ package com.thanhtuan.posnet.view.fragment;
 
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
@@ -21,7 +22,6 @@ import com.google.gson.Gson;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
-import com.thanhtuan.posnet.view.activity.MainActivity;
 import com.thanhtuan.posnet.view.activity.ReOrderActivity;
 
 import java.util.HashMap;
@@ -31,12 +31,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class KQReOderFragment extends Fragment {
+    private static final String TAG = "KQReOderFragment";
     @BindView(R.id.ThanhToan)       ConstraintLayout ThanhToan;
     @BindView(R.id.KQ)              ConstraintLayout KQ;
     @BindView(R.id.TraTruoc)        ConstraintLayout TraTruoc;
@@ -85,41 +84,23 @@ public class KQReOderFragment extends Fragment {
         if (step ==0){
             step = 1;
             ((ReOrderActivity)getActivity()).productCurrent = null;
-            SweetDialogUtil.onWarning(getActivity(), "Bạn có muốn mua tiếp không?", new SweetAlertDialog.OnSweetClickListener() {
-                @Override
-                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    ((ReOrderActivity)getActivity()).thongTinGiaoHang = null;
-                    ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Thông tin sản phẩm");
-                    sweetAlertDialog.dismiss();
-                }
-            }, new SweetAlertDialog.OnSweetClickListener() {
-                @Override
-                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    sweetAlertDialog.dismiss();
-                    SweetDialogUtil.onSuccess(getActivity(), "Mua hàng thành công!", new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-                            KQ.setVisibility(View.VISIBLE);
-                            ThanhToan.setVisibility(View.GONE);
-                            sweetAlertDialog.dismiss();
-                        }
-                    });
-                }
-            });
+            showAlertDialogXacNhan();
             btnXacNhan.setText(R.string.success);
         }else {
             Gson gson = new Gson();
             String customer = gson.toJson(((ReOrderActivity)getActivity()).customer);
             String TTGH = gson.toJson(((ReOrderActivity)getActivity()).thongTinGiaoHang);
             String list = gson.toJson(((ReOrderActivity)getActivity()).listPRBuy);
-            HashMap<String,Object> param = new HashMap<String, Object>();
+            HashMap<String,Object> param = new HashMap<>();
             param.put("Customer",customer);
             param.put("TTGH",TTGH);
             param.put("list_sp",list);
+            Log.d(TAG, "XacNhanClick: " + param);
 
             ((ReOrderActivity)getActivity()).customer = null;
             ((ReOrderActivity)getActivity()).thongTinGiaoHang = null;
-            ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Thông tin sản phẩm");
+            ((ReOrderActivity)getActivity()).listPRBuy.clear();
+            ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Tìm kiếm");
         }
     }
 
@@ -158,5 +139,30 @@ public class KQReOderFragment extends Fragment {
                 TraTruoc.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    public void showAlertDialogXacNhan(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Thông báo");
+        builder.setMessage("Bạn có muốn tiếp tục order?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ((ReOrderActivity)getActivity()).thongTinGiaoHang = null;
+                ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Tìm kiếm");
+                dialogInterface.dismiss();
+            }
+        });
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                KQ.setVisibility(View.VISIBLE);
+                ThanhToan.setVisibility(View.GONE);
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

@@ -57,12 +57,12 @@ import io.reactivex.observers.DisposableObserver;
  */
 public class SearchFragment extends Fragment {
     private static final String TAG = "SearchFragment";
-    @BindView(R.id.rcvSearch)       RecyclerView rcvSearch;
+    @BindView(R.id.rcvSearch) RecyclerView rcvSearch;
     private List<ItemSearch> searchList;
     private DataManager dataManager;
     private CompositeDisposable mSubscriptions;
 
-    public  String          codeBar;
+    public  String codeBar;
     ItemSearchAdapter adapter;
     private Timer timer;
 
@@ -79,6 +79,7 @@ public class SearchFragment extends Fragment {
         ButterKnife.bind(this,view);
         setHasOptionsMenu(true);
 
+        ((ReOrderActivity)getActivity()).getCardViewSearch().setVisibility(View.VISIBLE);
         searchList = new ArrayList<>();
         dataManager = POSCenterApplication.get(getActivity()).getComponent().dataManager();
         mSubscriptions = new CompositeDisposable();
@@ -180,7 +181,9 @@ public class SearchFragment extends Fragment {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
                     InputMethodManager imm =  (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+                    }
                     return true;
                 }
                 return false;

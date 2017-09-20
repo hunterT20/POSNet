@@ -281,7 +281,9 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
                 txtvLogo.setVisibility(View.GONE);
 
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
+                if (imm != null) {
+                    imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
+                }
             }
         });
 
