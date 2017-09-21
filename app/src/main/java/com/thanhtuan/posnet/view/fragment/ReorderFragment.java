@@ -36,15 +36,18 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.data.DataManager;
 import com.thanhtuan.posnet.model.Customer;
 import com.thanhtuan.posnet.model.ItemKM;
+import com.thanhtuan.posnet.model.KhachHang;
 import com.thanhtuan.posnet.model.Kho;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.model.Quay;
+import com.thanhtuan.posnet.model.StatusKhachHang;
 import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.StatusQuay;
 import com.thanhtuan.posnet.model.ThongTinGiaoHang;
@@ -291,11 +294,18 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
-                    edtSearch.clearFocus();
+                    InputMethodManager imm =  (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+                    }
                     if (getActivity() == null) return false;
-                    String SiteID = SharePreferenceUtil.getValueSiteid(getActivity());
-                    if (edtSearch.getText().length() > 3){
-                        //search thông tin khách hàng
+                    String SearchText = edtSearch.getText().toString();
+                    if (SearchText.length() > 8){
+                        if (SearchText.substring(0,1).endsWith("1")){
+                            getInfoUser(SearchText,null);
+                        }else {
+                            getInfoUser(null,SearchText);
+                        }
                     }
                     return true;
                 }
@@ -309,6 +319,37 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
                //scan
             }
         });
+    }
+
+    private void getInfoUser(String CustomerID, String PhoneNumber){
+        mSubscriptions.add(dataManager
+                .getKhachHang(CustomerID, PhoneNumber)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(dataManager.getScheduler())
+                .subscribeWith(new DisposableObserver<StatusKhachHang>() {
+                    @Override
+                    public void onNext(StatusKhachHang statusKhachHang) {
+                        if (statusKhachHang.getData() != null){
+                            KhachHang khachHang = statusKhachHang.getData().get(0);
+
+                            edtTenKH.setText(khachHang.getCustomerName());
+                            edtDiaChi.setText(khachHang.getAddress());
+                            edtPhoneKH.setText(khachHang.getMobilePhone());
+                        }else {
+                            Toast.makeText(getActivity(), "Không tìm thấy thông tin khách hàng!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }));
     }
 
     @Override

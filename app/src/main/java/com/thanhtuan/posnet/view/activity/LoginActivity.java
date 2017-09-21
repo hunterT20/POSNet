@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-                        btnLogin.setText("Login");
+                        btnLogin.setText("Đăng nhập");
                     }
                 }));
     }

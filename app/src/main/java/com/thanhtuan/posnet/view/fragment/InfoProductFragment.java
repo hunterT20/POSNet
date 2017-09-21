@@ -146,17 +146,16 @@ public class InfoProductFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
-                    ItemKM itemKM = listKMAll.get((int)l);
+                    ItemKM itemKM = (ItemKM) lvKhuyenMai.getAdapter().getItem(i);
+                    View change =  lvKhuyenMai.getAdapter().getView(i,view,adapterView);
                     if (!itemKM.getChon()){
                         itemKM.setChon(true);
-                        view.setBackgroundResource(R.color.colorAccent);
+                        change.setBackgroundResource(R.color.colorAccent);
                         setTachGiaChon(itemKM);
                     }else {
                         itemKM.setChon(false);
-                        view.setBackgroundResource(R.color.cardview_light_background);
-                        if (itemKM.getTachGia() == 1){
-                            setTachGiaKhongChon(itemKM);
-                        }
+                        change.setBackgroundResource(R.color.cardview_light_background);
+                        setTachGiaKhongChon(itemKM);
                     }
                 }catch (Exception ex){
                     Log.e(TAG, "onItemClick: " + ex);
@@ -337,7 +336,7 @@ public class InfoProductFragment extends Fragment{
         if (itemKM.getTachGia() == 1){
             txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia + itemKM.getPromotionPrice())) + "đ");
             tonggia = tonggia + itemKM.getPromotionPrice() - itemKM.getGiamGiaKLHKM();
-            GiamGia += GiamGia + itemKM.getGiamGiaKLHKM();
+            GiamGia += itemKM.getGiamGiaKLHKM();
             txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
             txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
         }else {

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.greenrobot.eventbus.EventBus.TAG;
 
 
 public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> {
@@ -51,6 +54,7 @@ public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "onClick: hahahahah");
                 if (!product.getChon()){
                    setChon(product,holder);
                 }else {

@@ -167,8 +167,10 @@ public class SearchFragment extends Fragment {
                             onSearch(String.valueOf(editable),SiteID);
                         }else if (editable.length() == 0){
                             int size = searchList.size();
-                            searchList.clear();
-                            adapter.notifyItemRangeRemoved(0, size);
+                            if (size != 0) {
+                                searchList.clear();
+                                adapter.notifyItemRangeRemoved(0, size);
+                            }
                         }
                     }
                 }, 600);
