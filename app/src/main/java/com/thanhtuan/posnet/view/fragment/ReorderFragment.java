@@ -51,6 +51,7 @@ import com.thanhtuan.posnet.model.StatusKhachHang;
 import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.StatusQuay;
 import com.thanhtuan.posnet.model.ThongTinGiaoHang;
+import com.thanhtuan.posnet.util.AnimationUtil;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
@@ -462,9 +463,12 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
             edtPhoneKH.setText(customer.getSDT());
         }
 
+        
         setGoneSearch();
+        AnimationUtil.SlideUP(ThongTinKH,getActivity());
         ThongTinKH.setVisibility(View.GONE);
         ThongTinGiaoHang.setVisibility(View.VISIBLE);
+        AnimationUtil.SlideDown(ThongTinGiaoHang,getActivity());
         btnBack.setVisibility(View.VISIBLE);
     }
 

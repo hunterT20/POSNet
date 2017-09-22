@@ -147,14 +147,11 @@ public class InfoProductFragment extends Fragment{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     ItemKM itemKM = (ItemKM) lvKhuyenMai.getAdapter().getItem(i);
-                    View change =  lvKhuyenMai.getAdapter().getView(i,view,adapterView);
                     if (!itemKM.getChon()){
                         itemKM.setChon(true);
-                        change.setBackgroundResource(R.color.colorAccent);
                         setTachGiaChon(itemKM);
                     }else {
                         itemKM.setChon(false);
-                        change.setBackgroundResource(R.color.cardview_light_background);
                         setTachGiaKhongChon(itemKM);
                     }
                 }catch (Exception ex){

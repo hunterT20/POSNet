@@ -12,12 +12,12 @@ import com.thanhtuan.posnet.R;
 public class AnimationUtil {
     public static void SlideUP(View view, Context context){
         view.startAnimation(AnimationUtils.loadAnimation(context,
-                R.anim.slide_up));
+                R.anim.slide_right_to_left));
     }
 
     public static void SlideDown(View view,Context context){
         view.startAnimation(AnimationUtils.loadAnimation(context,
-                R.anim.slide_down));
+                R.anim.slide_small_to_large));
     }
 
     public static void ScaleList(View view,Context context){
