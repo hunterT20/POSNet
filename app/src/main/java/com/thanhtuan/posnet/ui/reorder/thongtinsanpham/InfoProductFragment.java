@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +35,7 @@ import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.StatusProduct;
 import com.thanhtuan.posnet.ui.reorder.search.SearchFragment;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
+import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.ui.index.MainActivity;
 import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
@@ -54,15 +56,9 @@ import io.reactivex.observers.DisposableObserver;
 
 public class InfoProductFragment extends Fragment{
     private static final String TAG = "FragmentInfo";
-    private ListView lvKhuyenMai;
-    private TextView txtvNamePR;
-    private TextView txtvDonGiaPR;
-    private TextView txtvSoSPChon;
-    private TextView txtvTamTinh;
-    private TextView txtvGiam;
-    private TextView txtvTongGia;
+    private RecyclerView rcvKhuyenMai;
+
     private Button btnReOrder;
-    private ImageView imgChitiet;
 
     private List<ItemKM>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
     private Product product;
@@ -70,8 +66,6 @@ public class InfoProductFragment extends Fragment{
 
     private DataManager dataManager;
     private CompositeDisposable mSubscriptions;
-
-    long GiamGia = 0;
 
     public InfoProductFragment() {
         // Required empty public constructor
@@ -113,53 +107,6 @@ public class InfoProductFragment extends Fragment{
                 ((ReOrderActivity)getActivity()).callFragment(new ReorderFragment(),"Thông tin Order");
             }
         });
-
-        imgChitiet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String ItemID = SharePreferenceUtil.getValueItemid(getActivity());
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Chi tiết sản phẩm");
-
-                WebView wv = new WebView(getActivity());
-                wv.loadUrl("https://dienmaycholon.vn/default/product/thongsokythuat/sap/"+ItemID);
-                wv.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        view.loadUrl(url);
-                        return true;
-                    }
-                });
-
-                alert.setView(wv);
-                alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                alert.show();
-            }
-        });
-
-        lvKhuyenMai.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                try {
-                    ItemKM itemKM = (ItemKM) lvKhuyenMai.getAdapter().getItem(i);
-                    if (!itemKM.getChon()){
-                        itemKM.setChon(true);
-                        setTachGiaChon(itemKM);
-                    }else {
-                        itemKM.setChon(false);
-                        setTachGiaKhongChon(itemKM);
-                    }
-                }catch (Exception ex){
-                    Log.e(TAG, "onItemClick: " + ex);
-                }
-            }
-        });
     }
 
     @Override
@@ -173,23 +120,9 @@ public class InfoProductFragment extends Fragment{
      * @param view: fragment hiện tại
      */
     private void addViews(View view) {
-        View headerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.header_listview_info_product, null, false);
-        View footerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_listview_info_product, null, false);
-
-        lvKhuyenMai = view.findViewById(R.id.lvKhuyenMai);
+        rcvKhuyenMai = view.findViewById(R.id.rcvKhuyenMai);
+        RecyclerViewUtil.setupRecyclerView(rcvKhuyenMai,new KhuyenMaiAdapter(getActivity(),listKMAll,product),getActivity());
         btnReOrder = view.findViewById(R.id.btnReOrder);
-
-        txtvDonGiaPR = headerView.findViewById(R.id.txtvDonGiaPR);
-        txtvNamePR = headerView.findViewById(R.id.txtvNamePR);
-        txtvSoSPChon = headerView.findViewById(R.id.txtvSoSPChon);
-        imgChitiet = headerView.findViewById(R.id.imgChitiet);
-
-        txtvTamTinh = footerView.findViewById(R.id.txtvTamTinh);
-        txtvGiam = footerView.findViewById(R.id.txtvGiam);
-        txtvTongGia = footerView.findViewById(R.id.txtvTongGia);
-
-        lvKhuyenMai.addHeaderView(headerView,null,false);
-        lvKhuyenMai.addFooterView(footerView,null,false);
 
         if (((ReOrderActivity)getActivity()).productCurrent != null){
             product = ((ReOrderActivity)getActivity()).productCurrent;
@@ -216,31 +149,10 @@ public class InfoProductFragment extends Fragment{
                     public void onNext(@NonNull StatusProduct statusProduct) {
                         if (statusProduct.getData() != null){
                             product = statusProduct.getData().get(0);
-                            txtvNamePR.setText(product.getItemName() + " (" + "Loại: " + product.getTypeItemID() + ")");
                             listKMAll = product.getListItemkm();
-
-                            if (listKMAll.size() != 0){
-                                txtvSoSPChon.setText("Khách hàng được chọn " +
-                                        listKMAll.get(0).getPermissonBuyItemAttach() + " sản phẩm!");
-                                if (getActivity() == null) return;
-                                adapter = new KhuyenMaiAdapter(getActivity(),listKMAll);
-                                lvKhuyenMai.setAdapter(adapter);
-                                long TongGia = product.getSalesPrice();
-                                long DonGia = product.getSalesPrice();
-                                for (ItemKM itemKM : listKMAll){
-                                    if (itemKM.getTachGia() == 1){
-                                        if (!itemKM.getChon()){
-                                            DonGia += itemKM.getPromotionPrice();
-                                            GiamGia += itemKM.getGiamGiaKLHKM();
-                                            TongGia = TongGia + itemKM.getPromotionPrice() - itemKM.getGiamGiaKLHKM();
-                                        }
-                                    }
-                                }
-                                txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(DonGia)) + "đ");
-                                txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(DonGia)) + "đ");
-                                txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(TongGia)) + "đ");
-                                txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
-                            }
+                            adapter = new KhuyenMaiAdapter(getActivity(),listKMAll,product);
+                            adapter.setHasStableIds(true);
+                            rcvKhuyenMai.setAdapter(adapter);
                         }else {
                             Toast.makeText(getActivity(), "Sản phẩm không có", Toast.LENGTH_SHORT).show();
                         }
@@ -322,38 +234,5 @@ public class InfoProductFragment extends Fragment{
                 ((ReOrderActivity)getActivity()).callFragment(new SearchFragment(),"Search");
             }
         });
-    }
-
-    /**
-     * setTachGiaKhongChon để set giá cho sản phẩm nếu sản phẩm khuyến mãi không chọn trong trường hợp
-     * tách giá hoặc không
-     * @param itemKM: sản phẩm khuyến mãi
-     */
-    private void setTachGiaKhongChon(ItemKM itemKM){
-        long tonggia = product.getSalesPrice();
-        if (itemKM.getTachGia() == 1){
-            txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia + itemKM.getPromotionPrice())) + "đ");
-            tonggia = tonggia + itemKM.getPromotionPrice() - itemKM.getGiamGiaKLHKM();
-            GiamGia += itemKM.getGiamGiaKLHKM();
-            txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
-            txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
-        }else {
-            txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
-            txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
-            txtvGiam.setText("0đ");
-            txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
-        }
-    }
-
-    /**
-     * setTachGiaChon để set giá cho sản phẩm không tách giá
-     */
-    private void setTachGiaChon(ItemKM itemKM){
-        long tonggia = product.getSalesPrice();
-        GiamGia -= itemKM.getGiamGiaKLHKM();
-        txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
-        txtvTamTinh.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
-        txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
-        txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
     }
 }

@@ -7,8 +7,8 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ListView
-        android:id="@+id/lvKhuyenMai"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcvKhuyenMai"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#EEEEEE"
@@ -17,7 +17,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="0dp" />
+        tools:listitem="@layout/item_info_product" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardView3"
