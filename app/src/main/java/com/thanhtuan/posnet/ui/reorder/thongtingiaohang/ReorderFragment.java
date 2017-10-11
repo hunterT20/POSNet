@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.fragment;
+package com.thanhtuan.posnet.ui.reorder.thongtingiaohang;
 
 
 import android.annotation.SuppressLint;
@@ -10,13 +10,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,14 +45,14 @@ import com.thanhtuan.posnet.model.StatusKhachHang;
 import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.StatusQuay;
 import com.thanhtuan.posnet.model.ThongTinGiaoHang;
+import com.thanhtuan.posnet.ui.reorder.thongtinsanpham.InfoProductFragment;
 import com.thanhtuan.posnet.util.AnimationUtil;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
-import com.thanhtuan.posnet.view.activity.ReOrderActivity;
-import com.thanhtuan.posnet.view.adapter.ItemKhoAdapter;
-import com.thanhtuan.posnet.view.adapter.ItemQuayAdapter;
-import com.thanhtuan.posnet.view.adapter.KMAdapter;
+import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
+import com.thanhtuan.posnet.ui.reorder.thongtinsanpham.KMAdapter;
+import com.thanhtuan.posnet.ui.reorder.xacnhanmua.KQReOderFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,8 +65,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
-
-import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
  * A simple {@link Fragment} subclass.

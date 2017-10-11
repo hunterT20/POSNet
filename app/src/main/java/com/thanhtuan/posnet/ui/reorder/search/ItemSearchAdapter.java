@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.adapter;
+package com.thanhtuan.posnet.ui.reorder.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,11 +10,11 @@ import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.ItemSearch;
+import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
 import com.thanhtuan.posnet.util.AnimationUtil;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
-import com.thanhtuan.posnet.view.activity.ReOrderActivity;
-import com.thanhtuan.posnet.view.fragment.InfoProductFragment;
+import com.thanhtuan.posnet.ui.reorder.thongtinsanpham.InfoProductFragment;
 
 import java.util.List;
 

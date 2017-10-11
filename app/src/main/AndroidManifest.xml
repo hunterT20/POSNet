@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".view.activity.LoginActivity"
+        <activity android:name=".ui.login.LoginActivity"
             android:theme="@style/AppTheme.Trans">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,11 +24,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name=".ui.index.MainActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.activity.ReOrderActivity"
+            android:name=".ui.reorder.ReOrderActivity"
             android:label="@string/title_activity_re_order"
             android:theme="@style/AppTheme"/>
     </application>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bglogin"
     android:fitsSystemWindows="true"
-    tools:context="com.thanhtuan.posnet.view.activity.LoginActivity">
+    tools:context="com.thanhtuan.posnet.ui.login.LoginActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"

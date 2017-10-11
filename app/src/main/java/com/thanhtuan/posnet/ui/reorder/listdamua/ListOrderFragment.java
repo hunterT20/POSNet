@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.fragment;
+package com.thanhtuan.posnet.ui.reorder.listdamua;
 
 
 import android.annotation.SuppressLint;
@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.ui.reorder.search.SearchFragment;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
-import com.thanhtuan.posnet.view.activity.ReOrderActivity;
-import com.thanhtuan.posnet.view.adapter.OrderAdapter;
+import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
 
 import java.util.List;
 

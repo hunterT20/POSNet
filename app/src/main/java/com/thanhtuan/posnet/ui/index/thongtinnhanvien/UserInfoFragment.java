@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.fragment;
+package com.thanhtuan.posnet.ui.index.thongtinnhanvien;
 
 
 import android.os.Bundle;

@@ -1,17 +1,13 @@
-package com.thanhtuan.posnet.view.fragment;
+package com.thanhtuan.posnet.ui.reorder.search;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Handler;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,9 +32,9 @@ import com.thanhtuan.posnet.model.StatusSearch;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.ScanUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
-import com.thanhtuan.posnet.view.activity.MainActivity;
-import com.thanhtuan.posnet.view.activity.ReOrderActivity;
-import com.thanhtuan.posnet.view.adapter.ItemSearchAdapter;
+import com.thanhtuan.posnet.ui.index.MainActivity;
+import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
+import com.thanhtuan.posnet.ui.reorder.listdamua.ListOrderFragment;
 
 import java.util.ArrayList;
 import java.util.List;

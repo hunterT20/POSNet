@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.activity;
+package com.thanhtuan.posnet.ui.index;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -13,8 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.view.fragment.HomeFragment;
-import com.thanhtuan.posnet.view.fragment.UserInfoFragment;
+import com.thanhtuan.posnet.ui.index.thongtinnhanvien.UserInfoFragment;
+import com.thanhtuan.posnet.ui.index.home.HomeFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

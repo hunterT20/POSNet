@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.activity;
+package com.thanhtuan.posnet.ui.reorder;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.Customer;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.model.ThongTinGiaoHang;
-import com.thanhtuan.posnet.view.fragment.SearchFragment;
+import com.thanhtuan.posnet.ui.reorder.search.SearchFragment;
 
 import java.util.ArrayList;
 import java.util.List;

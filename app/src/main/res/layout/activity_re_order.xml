@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context="com.thanhtuan.posnet.view.activity.ReOrderActivity">
+    tools:context="com.thanhtuan.posnet.ui.reorder.ReOrderActivity">
 
     <include
         android:id="@+id/include"

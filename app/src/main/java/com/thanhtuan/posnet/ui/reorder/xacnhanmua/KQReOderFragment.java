@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.fragment;
+package com.thanhtuan.posnet.ui.reorder.xacnhanmua;
 
 
 import android.annotation.SuppressLint;
@@ -20,9 +20,11 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.thanhtuan.posnet.R;
+import com.thanhtuan.posnet.ui.reorder.thongtingiaohang.ReorderFragment;
+import com.thanhtuan.posnet.ui.reorder.search.SearchFragment;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.SweetDialogUtil;
-import com.thanhtuan.posnet.view.activity.ReOrderActivity;
+import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
 
 import java.util.HashMap;
 

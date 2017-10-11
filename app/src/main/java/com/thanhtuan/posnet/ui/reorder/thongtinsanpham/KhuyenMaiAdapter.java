@@ -1,11 +1,10 @@
-package com.thanhtuan.posnet.view.adapter;
+package com.thanhtuan.posnet.ui.reorder.thongtinsanpham;
 
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -13,7 +12,6 @@ import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.ItemKM;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class KhuyenMaiAdapter extends BaseAdapter {

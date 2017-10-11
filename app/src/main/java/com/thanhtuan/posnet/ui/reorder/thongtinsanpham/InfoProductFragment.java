@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.fragment;
+package com.thanhtuan.posnet.ui.reorder.thongtinsanpham;
 
 
 import android.annotation.SuppressLint;
@@ -32,11 +32,12 @@ import com.thanhtuan.posnet.model.ItemKM;
 import com.thanhtuan.posnet.model.Product;
 import com.thanhtuan.posnet.model.StatusKho;
 import com.thanhtuan.posnet.model.StatusProduct;
+import com.thanhtuan.posnet.ui.reorder.search.SearchFragment;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
-import com.thanhtuan.posnet.view.activity.MainActivity;
-import com.thanhtuan.posnet.view.activity.ReOrderActivity;
-import com.thanhtuan.posnet.view.adapter.KhuyenMaiAdapter;
+import com.thanhtuan.posnet.ui.index.MainActivity;
+import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
+import com.thanhtuan.posnet.ui.reorder.thongtingiaohang.ReorderFragment;
 
 import java.util.ArrayList;
 import java.util.List;

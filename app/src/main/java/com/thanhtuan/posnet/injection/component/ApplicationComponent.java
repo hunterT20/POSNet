@@ -4,8 +4,7 @@ import android.app.Application;
 
 import com.thanhtuan.posnet.data.DataManager;
 import com.thanhtuan.posnet.injection.module.ApplicationModule;
-import com.thanhtuan.posnet.view.activity.LoginActivity;
-import com.thanhtuan.posnet.view.activity.MainActivity;
+import com.thanhtuan.posnet.ui.login.LoginActivity;
 
 import javax.inject.Singleton;
 

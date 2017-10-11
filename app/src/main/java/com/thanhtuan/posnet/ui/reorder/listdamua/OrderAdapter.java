@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.adapter;
+package com.thanhtuan.posnet.ui.reorder.listdamua;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

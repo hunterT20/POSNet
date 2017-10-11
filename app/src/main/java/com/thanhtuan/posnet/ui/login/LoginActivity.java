@@ -1,10 +1,9 @@
-package com.thanhtuan.posnet.view.activity;
+package com.thanhtuan.posnet.ui.login;
 
 import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,12 +16,11 @@ import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.data.DataManager;
 import com.thanhtuan.posnet.model.User;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
-import com.thanhtuan.posnet.util.SweetDialogUtil;
+import com.thanhtuan.posnet.ui.index.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;

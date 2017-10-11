@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.fragment;
+package com.thanhtuan.posnet.ui.index.home;
 
 
 import android.content.Intent;
@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.NewFeeds;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
-import com.thanhtuan.posnet.view.activity.ReOrderActivity;
-import com.thanhtuan.posnet.view.adapter.NewfeedAdapter;
+import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
 
 import java.util.ArrayList;
 import java.util.List;

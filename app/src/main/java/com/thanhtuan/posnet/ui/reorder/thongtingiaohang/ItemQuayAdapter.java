@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.view.adapter;
+package com.thanhtuan.posnet.ui.reorder.thongtingiaohang;
 
 import android.content.Context;
 import android.view.LayoutInflater;
