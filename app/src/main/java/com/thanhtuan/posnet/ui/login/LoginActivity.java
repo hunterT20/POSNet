@@ -55,11 +55,16 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnLogin)
     public void LoginClick(){
-        btnLogin.setText("Loading...");
         String getEmail = edtEmail.getText().toString();
         String getPass  = edtPass.getText().toString();
-
-        login(getEmail,getPass);
+        if (getEmail.length() == 0){
+            Toast.makeText(this, "Tên đăng nhập không được để trống!", Toast.LENGTH_SHORT).show();
+        }else if (getPass.length() == 0){
+            Toast.makeText(this, "Mật khẩu không được để trống!", Toast.LENGTH_SHORT).show();
+        }else {
+            btnLogin.setText("Loading...");
+            login(getEmail,getPass);
+        }
     }
 
     private void login(final String username, final String pass){

@@ -151,7 +151,6 @@ public class InfoProductFragment extends Fragment{
                             product = statusProduct.getData().get(0);
                             listKMAll = product.getListItemkm();
                             adapter = new KhuyenMaiAdapter(getActivity(),listKMAll,product);
-                            adapter.setHasStableIds(true);
                             rcvKhuyenMai.setAdapter(adapter);
                         }else {
                             Toast.makeText(getActivity(), "Sản phẩm không có", Toast.LENGTH_SHORT).show();

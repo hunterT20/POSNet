@@ -128,20 +128,4 @@ public class ItemKM {
     public void setTachGia(Long TachGia) {
         mTachGia = TachGia;
     }
-    @Override
-    public int hashCode() {
-        int result = mGiamGiaKLHKM != null ? mGiamGiaKLHKM.hashCode() : 0;
-        result = 31 * result + (mIDHeader != null ? mIDHeader.hashCode() : 0);
-        result = 31 * result + (mItemIDCan != null ? mItemIDCan.hashCode() : 0);
-        result = 31 * result + (mItemIDKM != null ? mItemIDKM.hashCode() : 0);
-        result = 31 * result + (mItemNameKM != null ? mItemNameKM.hashCode() : 0);
-        result = 31 * result + (mNote != null ? mNote.hashCode() : 0);
-        result = 31 * result + (mPermissonBuyItemAttach != null ? mPermissonBuyItemAttach.hashCode() : 0);
-        result = 31 * result + (mPromotionPrice != null ? mPromotionPrice.hashCode() : 0);
-        result = 31 * result + (mQuantity != null ? mQuantity.hashCode() : 0);
-        result = 31 * result + (mQuiDinh != null ? mQuiDinh.hashCode() : 0);
-        result = 31 * result + (mTachGia != null ? mTachGia.hashCode() : 0);
-        result = 31 * result + (getChon() != null ? getChon().hashCode() : 0);
-        return result;
-    }
 }
