@@ -1,5 +1,6 @@
 package com.thanhtuan.posnet.ui.reorder.thongtinsanpham;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.constraint.ConstraintLayout;
@@ -11,13 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.ItemKM;
 import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
+import com.thanhtuan.posnet.ui.reorder.search.SearchFragment;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
@@ -105,18 +112,17 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         itemViewHolder.itempr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    if (!itemKM.getChon()){
-                        itemKM.setChon(true);
-                        setTachGiaChon(itemKM);
-                        itemViewHolder.itempr.setBackgroundResource(R.color.colorAccent);
-                    }else {
-                        itemKM.setChon(false);
-                        setTachGiaKhongChon(itemKM);
-                        itemViewHolder.itempr.setBackgroundResource(R.color.cardview_light_background);
-                    }
-                }catch (Exception ex){
-                    Log.e(TAG, "onItemClick: " + ex);
+                /*if (itemKM.getGiamGiaKLHKM() != 0){
+                    DialogKM();
+                }*/
+                if (!itemKM.getChon()){
+                    itemKM.setChon(true);
+                    setTachGiaChon(itemKM);
+                    itemViewHolder.itempr.setBackgroundResource(R.color.colorAccent);
+                }else {
+                    itemKM.setChon(false);
+                    setTachGiaKhongChon(itemKM);
+                    itemViewHolder.itempr.setBackgroundResource(R.color.cardview_light_background);
                 }
             }
         });
@@ -152,17 +158,38 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         });
     }
 
+    private void DialogKM(){
+        final Dialog dialog = new Dialog(context);
+
+        View view = LayoutInflater.from(context).inflate(R.layout.item_chonsanphamkm,null);
+        Button btnLaySP = view.findViewById(R.id.btnLaySP);
+        Button btnLayGiamGia = view.findViewById(R.id.btnLayGiamGia);
+        Button btnKhongChonKM = view.findViewById(R.id.btnKhongChonKM);
+
+        btnKhongChonKM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Không chọn", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.setContentView(view);
+        dialog.setTitle("Chọn khuyến mãi");
+
+        dialog.show();
+    }
+
     /**
      * setTachGiaKhongChon để set giá cho sản phẩm nếu sản phẩm khuyến mãi không chọn trong trường hợp
      * tách giá hoặc không
      * @param itemKM: sản phẩm khuyến mãi
      */
     private void setTachGiaKhongChon(ItemKM itemKM){
-        long tonggia = product.getSalesPrice();
         if (itemKM.getTachGia() == 1){
-            tonggia = tonggia + itemKM.getPromotionPrice() - itemKM.getGiamGiaKLHKM();
+            TongGia = TongGia - itemKM.getGiamGiaKLHKM();
             GiamGia += itemKM.getGiamGiaKLHKM();
-            txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
+            if (txtvTongGia == null) return;
+            txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(TongGia)) + "đ");
             txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
         }
     }
@@ -172,10 +199,11 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      */
     private void setTachGiaChon(ItemKM itemKM){
         if (itemKM.getTachGia() == 1){
-            long tonggia = product.getSalesPrice();
+            TongGia += itemKM.getGiamGiaKLHKM();
             GiamGia -= itemKM.getGiamGiaKLHKM();
+            if (txtvGiam == null) return;
             txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
-            txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(tonggia)) + "đ");
+            txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(TongGia)) + "đ");
         }
     }
 
