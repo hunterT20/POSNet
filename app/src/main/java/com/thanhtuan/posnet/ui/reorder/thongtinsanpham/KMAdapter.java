@@ -46,7 +46,7 @@ public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> 
         holder.txtvNameKM.setText(product.getItemNameKM());
         holder.txtvSLKM.setText(String.valueOf(product.getQuantity()));
         holder.txtvDonGiaKM.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getPromotionPrice().toString()) + "đ");
-        if (product.getChon())
+        if (product.getmChonGiamGia())
         {
             holder.itempr.setBackgroundResource(R.color.colorAccent);
         }
@@ -55,7 +55,7 @@ public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> 
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: hahahahah");
-                if (!product.getChon()){
+                if (!product.getmChonGiamGia()){
                    setChon(product,holder);
                 }else {
                     setBoChon(product,holder);
@@ -66,13 +66,13 @@ public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> 
 
     private void setChon(ItemKM product, KMAdapter.InfoPRViewHolder holder){
         listChon.add(product);
-        product.setChon(true);
+        product.setmChonGiamGia(true);
         holder.itempr.setBackgroundResource(R.color.colorAccent);
     }
 
     private void setBoChon(ItemKM product, KMAdapter.InfoPRViewHolder holder){
         listChon.remove(product);
-        product.setChon(false);
+        product.setmChonGiamGia(false);
         holder.itempr.setBackgroundResource(R.color.cardview_light_background);
     }
 

@@ -68,7 +68,7 @@
     <string name="lay_hang">Lấy hàng:</string>
     <string name="check">Check</string>
     <string name="giao_hang">Giao hàng:</string>
-    <string name="chon">Chọn</string>
+    <string name="mChonGiamGia">Chọn</string>
     <string name="thong_tin_giao_hang"><![CDATA[> Thông Tin Giao Hàng]]></string>
     <string name="nha">Nhà</string>
     <string name="khuyen_mai"><![CDATA[> Khuyến mãi]]></string>

@@ -30,14 +30,23 @@ public class ItemKM {
     private String mQuiDinh;
     @SerializedName("TachGia")
     private Long mTachGia;
-    private Boolean chon = false;
+    private Boolean mChonGiamGia = false;
+    private Boolean mChonSanPham = false;
 
-    public Boolean getChon() {
-        return chon;
+    public Boolean getmChonSanPham() {
+        return mChonSanPham;
     }
 
-    public void setChon(Boolean chon) {
-        this.chon = chon;
+    public void setmChonSanPham(Boolean mChonSanPham) {
+        this.mChonSanPham = mChonSanPham;
+    }
+
+    public Boolean getmChonGiamGia() {
+        return mChonGiamGia;
+    }
+
+    public void setmChonGiamGia(Boolean mChonGiamGia) {
+        this.mChonGiamGia = mChonGiamGia;
     }
 
 

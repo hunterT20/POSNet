@@ -348,7 +348,7 @@
             android:layout_marginTop="8dp"
             android:background="@color/colorPrimaryDark"
             android:padding="3dp"
-            android:text="@string/chon"
+            android:text="@string/mChonGiamGia"
             android:textColor="@color/cardview_light_background"
             android:textSize="18sp"
             android:textStyle="bold"
