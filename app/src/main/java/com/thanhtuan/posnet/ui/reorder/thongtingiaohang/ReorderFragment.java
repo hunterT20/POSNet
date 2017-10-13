@@ -35,16 +35,16 @@ import android.widget.Toast;
 import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.data.DataManager;
-import com.thanhtuan.posnet.model.Customer;
-import com.thanhtuan.posnet.model.ItemKM;
-import com.thanhtuan.posnet.model.KhachHang;
-import com.thanhtuan.posnet.model.Kho;
-import com.thanhtuan.posnet.model.Product;
-import com.thanhtuan.posnet.model.Quay;
-import com.thanhtuan.posnet.model.StatusKhachHang;
-import com.thanhtuan.posnet.model.StatusKho;
-import com.thanhtuan.posnet.model.StatusQuay;
-import com.thanhtuan.posnet.model.ThongTinGiaoHang;
+import com.thanhtuan.posnet.model.data.Customer;
+import com.thanhtuan.posnet.model.data.PromotionProducts;
+import com.thanhtuan.posnet.model.data.KhachHang;
+import com.thanhtuan.posnet.model.data.Kho;
+import com.thanhtuan.posnet.model.data.Product;
+import com.thanhtuan.posnet.model.data.Quay;
+import com.thanhtuan.posnet.model.status.StatusKhachHang;
+import com.thanhtuan.posnet.model.status.StatusKho;
+import com.thanhtuan.posnet.model.status.StatusQuay;
+import com.thanhtuan.posnet.model.data.ThongTinGiaoHang;
 import com.thanhtuan.posnet.ui.reorder.thongtinsanpham.InfoProductFragment;
 import com.thanhtuan.posnet.util.AnimationUtil;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
@@ -98,7 +98,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     * step == 2: xác nhận danh sách sản phẩm*/
     private int step = 0;
 
-    private List<ItemKM> productList;
+    private List<PromotionProducts> productList;
     private DataManager dataManager;
     private CompositeDisposable mSubscriptions;
 
@@ -471,7 +471,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
         TongTien.setVisibility(View.VISIBLE);
         btnNext.setText(R.string.thanhtoan);
 
-        com.thanhtuan.posnet.model.ThongTinGiaoHang thongTinGiaoHang = ((ReOrderActivity)getActivity()).thongTinGiaoHang;
+        com.thanhtuan.posnet.model.data.ThongTinGiaoHang thongTinGiaoHang = ((ReOrderActivity)getActivity()).thongTinGiaoHang;
         if (thongTinGiaoHang == null){
             thongTinGiaoHang = new ThongTinGiaoHang();
             thongTinGiaoHang.setDiaChi(txtvDCGiaoHang.getText().toString());

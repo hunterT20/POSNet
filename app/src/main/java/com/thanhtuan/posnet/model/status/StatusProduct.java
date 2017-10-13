@@ -1,16 +1,17 @@
 
-package com.thanhtuan.posnet.model;
+package com.thanhtuan.posnet.model.status;
 
 import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
+import com.thanhtuan.posnet.model.data.Product;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class StatusQuay {
+public class StatusProduct {
 
     @SerializedName("Data")
-    private List<Quay> mData;
+    private List<Product> mData;
     @SerializedName("ErrorCode")
     private Long mErrorCode;
     @SerializedName("Message")
@@ -22,11 +23,11 @@ public class StatusQuay {
     @SerializedName("UserName")
     private String mUserName;
 
-    public List<Quay> getData() {
+    public List<Product> getData() {
         return mData;
     }
 
-    public void setData(List<Quay> Data) {
+    public void setData(List<Product> Data) {
         mData = Data;
     }
 

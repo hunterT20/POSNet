@@ -1,9 +1,9 @@
-package com.thanhtuan.posnet.model;
+package com.thanhtuan.posnet.model.data;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+public class NhanVien {
     @SerializedName("Data")
     @Expose
     private Object data;

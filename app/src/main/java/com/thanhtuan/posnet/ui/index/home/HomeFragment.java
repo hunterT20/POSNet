@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.model.NewFeeds;
+import com.thanhtuan.posnet.model.data.NewFeeds;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
 

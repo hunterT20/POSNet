@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.model.ItemKM;
+import com.thanhtuan.posnet.model.data.PromotionProducts;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 
 import java.util.ArrayList;
@@ -22,11 +22,11 @@ import static org.greenrobot.eventbus.EventBus.TAG;
 
 public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> {
     private Context context;
-    private List<ItemKM> mProduct;
+    private List<PromotionProducts> mProduct;
     private LayoutInflater mLayoutInflater;
-    private List<ItemKM> listChon = new ArrayList<>();
+    private List<PromotionProducts> listChon = new ArrayList<>();
 
-    public KMAdapter(List<ItemKM> mProduct, Context mContext) {
+    public KMAdapter(List<PromotionProducts> mProduct, Context mContext) {
         this.context = mContext;
         this.mProduct = mProduct;
         this.mLayoutInflater = LayoutInflater.from(mContext);
@@ -41,7 +41,7 @@ public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final KMAdapter.InfoPRViewHolder holder, int position) {
-        final ItemKM product = mProduct.get(position);
+        final PromotionProducts product = mProduct.get(position);
 
         holder.txtvNameKM.setText(product.getItemNameKM());
         holder.txtvSLKM.setText(String.valueOf(product.getQuantity()));
@@ -64,19 +64,19 @@ public class KMAdapter extends RecyclerView.Adapter<KMAdapter.InfoPRViewHolder> 
         });
     }
 
-    private void setChon(ItemKM product, KMAdapter.InfoPRViewHolder holder){
+    private void setChon(PromotionProducts product, KMAdapter.InfoPRViewHolder holder){
         listChon.add(product);
         product.setmChonGiamGia(true);
         holder.itempr.setBackgroundResource(R.color.colorAccent);
     }
 
-    private void setBoChon(ItemKM product, KMAdapter.InfoPRViewHolder holder){
+    private void setBoChon(PromotionProducts product, KMAdapter.InfoPRViewHolder holder){
         listChon.remove(product);
         product.setmChonGiamGia(false);
         holder.itempr.setBackgroundResource(R.color.cardview_light_background);
     }
 
-    public List<ItemKM> getProductChon(){
+    public List<PromotionProducts> getProductChon(){
         return listChon;
     }
 

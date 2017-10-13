@@ -1,5 +1,5 @@
 
-package com.thanhtuan.posnet.model;
+package com.thanhtuan.posnet.model.data;
 
 import java.util.List;
 import javax.annotation.Generated;
@@ -26,7 +26,7 @@ public class Product {
     @SerializedName("ItemName")
     private String mItemName;
     @SerializedName("List_Itemkm")
-    private List<ItemKM> mListItemkm;
+    private List<PromotionProducts> mListItemkm;
     @SerializedName("Mota")
     private String mMota;
     @SerializedName("QuantityCan")
@@ -104,12 +104,12 @@ public class Product {
         mItemName = ItemName;
     }
 
-    public List<ItemKM> getListItemkm() {
+    public List<PromotionProducts> getListItemkm() {
         return mListItemkm;
     }
 
-    public void setListItemkm(List<ItemKM> ListItemkm) {
-        mListItemkm = ListItemkm;
+    public void setListItemkm(List<PromotionProducts> listItemkm) {
+        mListItemkm = listItemkm;
     }
 
     public String getMota() {

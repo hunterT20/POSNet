@@ -1,5 +1,5 @@
 
-package com.thanhtuan.posnet.model;
+package com.thanhtuan.posnet.model.data;
 
 import java.util.List;
 import javax.annotation.Generated;

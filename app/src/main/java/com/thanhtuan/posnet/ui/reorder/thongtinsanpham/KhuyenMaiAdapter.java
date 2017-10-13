@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.model.ItemKM;
-import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.model.data.PromotionProducts;
+import com.thanhtuan.posnet.model.data.Product;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 
@@ -26,7 +25,7 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final String TAG = "KhuyenMaiAdapter";
     private Context context;
     private LayoutInflater layoutInflater;
-    private List<ItemKM> itemKMList;
+    private List<PromotionProducts> promotionProductsList;
     private Product product;
 
     private TextView txtvTamTinh;
@@ -43,22 +42,22 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private long TongGia = 0;
     private long DonGia = 0;
 
-    KhuyenMaiAdapter(Context context, List<ItemKM> itemKMList, Product product) {
+    KhuyenMaiAdapter(Context context, List<PromotionProducts> promotionProductsList, Product product) {
         this.context = context;
-        this.itemKMList = itemKMList;
+        this.promotionProductsList = promotionProductsList;
         this.product = product;
         layoutInflater = LayoutInflater.from(context);
         setHasStableIds(true);
 
-        if (itemKMList.size() != 0){
+        if (promotionProductsList.size() != 0){
             if (context == null) return;
             TongGia = product.getSalesPrice();
             DonGia = product.getSalesPrice();
-            for (ItemKM itemKM : itemKMList){
-                if (itemKM.getTachGia() == 1){
-                    if (!itemKM.getmChonGiamGia()){
-                        DonGia += itemKM.getPromotionPrice();
-                        TongGia = TongGia + itemKM.getPromotionPrice();
+            for (PromotionProducts promotionProducts : promotionProductsList){
+                if (promotionProducts.getTachGia() == 1){
+                    if (!promotionProducts.getmChonGiamGia()){
+                        DonGia += promotionProducts.getPromotionPrice();
+                        TongGia = TongGia + promotionProducts.getPromotionPrice();
                     }
                 }
             }
@@ -84,33 +83,33 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-            ItemKM itemKM = itemKMList.get(position - 1);
+            PromotionProducts promotionProducts = promotionProductsList.get(position - 1);
 
-            itemViewHolder.itempr.setBackgroundResource(itemKM.getmChonGiamGia() || itemKM.getmChonSanPham() ? R.color.colorAccent : R.color.cardview_light_background);
+            itemViewHolder.itempr.setBackgroundResource(promotionProducts.getmChonGiamGia() || promotionProducts.getmChonSanPham() ? R.color.colorAccent : R.color.cardview_light_background);
 
-            itemViewHolder.txtvNameKM.setText(itemKM.getItemNameKM());
-            itemViewHolder.txtvDonGiaKM.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(itemKM.getPromotionPrice())) + "đ");
-            itemViewHolder.txtvSLKM.setText(String.valueOf(itemKM.getQuantity()));
-            itemViewHolder.txtvKLKM.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(itemKM.getGiamGiaKLHKM())) + "đ");
-            itemViewHolder.txtvQuyDinh.setText(itemKM.getQuiDinh());
+            itemViewHolder.txtvNameKM.setText(promotionProducts.getItemNameKM());
+            itemViewHolder.txtvDonGiaKM.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(promotionProducts.getPromotionPrice())) + "đ");
+            itemViewHolder.txtvSLKM.setText(String.valueOf(promotionProducts.getQuantity()));
+            itemViewHolder.txtvKLKM.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(promotionProducts.getGiamGiaKLHKM())) + "đ");
+            itemViewHolder.txtvQuyDinh.setText(promotionProducts.getQuiDinh());
 
-            addEventItems(itemViewHolder, itemKM);
+            addEventItems(itemViewHolder, promotionProducts);
         }
     }
 
-    private void addEventItems(final ItemViewHolder itemViewHolder, final ItemKM itemKM) {
+    private void addEventItems(final ItemViewHolder itemViewHolder, final PromotionProducts promotionProducts) {
         itemViewHolder.itempr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (itemKM.getGiamGiaKLHKM() != 0){
-                    if (itemKM.getTachGia() == 1) DialogKM(itemViewHolder,itemKM);
+                if (promotionProducts.getGiamGiaKLHKM() != 0){
+                    if (promotionProducts.getTachGia() == 1) DialogKM(itemViewHolder, promotionProducts);
                 }else {
-                    if (!itemKM.getmChonSanPham()){
-                        itemKM.setmChonSanPham(true);
-                        setColorItemSelected(itemViewHolder,itemKM);
+                    if (!promotionProducts.getmChonSanPham()){
+                        promotionProducts.setmChonSanPham(true);
+                        setColorItemSelected(itemViewHolder, promotionProducts);
                     }else {
-                        itemKM.setmChonSanPham(false);
-                        setColorItemNotSelected(itemViewHolder,itemKM);
+                        promotionProducts.setmChonSanPham(false);
+                        setColorItemNotSelected(itemViewHolder, promotionProducts);
                     }
                 }
             }
@@ -147,7 +146,7 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         });
     }
 
-    private void DialogKM(final ItemViewHolder itemViewHolder , final ItemKM itemKM){
+    private void DialogKM(final ItemViewHolder itemViewHolder , final PromotionProducts promotionProducts){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Chọn khuyến mãi");
         final String[] item = {"Lấy sản phẩm","Lấy giảm giá","Không lấy"};
@@ -157,38 +156,38 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 Boolean flag_chon = false;
                 switch (i){
                     case 0:
-                        if (itemKM.getmChonGiamGia()){
-                            TongGia += itemKM.getGiamGiaKLHKM();
-                            GiamGia -= itemKM.getGiamGiaKLHKM();
+                        if (promotionProducts.getmChonGiamGia()){
+                            TongGia += promotionProducts.getGiamGiaKLHKM();
+                            GiamGia -= promotionProducts.getGiamGiaKLHKM();
                         }
-                        itemKM.setmChonSanPham(true);
-                        itemKM.setmChonGiamGia(false);
+                        promotionProducts.setmChonSanPham(true);
+                        promotionProducts.setmChonGiamGia(false);
                         flag_chon = true;
                         break;
                     case 1:
-                        if (!itemKM.getmChonGiamGia()){
-                            itemKM.setmChonSanPham(false);
-                            itemKM.setmChonGiamGia(true);
-                            TongGia -= itemKM.getGiamGiaKLHKM();
-                            GiamGia += itemKM.getGiamGiaKLHKM();
+                        if (!promotionProducts.getmChonGiamGia()){
+                            promotionProducts.setmChonSanPham(false);
+                            promotionProducts.setmChonGiamGia(true);
+                            TongGia -= promotionProducts.getGiamGiaKLHKM();
+                            GiamGia += promotionProducts.getGiamGiaKLHKM();
                         }
                         flag_chon = true;
                         break;
                     case 2:
-                        if (itemKM.getmChonGiamGia()){
-                            TongGia += itemKM.getGiamGiaKLHKM();
-                            GiamGia -= itemKM.getGiamGiaKLHKM();
+                        if (promotionProducts.getmChonGiamGia()){
+                            TongGia += promotionProducts.getGiamGiaKLHKM();
+                            GiamGia -= promotionProducts.getGiamGiaKLHKM();
                         }
-                        itemKM.setmChonSanPham(false);
-                        itemKM.setmChonGiamGia(false);
+                        promotionProducts.setmChonSanPham(false);
+                        promotionProducts.setmChonGiamGia(false);
                         flag_chon = false;
                         break;
 
                 }
                 if (flag_chon){
-                    setColorItemSelected(itemViewHolder,itemKM);
+                    setColorItemSelected(itemViewHolder, promotionProducts);
                 }else {
-                    setColorItemNotSelected(itemViewHolder,itemKM);
+                    setColorItemNotSelected(itemViewHolder, promotionProducts);
                 }
             }
         });
@@ -197,23 +196,23 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         alertDialog.show();
     }
 
-    private void setColorItemSelected(ItemViewHolder itemViewHolder,ItemKM itemKM){
-        setTachGiaChon(itemKM);
+    private void setColorItemSelected(ItemViewHolder itemViewHolder,PromotionProducts promotionProducts){
+        setTachGiaChon(promotionProducts);
         itemViewHolder.itempr.setBackgroundResource(R.color.colorAccent);
     }
 
-    private void setColorItemNotSelected(ItemViewHolder itemViewHolder,ItemKM itemKM){
-        setTachGiaKhongChon(itemKM);
+    private void setColorItemNotSelected(ItemViewHolder itemViewHolder,PromotionProducts promotionProducts){
+        setTachGiaKhongChon(promotionProducts);
         itemViewHolder.itempr.setBackgroundResource(R.color.cardview_light_background);
     }
 
     /**
      * setTachGiaKhongChon để set giá cho sản phẩm nếu sản phẩm khuyến mãi không chọn trong trường hợp
      * tách giá hoặc không
-     * @param itemKM: sản phẩm khuyến mãi
+     * @param promotionProducts: sản phẩm khuyến mãi
      */
-    private void setTachGiaKhongChon(ItemKM itemKM){
-        if (itemKM.getTachGia() == 1){
+    private void setTachGiaKhongChon(PromotionProducts promotionProducts){
+        if (promotionProducts.getTachGia() == 1){
             if (txtvTongGia == null) return;
             txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(TongGia)) + "đ");
             txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
@@ -223,8 +222,8 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     /**
      * setTachGiaChon để set giá cho sản phẩm không tách giá
      */
-    private void setTachGiaChon(ItemKM itemKM){
-        if (itemKM.getTachGia() == 1){
+    private void setTachGiaChon(PromotionProducts promotionProducts){
+        if (promotionProducts.getTachGia() == 1){
             if (txtvGiam == null) return;
             txtvGiam.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(GiamGia)) + "đ");
             txtvTongGia.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(TongGia)) + "đ");
@@ -238,7 +237,7 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        return itemKMList.size() + 2;
+        return promotionProductsList.size() + 2;
     }
 
     @Override
@@ -256,7 +255,7 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private boolean isPositionFooter (int position) {
-        return position == itemKMList.size () + 1;
+        return position == promotionProductsList.size () + 1;
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -287,9 +286,9 @@ public class KhuyenMaiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if (product == null) return;
             txtvNamePR.setText(product.getItemName() + " (" + "Loại: " + product.getTypeItemID() + ")");
 
-            if (itemKMList.size() != 0){
+            if (promotionProductsList.size() != 0){
                 txtvSoSPChon.setText("Khách hàng được chọn " +
-                        itemKMList.get(0).getPermissonBuyItemAttach() + " sản phẩm!");
+                        promotionProductsList.get(0).getPermissonBuyItemAttach() + " sản phẩm!");
 
                 txtvDonGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(String.valueOf(DonGia)) + "đ");
             }

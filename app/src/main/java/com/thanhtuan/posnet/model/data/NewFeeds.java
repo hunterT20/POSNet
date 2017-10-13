@@ -1,4 +1,4 @@
-package com.thanhtuan.posnet.model;
+package com.thanhtuan.posnet.model.data;
 
 public class NewFeeds {
     private String Type;

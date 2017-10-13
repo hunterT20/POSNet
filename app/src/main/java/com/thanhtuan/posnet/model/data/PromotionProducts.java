@@ -1,12 +1,12 @@
 
-package com.thanhtuan.posnet.model;
+package com.thanhtuan.posnet.model.data;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class ItemKM {
+public class PromotionProducts {
 
     @SerializedName("GiamGiaKLHKM")
     private Long mGiamGiaKLHKM;

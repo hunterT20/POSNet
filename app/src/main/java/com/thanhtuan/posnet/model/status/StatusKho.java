@@ -1,9 +1,10 @@
 
-package com.thanhtuan.posnet.model;
+package com.thanhtuan.posnet.model.status;
 
 import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
+import com.thanhtuan.posnet.model.data.Kho;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.model.ItemSearch;
+import com.thanhtuan.posnet.model.data.ItemSearch;
 import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;
 import com.thanhtuan.posnet.util.AnimationUtil;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;

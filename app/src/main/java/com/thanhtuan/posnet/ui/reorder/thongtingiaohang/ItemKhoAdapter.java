@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.model.Kho;
+import com.thanhtuan.posnet.model.data.Kho;
 
 import java.util.List;
 

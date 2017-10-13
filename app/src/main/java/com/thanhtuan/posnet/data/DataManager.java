@@ -6,14 +6,12 @@ import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.data.remote.POSCenterService;
 import com.thanhtuan.posnet.injection.component.DaggerDataManagerComponent;
 import com.thanhtuan.posnet.injection.module.DataManagerModule;
-import com.thanhtuan.posnet.model.StatusKhachHang;
-import com.thanhtuan.posnet.model.StatusKho;
-import com.thanhtuan.posnet.model.StatusProduct;
-import com.thanhtuan.posnet.model.StatusQuay;
-import com.thanhtuan.posnet.model.StatusSearch;
-import com.thanhtuan.posnet.model.User;
-
-import java.util.List;
+import com.thanhtuan.posnet.model.status.StatusKhachHang;
+import com.thanhtuan.posnet.model.status.StatusKho;
+import com.thanhtuan.posnet.model.status.StatusProduct;
+import com.thanhtuan.posnet.model.status.StatusQuay;
+import com.thanhtuan.posnet.model.status.StatusSearch;
+import com.thanhtuan.posnet.model.data.NhanVien;
 
 import javax.inject.Inject;
 
@@ -48,7 +46,7 @@ public class DataManager {
         return mSubscribeScheduler;
     }
 
-    public Observable<User> login(String username, String pass){
+    public Observable<NhanVien> login(String username, String pass){
         return posCenterService.login(username, pass);
     }
 

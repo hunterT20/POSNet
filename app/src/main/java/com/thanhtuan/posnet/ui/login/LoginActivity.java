@@ -14,7 +14,7 @@ import com.rey.material.widget.CheckBox;
 import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.data.DataManager;
-import com.thanhtuan.posnet.model.User;
+import com.thanhtuan.posnet.model.data.NhanVien;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.ui.index.MainActivity;
 
@@ -72,9 +72,9 @@ public class LoginActivity extends AppCompatActivity {
                 .login(username, pass)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(dataManager.getScheduler())
-                .subscribeWith(new DisposableObserver<User>(){
+                .subscribeWith(new DisposableObserver<NhanVien>(){
                     @Override
-                    public void onNext(@NonNull User user) {
+                    public void onNext(@NonNull NhanVien user) {
                         if (user.getUserName().equals(username)){
                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                             if (ckbSave.isChecked()){

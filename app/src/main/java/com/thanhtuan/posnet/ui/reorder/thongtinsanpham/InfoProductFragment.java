@@ -2,39 +2,30 @@ package com.thanhtuan.posnet.ui.reorder.thongtinsanpham;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thanhtuan.posnet.POSCenterApplication;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.data.DataManager;
-import com.thanhtuan.posnet.model.ItemKM;
-import com.thanhtuan.posnet.model.Product;
-import com.thanhtuan.posnet.model.StatusKho;
-import com.thanhtuan.posnet.model.StatusProduct;
+import com.thanhtuan.posnet.model.data.PromotionProducts;
+import com.thanhtuan.posnet.model.data.Product;
+import com.thanhtuan.posnet.model.status.StatusKho;
+import com.thanhtuan.posnet.model.status.StatusProduct;
 import com.thanhtuan.posnet.ui.reorder.search.SearchFragment;
-import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.util.RecyclerViewUtil;
 import com.thanhtuan.posnet.util.SharePreferenceUtil;
 import com.thanhtuan.posnet.ui.index.MainActivity;
@@ -60,7 +51,7 @@ public class InfoProductFragment extends Fragment{
 
     private Button btnReOrder;
 
-    private List<ItemKM>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
+    private List<PromotionProducts>   listKMAll;      /*Tất cả sản phẩm khuyến mãi của sản phẩm*/
     private Product product;
     private KhuyenMaiAdapter adapter;
 

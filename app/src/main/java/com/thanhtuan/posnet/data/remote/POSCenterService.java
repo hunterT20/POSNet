@@ -1,13 +1,11 @@
 package com.thanhtuan.posnet.data.remote;
 
-import com.thanhtuan.posnet.model.StatusKhachHang;
-import com.thanhtuan.posnet.model.StatusKho;
-import com.thanhtuan.posnet.model.StatusProduct;
-import com.thanhtuan.posnet.model.StatusQuay;
-import com.thanhtuan.posnet.model.StatusSearch;
-import com.thanhtuan.posnet.model.User;
-
-import java.util.List;
+import com.thanhtuan.posnet.model.status.StatusKhachHang;
+import com.thanhtuan.posnet.model.status.StatusKho;
+import com.thanhtuan.posnet.model.status.StatusProduct;
+import com.thanhtuan.posnet.model.status.StatusQuay;
+import com.thanhtuan.posnet.model.status.StatusSearch;
+import com.thanhtuan.posnet.model.data.NhanVien;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -17,7 +15,7 @@ public interface POSCenterService {
     String URL = "http://192.168.1.79:81/svGetGiaBan.svc/";
 
     @GET("mLogin")
-    Observable<User> login(@Query("strUserName") String Username, @Query("strPassword") String Password );
+    Observable<NhanVien> login(@Query("strUserName") String Username, @Query("strPassword") String Password );
 
     @GET("SearchItemList")
     Observable<StatusSearch> search(@Query("strModel") String Model, @Query("strSiteID") String SiteID);

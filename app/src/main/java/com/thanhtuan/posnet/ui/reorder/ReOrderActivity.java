@@ -10,9 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.model.Customer;
-import com.thanhtuan.posnet.model.Product;
-import com.thanhtuan.posnet.model.ThongTinGiaoHang;
+import com.thanhtuan.posnet.model.data.Customer;
+import com.thanhtuan.posnet.model.data.Product;
+import com.thanhtuan.posnet.model.data.ThongTinGiaoHang;
 import com.thanhtuan.posnet.ui.reorder.search.SearchFragment;
 
 import java.util.ArrayList;

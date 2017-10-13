@@ -1,5 +1,5 @@
 
-package com.thanhtuan.posnet.model;
+package com.thanhtuan.posnet.model.data;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;

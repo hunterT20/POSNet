@@ -12,7 +12,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.model.data.Product;
 import com.thanhtuan.posnet.ui.reorder.search.SearchFragment;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 import com.thanhtuan.posnet.ui.reorder.ReOrderActivity;

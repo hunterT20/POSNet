@@ -9,8 +9,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.model.ItemKM;
-import com.thanhtuan.posnet.model.Product;
+import com.thanhtuan.posnet.model.data.PromotionProducts;
+import com.thanhtuan.posnet.model.data.Product;
 import com.thanhtuan.posnet.util.NumberTextWatcherForThousand;
 
 import java.util.List;
@@ -82,7 +82,7 @@ public class OrderAdapter extends BaseExpandableListAdapter{
     @SuppressLint({"SetTextI18n", "InflateParams"})
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-        ItemKM itemKM = (ItemKM) getChild(i,i1);
+        PromotionProducts promotionProducts = (PromotionProducts) getChild(i,i1);
         if (view == null) {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = infalInflater != null ? infalInflater.inflate(R.layout.item_search, null) : null;
@@ -91,9 +91,9 @@ public class OrderAdapter extends BaseExpandableListAdapter{
             TextView txtvItemID = view.findViewById(R.id.txtvItemID);
             TextView txtvPriceItem = view.findViewById(R.id.txtvPriceItem);
 
-            txtvNameItem.setText(itemKM.getItemNameKM());
-            txtvItemID.setText(itemKM.getItemIDKM());
-            txtvPriceItem.setText(NumberTextWatcherForThousand.getDecimalFormattedString(itemKM.getPromotionPrice().toString()) + "đ");
+            txtvNameItem.setText(promotionProducts.getItemNameKM());
+            txtvItemID.setText(promotionProducts.getItemIDKM());
+            txtvPriceItem.setText(NumberTextWatcherForThousand.getDecimalFormattedString(promotionProducts.getPromotionPrice().toString()) + "đ");
 
         }
 

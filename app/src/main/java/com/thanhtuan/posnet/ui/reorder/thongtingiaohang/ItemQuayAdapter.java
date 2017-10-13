@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.thanhtuan.posnet.R;
-import com.thanhtuan.posnet.model.Quay;
+import com.thanhtuan.posnet.model.data.Quay;
 
 import java.util.List;
 
