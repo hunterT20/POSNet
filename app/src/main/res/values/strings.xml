@@ -58,7 +58,7 @@
     <string name="tenKH">Tên khách hàng</string>
     <string name="dia_chi">Địa chỉ</string>
     <string name="so_dien_thoai">Số điện thoại</string>
-    <string name="thong_tin_khach_hang"><![CDATA[> Thông Tin Khách Hàng]]></string>
+    <string name="thong_tin_khach_hang">Thông Tin Khách Hàng</string>
     <string name="thoi_gian">Thời gian:</string>
     <string name="ngay_giao">Ngày giao:</string>
     <string name="chon_ngay">Chọn ngày</string>
@@ -69,7 +69,7 @@
     <string name="check">Check</string>
     <string name="giao_hang">Giao hàng:</string>
     <string name="mChonGiamGia">Chọn</string>
-    <string name="thong_tin_giao_hang"><![CDATA[> Thông Tin Giao Hàng]]></string>
+    <string name="thong_tin_giao_hang">Thông Tin Giao Hàng</string>
     <string name="nha">Nhà</string>
     <string name="khuyen_mai"><![CDATA[> Khuyến mãi]]></string>
     <string name="thong_tin_san_pham"><![CDATA[> Thông tin sản phẩm]]></string>

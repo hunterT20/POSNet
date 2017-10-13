@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -71,8 +72,8 @@ import io.reactivex.observers.DisposableObserver;
  */
 public class ReorderFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private static final String TAG = "ReOderFragment";
-    @BindView(R.id.ThongTinKH)          ConstraintLayout ThongTinKH;
-    @BindView(R.id.ThongTinGiaoHang)    ConstraintLayout ThongTinGiaoHang;
+    @BindView(R.id.ThongTinKH)          CardView ThongTinKH;
+    @BindView(R.id.ThongTinGiaoHang)    CardView ThongTinGiaoHang;
     @BindView(R.id.TaiNha)              ConstraintLayout TaiNha;
     @BindView(R.id.ThongTinSP)          ConstraintLayout ThongTinSP;
     @BindView(R.id.TongTien)            LinearLayout TongTien;
