@@ -71,8 +71,8 @@
     <string name="mChonGiamGia">Chọn</string>
     <string name="thong_tin_giao_hang">Thông Tin Giao Hàng</string>
     <string name="nha">Nhà</string>
-    <string name="khuyen_mai"><![CDATA[> Khuyến mãi]]></string>
-    <string name="thong_tin_san_pham"><![CDATA[> Thông tin sản phẩm]]></string>
+    <string name="khuyen_mai">Khuyến mãi đã chọn</string>
+    <string name="thong_tin_san_pham">Thông tin sản phẩm</string>
     <string name="quay_lai">Quay lại</string>
     <string name="tiep_tuc">Tiếp tục</string>
     <string name="khong_co_luu_y">Không có lưu ý</string>

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.thanhtuan.posnet.R;
 import com.thanhtuan.posnet.model.data.Customer;
 import com.thanhtuan.posnet.model.data.Product;
+import com.thanhtuan.posnet.model.data.PromotionProducts;
 import com.thanhtuan.posnet.model.data.ThongTinGiaoHang;
 import com.thanhtuan.posnet.ui.reorder.search.SearchFragment;
 
@@ -37,6 +38,8 @@ public class ReOrderActivity extends AppCompatActivity {
     public Product productCurrent;              /*SP đang mua*/
     public Customer customer;                   /*Thông tin khách hàng đang mua*/
     public ThongTinGiaoHang thongTinGiaoHang;   /*Thông tin nơi giao*/
+    public long TongTienPro;
+    public List<PromotionProducts> listKM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +53,10 @@ public class ReOrderActivity extends AppCompatActivity {
     private void addControls() {
         productCurrent = null;
         listPRBuy = new ArrayList<>();
+        listKM = new ArrayList<>();
         customer = null;
         thongTinGiaoHang = null;
+        TongTienPro = 0;
     }
 
     private void addViews() {

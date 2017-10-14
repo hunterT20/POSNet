@@ -95,9 +95,18 @@ public class InfoProductFragment extends Fragment{
             public void onClick(View view) {
                 ((ReOrderActivity)getActivity()).productCurrent = product;
                 ((ReOrderActivity)getActivity()).listPRBuy.add(product);
+                ((ReOrderActivity)getActivity()).listKM = getPromotionSelected();
                 ((ReOrderActivity)getActivity()).callFragment(new ReorderFragment(),"Thông tin Order");
             }
         });
+    }
+
+    private List<PromotionProducts> getPromotionSelected(){
+        List<PromotionProducts> promotionProducts = new ArrayList<>();
+        for (PromotionProducts pro: product.getListItemkm()) {
+            if (pro.getmChonGiamGia() || pro.getmChonSanPham()) promotionProducts.add(pro);
+        }
+        return  promotionProducts;
     }
 
     @Override

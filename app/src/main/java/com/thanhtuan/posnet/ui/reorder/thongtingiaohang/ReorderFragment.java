@@ -75,7 +75,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     @BindView(R.id.ThongTinKH)          CardView ThongTinKH;
     @BindView(R.id.ThongTinGiaoHang)    CardView ThongTinGiaoHang;
     @BindView(R.id.TaiNha)              ConstraintLayout TaiNha;
-    @BindView(R.id.ThongTinSP)          ConstraintLayout ThongTinSP;
+    @BindView(R.id.ThongTinSP)          CardView ThongTinSP;
     @BindView(R.id.TongTien)            LinearLayout TongTien;
     @BindView(R.id.btnBack)             Button btnBack;
     @BindView(R.id.btnNext)             Button btnNext;
@@ -85,6 +85,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
     @BindView(R.id.txtvDate)            TextView txtvDate;
     @BindView(R.id.txtvTime)            TextView txtvTime;
     @BindView(R.id.txtvNamePR)          TextView txtvNamePR;
+    @BindView(R.id.txtvGiaPR)           TextView txtvGiaPR;
     @BindView(R.id.txtvLayHang)         TextView txtvLayHang;
     @BindView(R.id.txtvGiaoHang)        TextView txtvGiaHang;
     @BindView(R.id.txtvDCGiaoHang)      TextView txtvDCGiaoHang;
@@ -254,6 +255,7 @@ public class ReorderFragment extends Fragment implements DatePickerDialog.OnDate
         Product product = ((ReOrderActivity)getActivity()).productCurrent;
         txtvTongTien.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getSalesPrice().toString()) + "đ");
         txtvNamePR.setText(product.getItemName());
+        txtvGiaPR.setText(NumberTextWatcherForThousand.getDecimalFormattedString(product.getSalesPrice().toString()) + "đ");
         productList = (product.getListItemkm());
 
         if (getActivity() == null) return;
